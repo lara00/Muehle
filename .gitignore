@@ -1,2 +1,32 @@
-*.class
-*.log
+# Ignore Mac specific files
+.DS_Store
+
+# Ignore sbt specific files
+dist/
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+project/local-plugins.sbt
+.history
+.ensime
+.ensime_cache/
+.sbt-scripted/
+local.sbt
+
+# Ignore Bloop specific files
+.bsp
+
+# Ignore VS Code specific files
+.vscode/
+
+# Ignore Metals specific files
+.bloop/
+.metals/
+metals.sbt
+
+# Ignore IDEA specific files
+.idea/
+.idea_modules/
+.worksheet/
