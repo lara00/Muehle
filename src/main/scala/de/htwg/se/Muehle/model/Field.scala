@@ -1,37 +1,15 @@
 package de.htwg.se.Muehle.model
-object Field {
-  val erlaubteFelder = Set(
-    (0, 0),
-    (0, 3),
-    (0, 6),
-    (1, 1),
-    (1, 3),
-    (1, 5),
-    (2, 2),
-    (2, 3),
-    (2, 4),
-    (3, 0),
-    (3, 1),
-    (3, 2),
-    (3, 4),
-    (3, 5),
-    (3, 6),
-    (4, 2),
-    (4, 3),
-    (4, 4),
-    (5, 1),
-    (5, 3),
-    (5, 5),
-    (6, 0),
-    (6, 3),
-    (6, 6)
-  )
-  def isAllowed(row: Int, column: Int): Boolean =
-    erlaubteFelder.contains((row, column))
-}
-case class Field(matrix: Matrix[Stone]):
-  def this(size: Int, filling: Stone, vorbitten: Stone) =
-    this(new Matrix(size, filling, vorbitten))
+import de.htwg.se.Muehle.AllowedFields.Matrix
+
+case class Field(matrix: Matrix[Stone], allowedFields: Set[(Int, Int)]) {
+  def this(
+      size: Int,
+      filling: Stone,
+      vorbitten: Stone,
+      allowedFields: Set[(Int, Int)]
+  ) =
+    this(new Matrix(size, filling, vorbitten, allowedFields), allowedFields)
+
   val size = matrix.size
   def cells(row: Int): String =
     matrix
@@ -51,6 +29,7 @@ case class Field(matrix: Matrix[Stone]):
   }
   def put(stone: Stone, x: Int, y: Int): Field = {
     val newMatrix = matrix.replaceCell(x, y, stone)
-    Field(newMatrix)
+    Field(newMatrix, allowedFields)
   }
   def get(x: Int, y: Int): Stone = matrix.cell(x, y)
+}
