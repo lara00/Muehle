@@ -16,7 +16,7 @@ import de.htwg.se.Muehle.model.{Matrix, Stone, Field}
   println()
   println()
   println()
-  println("change a value of a field")
+  println("Change a value of a field")
   val s = d.put(Stone.Black, 1, 1)
   println("game board output")
   println(s.mesh())
