@@ -1,5 +1,5 @@
 package de.htwg.se.Muehle.model
-object field {
+object Field {
   val erlaubteFelder = Set(
     (0, 0),
     (0, 3),
@@ -29,7 +29,7 @@ object field {
   def isAllowed(row: Int, column: Int): Boolean =
     erlaubteFelder.contains((row, column))
 }
-case class field(matrix: Matrix[Stone]):
+case class Field(matrix: Matrix[Stone]):
   def this(size: Int, filling: Stone, vorbitten: Stone) =
     this(new Matrix(size, filling, vorbitten))
   val size = matrix.size
@@ -49,8 +49,8 @@ case class field(matrix: Matrix[Stone]):
       }
       .mkString("\n")
   }
-  def put(stone: Stone, x: Int, y: Int): field = {
+  def put(stone: Stone, x: Int, y: Int): Field = {
     val newMatrix = matrix.replaceCell(x, y, stone)
-    field(newMatrix)
+    Field(newMatrix)
   }
   def get(x: Int, y: Int): Stone = matrix.cell(x, y)

@@ -4,7 +4,7 @@ case class Matrix[T](rows: Vector[Vector[T]]):
   def this(size: Int, filling: T, vorboten: T) = this(
     Vector
       .tabulate(7, 7) {
-        case (x, y) if field.isAllowed(x, y) => filling
+        case (x, y) if Field.isAllowed(x, y) => filling
         case _                               => vorboten
       }
   )
