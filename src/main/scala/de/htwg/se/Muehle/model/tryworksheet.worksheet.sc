@@ -72,7 +72,8 @@ case class field(matrix: Matrix[Stone]):
       .mkString("\n")
   }
   def put(stone: Stone, x: Int, y: Int): field = {
-    field(matrix.replaceCell(x, y, stone))
+    val newMatrix = matrix.replaceCell(x, y, stone)
+    field(newMatrix)
   }
   def get(x: Int, y: Int): Stone = matrix.cell(x, y)
 

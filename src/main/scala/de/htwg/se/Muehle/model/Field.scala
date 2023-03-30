@@ -1,16 +1,13 @@
 package de.htwg.se.Muehle.model
-import de.htwg.se.Muehle.AllowedFields.Matrix
 
-case class Field(matrix: Matrix[Stone], allowedFields: Set[(Int, Int)]) {
+case class Field(matrix: Pattern[Stone], allowedFields: Set[(Int, Int)]) {
   def this(
       size: Int,
       filling: Stone,
       vorbitten: Stone,
       allowedFields: Set[(Int, Int)]
   ) =
-    this(new Matrix(size, filling, vorbitten, allowedFields), allowedFields)
-
-  val size = matrix.size
+    this(new Pattern(size, filling, vorbitten, allowedFields), allowedFields)
   def cells(row: Int): String =
     matrix
       .row(row)
@@ -20,7 +17,7 @@ case class Field(matrix: Matrix[Stone], allowedFields: Set[(Int, Int)]) {
           .format(name)
       )
       .mkString("|")
-  def mesh(): String = {
+  def field(): String = {
     (0 to 6)
       .map { row =>
         cells(row)
