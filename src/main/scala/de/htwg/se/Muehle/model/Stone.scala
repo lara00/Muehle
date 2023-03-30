@@ -1,7 +1,7 @@
 package de.htwg.se.Muehle.model
 
-enum Stone(stringRepresentation: String):
-  override def toString = stringRepresentation
+enum Stone(string: String):
+  override def toString = string
   case White extends Stone("WHITE")
   case Black extends Stone("BLACK")
   case Empty extends Stone("EMPTY")
