@@ -1,5 +1,4 @@
 import de.htwg.se.Muehle.model.{Stone, Field}
-import de.htwg.se.Muehle.model.Pattern
 
 @main def hello: Unit = {
   val allowedFields = Set(
@@ -27,31 +26,12 @@ import de.htwg.se.Muehle.model.Pattern
     (6, 0),
     (6, 3),
     (6, 6)
-  )
-  val matri = new Pattern[Stone](
-    7,
-    Stone.Empty,
-    Stone.Vorbitten,
-    allowedFields
-  )
-  println("start of the programm")
-  println("print the value of the matrix")
-  println(matri.cell(1, 1))
-  println("print a row auf a Matrix")
-  println(matri.row(0))
-  println("Chance a value of a field")
-  matri.replaceCell(1, 2, Stone.White)
-
-  val d = Field(matri, allowedFields)
-  println("game board output")
-  println(d.field())
-  println()
-  println()
-  println()
-  println("Change a value of a field")
-  val s = d.put(Stone.Black, 1, 1)
-  println("game board output")
-  println(s.field())
-  println("Return a Stone")
-  println(s.get(1, 1))
+  ) // Beispiel Set-Objekt
+  val field =
+    new Field(
+      allowedFields
+    )
+  println("Gebe  Feld aus")
+  println(" ")
+  println(field.field())
 }

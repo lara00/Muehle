@@ -1,4 +1,9 @@
-enum Stone(stringRepresentation: String):
+
+
+
+
+object ModelWorksheet {
+/*<script>*/enum Stone(stringRepresentation: String):
   override def toString = stringRepresentation
   case White extends Stone("WHITE")
   case Black extends Stone("BLACK")
@@ -87,3 +92,24 @@ d.mesh()
 val s = d.put(Stone.Black, 1, 1)
 s.mesh()
 s.get(1, 1)
+s.get(1, 3)
+/*</script>*/ /*<generated>*/
+def args = ModelWorksheet_sc.args$
+  /*</generated>*/
+}
+
+object ModelWorksheet_sc {
+  private var args$opt0 = Option.empty[Array[String]]
+  def args$set(args: Array[String]): Unit = {
+    args$opt0 = Some(args)
+  }
+  def args$opt: Option[Array[String]] = args$opt0
+  def args$: Array[String] = args$opt.getOrElse {
+    sys.error("No arguments passed to this script")
+  }
+  def main(args: Array[String]): Unit = {
+    args$set(args)
+    ModelWorksheet.hashCode() // hasCode to clear scalac warning about pure expression in statement position
+  }
+}
+
