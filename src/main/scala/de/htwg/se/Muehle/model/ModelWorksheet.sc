@@ -51,6 +51,11 @@ case class Matrix[T](rows: Vector[Vector[T]]):
     rows.updated(row, rows(row).updated(col, cell))
   )
 
+val matri = new Matrix[Stone](7, Stone.Empty, Stone.Vorbitten)
+matri.cell(1, 1)
+matri.rows(0)
+matri.replaceCell(1, 2, Stone.White)
+
 case class field(matrix: Matrix[Stone]):
   def this(size: Int, filling: Stone, vorbitten: Stone) =
     this(new Matrix(size, filling, vorbitten))
@@ -75,11 +80,6 @@ case class field(matrix: Matrix[Stone]):
     field(matrix.replaceCell(x, y, stone))
   }
   def get(x: Int, y: Int): Stone = matrix.cell(x, y)
-
-val matri = new Matrix[Stone](7, Stone.Empty, Stone.Vorbitten)
-matri.cell(1, 1)
-matri.rows(0)
-matri.replaceCell(1, 2, Stone.White)
 
 val d = field(matri)
 print(d.size)
