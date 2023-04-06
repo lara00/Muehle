@@ -3,72 +3,75 @@ enum Stone(string: String):
   case White extends Stone("WHITE")
   case Black extends Stone("BLACK")
   case Empty extends Stone("EMPTY")
-  case Vorbitten extends Stone("")
 
-case class Field(matrix: Vector[Vector[Stone]] = Vector.tabulate(7, 7) {
-  case (x, y) if Field.allowedFields.contains((x, y)) => Stone.Empty
-  case _                                              => Stone.Vorbitten
-}) {
-  def cells(x: Int): String = {
-    matrix(x)
-      .map(_.toString)
-      .map(name =>
-        s"%-${Stone.values.map(_.toString).maxBy(_.length).length}s"
-          .format(name)
-      )
-      .mkString("|")
+val stones = (1 to 24).map { i =>
+  i -> Stone.Empty
+}
+
+val e = 1 to 24
+case class Field(
+    fields: Map[Int, Stone] = (1 to 24).map(i => i -> Stone.Empty).toMap
+) {
+  private val maxStoneLength =
+    Stone.values.map(_.toString).maxBy(_.length).length
+  def setField(number: Int, value: Stone): Field =
+    copy(fields = fields.updated(number, value))
+  def stoneString(number: Int): String = fields(number).toString
+  def formatRow(fields: String*): String = {
+    fields.map(_.padTo(maxStoneLength, ' ')).mkString(" | ") + "\n"
   }
+  private def row1_row7_format(
+      a: Int = 1 | 22,
+      b: Int = 2 | 23,
+      c: Int = 3 | 24
+  ): String =
+    formatRow(stoneString(a), "", "", stoneString(b), "", "", stoneString(c))
+  private def row2_row6_format(
+      a: Int = 4 | 19,
+      b: Int = 5 | 20,
+      c: Int = 6 | 21
+  ): String =
+    formatRow("", stoneString(a), "", stoneString(b), "", stoneString(c), "")
+  private def row3_row5_format(
+      a: Int = 10 | 26,
+      b: Int = 11 | 17,
+      c: Int = 12 | 18
+  ): String =
+    formatRow("", "", stoneString(a), stoneString(b), stoneString(c), "", "")
+  private def row4_format(
+      a: Int = 10,
+      b: Int = 11,
+      c: Int = 12,
+      d: Int = 13,
+      e: Int = 14,
+      f: Int = 15
+  ): String =
+    formatRow(
+      stoneString(a),
+      stoneString(b),
+      stoneString(c),
+      "",
+      stoneString(d),
+      stoneString(e),
+      stoneString(f)
+    )
+  def printfeld(): String = {
+    row1_row7_format(1, 2, 3)
+      + row2_row6_format(4, 5, 6)
+      + row3_row5_format(7, 8, 9)
+      + row4_format() +
+      row3_row5_format(16, 17, 18)
+      + row2_row6_format(19, 20, 21)
+      + row1_row7_format(22, 23, 24)
 
-  def field(): String = {
-    (0 to 6)
-      .map { row =>
-        cells(row)
-      }
-      .mkString("\n")
   }
-
-  def put(stone: Stone, x: Int, y: Int): Field = {
-    val updatedRow = matrix(x).updated(y, stone)
-    val updatedMatrix = matrix.updated(x, updatedRow)
-    copy(matrix = updatedMatrix)
-  }
-
-  def get(x: Int, y: Int): Stone = matrix(x)(y)
 }
 
 object Field {
-  val allowedFields = Set(
-    (0, 0),
-    (0, 3),
-    (0, 6),
-    (1, 1),
-    (1, 3),
-    (1, 5),
-    (2, 2),
-    (2, 3),
-    (2, 4),
-    (3, 0),
-    (3, 1),
-    (3, 2),
-    (3, 4),
-    (3, 5),
-    (3, 6),
-    (4, 2),
-    (4, 3),
-    (4, 4),
-    (5, 1),
-    (5, 3),
-    (5, 5),
-    (6, 0),
-    (6, 3),
-    (6, 6)
-  )
+  val EmptyFields = (1 to 24).map(i => i -> Stone.Empty).toMap
 }
-val d =
-  new Field()
+val zahl = Stone.values.map(_.toString).maxBy(_.length).length
+val field = Field()
+val updatedField = field.setField(1, Stone.Black)
 
-d.field()
-d.get(1, 1)
-val d1 = d.put(Stone.Black, 0,0)
-d1.get(0,0)
-d1.field()
+field.printfeld()
