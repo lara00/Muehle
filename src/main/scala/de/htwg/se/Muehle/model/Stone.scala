@@ -5,4 +5,3 @@ enum Stone(string: String):
   case White extends Stone("WHITE")
   case Black extends Stone("BLACK")
   case Empty extends Stone("EMPTY")
-  case Vorbitten extends Stone("")
