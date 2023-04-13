@@ -10,30 +10,21 @@ case class Field(
 ) {
   private val maxStoneLength = 5
   def size: Int = fields.size
-  def setField(number: Int, value: Stone): Field =
+  def setStone(number: Int, value: Stone): Field =
     copy(fields = fields.updated(number, value))
   def stoneString(number: Int): String = fields(number).toString
   def formatRow(fields: String*): String = {
     fields.map(_.padTo(maxStoneLength, ' ')).mkString(" | ") + "\n"
   }
-  private def row1_row7_format(
-      a: Int,
-      b: Int,
-      c: Int
-  ): String =
+  private def row1_row7_format(a: Int, b: Int, c: Int): String =
     formatRow(stoneString(a), "", "", stoneString(b), "", "", stoneString(c))
-  private def row2_row6_format(
-      a: Int,
-      b: Int,
-      c: Int
-  ): String =
+
+  private def row2_row6_format(a: Int, b: Int, c: Int): String =
     formatRow("", stoneString(a), "", stoneString(b), "", stoneString(c), "")
-  private def row3_row5_format(
-      a: Int,
-      b: Int,
-      c: Int
-  ): String =
+
+  private def row3_row5_format(a: Int, b: Int, c: Int): String =
     formatRow("", "", stoneString(a), stoneString(b), stoneString(c), "", "")
+
   private def row4_format(
       a: Int = 10,
       b: Int = 11,
