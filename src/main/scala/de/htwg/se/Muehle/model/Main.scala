@@ -1,5 +1,12 @@
-import de.htwg.se.Muehle.model.{Stone, Field}
+package de.htwg.se.Muehle.model
 
-@main def hello: Unit = {
-  println("Play Muehle")
+import de.htwg.se.Muehle.aview.Tui
+import scala.io.StdIn.readLine
+
+object Main {
+  def main(args: Array[String]): Unit = {
+    println("Play Muehle")
+    val tui = Tui()
+    tui.processInput(readLine().toString())
+  }
 }
