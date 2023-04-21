@@ -1,14 +1,21 @@
+package de.htwg.se.Muehle.model
+
 import java.io.{ByteArrayOutputStream, PrintStream}
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import de.htwg.se.Muehle.model.Main
 
 class MainSpec extends AnyFlatSpec with Matchers {
-  "The Main object" should "print 'Play Muehle' when main method is called" in {
-    val outContent = new ByteArrayOutputStream()
-    Console.withOut(new PrintStream(outContent)) {
-      Main.main(Array())
+  "Main" should "end the game when the user inputs 'end'" in {
+    val inputStream = new ByteArrayInputStream("end".getBytes())
+    val outputStream = new ByteArrayOutputStream()
+    Console.withIn(inputStream) {
+      Console.withOut(outputStream) {
+        Main.main(Array.empty[String])
+      }
     }
-    outContent.toString should include("Play Muehle")
+    val output = outputStream.toString.trim
+    output contains "End Game"
   }
 }
