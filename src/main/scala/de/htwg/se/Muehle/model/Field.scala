@@ -1,4 +1,8 @@
 package de.htwg.se.Muehle.model
+import scala.util.{Try, Success, Failure}
+
+val minField = 1
+val maxField = 24
 
 case class Field(
     fields: Map[Int, Stone] = {
@@ -10,11 +14,23 @@ case class Field(
 ) {
   private val maxStoneLength = 5
   def size: Int = fields.size
-  def setStone(number: Int, value: Stone): Field =
-    copy(fields = fields.updated(number, value))
+  def setStone(number: Int, value: Stone): Field = {
+    fields(number) match {
+      case Stone.Empty => copy(fields = fields.updated(number, value))
+      case _ =>
+        throw new IllegalArgumentException(
+          "Overwriting with Stone.Black or Stone.White is not allowed"
+        )
+    }
+  }
+
   def stoneString(number: Int): String = fields(number).toString
   def formatRow(fields: String*): String = {
     fields.map(_.padTo(maxStoneLength, ' ')).mkString(" | ") + "\n"
+  }
+  def isFieldValid(intValueString: String): Boolean = {
+    val intValueOpt = Try(intValueString.toInt).toOption
+    intValueOpt.exists(intValue => intValue >= minField && intValue <= maxField)
   }
   private def row1_row7_format(a: Int, b: Int, c: Int): String =
     formatRow(stoneString(a), "", "", stoneString(b), "", "", stoneString(c))
@@ -43,13 +59,15 @@ case class Field(
       stoneString(f)
     )
   def printfeld(): String = {
-    row1_row7_format(1, 2, 3)
-      + row2_row6_format(4, 5, 6)
-      + row3_row5_format(7, 8, 9)
-      + row4_format() +
-      row3_row5_format(16, 17, 18)
-      + row2_row6_format(19, 20, 21)
-      + row1_row7_format(22, 23, 24)
-
+    row1_row7_format(1, 2, 3) + row2_row6_format(4, 5, 6) + row3_row5_format(
+      7,
+      8,
+      9
+    ) + row4_format() +
+      row3_row5_format(16, 17, 18) + row2_row6_format(
+        19,
+        20,
+        21
+      ) + row1_row7_format(22, 23, 24)
   }
 }
