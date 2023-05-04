@@ -17,11 +17,14 @@ case class Field(
   def setStone(number: Int, value: Stone): Field = {
     fields(number) match {
       case Stone.Empty => copy(fields = fields.updated(number, value))
-      case _ =>
-        throw new IllegalArgumentException(
-          "Overwriting with Stone.Black or Stone.White is not allowed"
-        )
+      case Stone.Black | Stone.White => this
     }
+  }
+  def deleteStone(number: Int, value: Stone): Field = {
+    fields(number) match
+      case Stone.Black | Stone.White =>
+        copy(fields = fields.updated(number, value))
+      case Stone.Empty => this
   }
 
   def stoneString(number: Int): String = fields(number).toString
@@ -58,7 +61,7 @@ case class Field(
       stoneString(e),
       stoneString(f)
     )
-  def printfeld(): String = {
+  override def toString(): String = {
     row1_row7_format(1, 2, 3) + row2_row6_format(4, 5, 6) + row3_row5_format(
       7,
       8,
