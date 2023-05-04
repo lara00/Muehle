@@ -5,7 +5,6 @@ import model.Field
 import model.Stone
 import model.Player
 import model.PlayerList
-import model.SetStone
 
 import util.Observable
 import util.Event
