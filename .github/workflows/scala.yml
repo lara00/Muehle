@@ -19,3 +19,6 @@ jobs:
 
     - name: Build with sbt
       run: sbt test
+
+    - name: compile
+      run: sbt compile
