@@ -25,23 +25,14 @@ jobs:
       
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
-      
+
   run_tests:
     runs-on: ubuntu-latest
-    
+
     steps:
-
-    - uses: actions/checkout@v3
-
-    - name: Use Node.js 16.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16.x
-
-    - name: npm install, make test-coverage
+    - uses: actions/checkout@v2
+    - name: Build Project and export Coverage
+      env:
+       COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       run: |
-        npm install
-        make test-coverage
-
-    - name: Coveralls
-      uses: coverallsapp/github-action@v2
+       sbt clean jacoco jacocoCoveralls
