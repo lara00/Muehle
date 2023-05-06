@@ -2,9 +2,17 @@ name: Muehle
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build with sbt
+        run: sbt test
+      - name: compile with sbt
+        run: sbt compile
+
   scalatest_sbt:
     runs-on: ubuntu-latest
     steps:
@@ -15,3 +23,4 @@ jobs:
         run: sbt coverageReport
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2.0.0
+
