@@ -36,6 +36,43 @@ class FieldSpec extends AnyWordSpec with Matchers {
         field.isFieldValid(invalidInput) shouldBe false
       }
     }
+    "deleteStone" should {
+      "return a new Field with the specified position set to Empty" in {
+        val newField = field.setStone(1, Stone.Black)
+        val updatedField = newField.deleteStone(1, Stone.Black)
+        updatedField.fields(1) should be(Stone.Empty)
+      }
+      "return the same Field if a other Stone in the Field" in {
+        val newField = field.setStone(1, Stone.White)
+        val updatedField = newField.deleteStone(1, Stone.Black)
+        updatedField.fields(1) should be(Stone.White)
+      }
+    }
+    "movestone" should {
+      "return a new Field with the specified stone moved to the new position" in {
+        val newField = field.setStone(1, Stone.Black)
+        val updatedField = newField.movestone(1, 2, Stone.Black)
+        updatedField.fields(1) should be(Stone.Empty)
+        updatedField.fields(2) should be(Stone.Black)
+      }
+      "return the same Field if the stone is not moved to an empty position" in {
+        val newField = field.setStone(1, Stone.Black)
+        val updatedField = newField.movestone(1, 2, Stone.Black)
+        val sameField = updatedField.movestone(1, 2, Stone.Black)
+        sameField should be(updatedField)
+      }
+      "return the same Field if the stone at the original position is not the specified value" in {
+        val newField = field.setStone(1, Stone.Black)
+        val sameField = newField.movestone(1, 2, Stone.White)
+        sameField should be(newField)
+      }
+      "return the same Field if the new position is not empty" in {
+        val newField = field.setStone(1, Stone.Black)
+        val updatedField = newField.setStone(2, Stone.White)
+        val sameField = updatedField.movestone(1, 2, Stone.Black)
+        sameField should be(updatedField)
+      }
+    }
     "printed" should {
       "display empty stones in all fields" in {
         field.toString() should be(

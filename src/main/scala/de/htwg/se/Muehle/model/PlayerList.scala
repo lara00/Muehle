@@ -4,7 +4,6 @@ case class PlayerList(players: List[Player]) {
   def getFirstPlayer: Player = players.head
   def getNextPlayer(aktivePlayer: Player): Player =
     players.find(_ != aktivePlayer).get
-
   def updateStonesInField(aktivePlayer: Player): PlayerList = {
     val updatedPlayers = players.map { p =>
       if (p == aktivePlayer)
@@ -13,7 +12,6 @@ case class PlayerList(players: List[Player]) {
     }
     PlayerList(updatedPlayers)
   }
-
   def printStonesToSet(): String = {
     val output = new StringBuilder()
     players.foreach { player =>

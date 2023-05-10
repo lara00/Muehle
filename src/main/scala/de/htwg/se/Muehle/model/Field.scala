@@ -1,5 +1,5 @@
 package de.htwg.se.Muehle.model
-import scala.util.{Try, Success, Failure}
+import scala.util.{Try}
 
 val minField = 1
 val maxField = 24
@@ -21,12 +21,20 @@ case class Field(
     }
   }
   def deleteStone(number: Int, value: Stone): Field = {
-    fields(number) match
-      case Stone.Black | Stone.White =>
-        copy(fields = fields.updated(number, value))
-      case Stone.Empty => this
+    fields(number) match {
+      case `value` =>
+        copy(fields = fields.updated(number, Stone.Empty))
+      case _ => this
+    }
   }
-
+  def movestone(from: Int, to: Int, value: Stone): Field = {
+    if (fields(from) == value && fields(to) == Stone.Empty) {
+      val field = deleteStone(from, value)
+      field.setStone(to, value)
+    } else {
+      this
+    }
+  }
   def stoneString(number: Int): String = fields(number).toString
   def formatRow(fields: String*): String = {
     fields.map(_.padTo(maxStoneLength, ' ')).mkString(" | ") + "\n"
