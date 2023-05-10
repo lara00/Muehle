@@ -31,17 +31,4 @@ case class Player(
       fieldenummber: Int
   ): Field =
     field.setStone(fieldenummber, aktiveplayer.name)
-  def statusplayer(): Int = {
-    stonetoput match {
-      case n if n > 0 =>
-        println("Placing a stone on the field")
-        0
-      case n if stoneintheField > 3 =>
-        println("Moving a stone on the field")
-        1
-      case _ =>
-        println("Jumping with a stone on the field")
-        2
-    }
-  }
 }
