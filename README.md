@@ -1,6 +1,6 @@
 # Muehle
 
-[![Coverage Status](https://coveralls.io/repos/github/lara00/Muehle/badge.svg?branch=main)](https://coveralls.io/github/lara00/Muehle?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/lara00/Muehle/badge.svg)](https://coveralls.io/github/lara00/Muehle)
 
 ## Description
 
