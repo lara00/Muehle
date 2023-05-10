@@ -3,8 +3,8 @@ name: Muehle
 on:
   push:
     branches: [main]
- pull_request:
-   branches: [ pattern ]
+  pull_request:
+    branches: [ pattern ]
 
 
 jobs:
