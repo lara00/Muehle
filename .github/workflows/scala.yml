@@ -4,8 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [ main ]
-
+    branches: [main]
 
 jobs:
   build:
@@ -19,11 +18,12 @@ jobs:
   scalatest_sbt:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.5.2
+      - uses: actions/checkout@v2.5.1
       - name: Run tests
         run: sbt clean coverage test
       - name: Coverage Report
         run: sbt coverageReport
       - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@v2.5.2
+        uses: coverallsapp/github-action@v2.0.0
+
 
