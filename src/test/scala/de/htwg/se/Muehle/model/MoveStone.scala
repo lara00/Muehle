@@ -16,24 +16,51 @@ class MoveStoneSpec extends AnyWordSpec with Matchers {
       "place the stone at the specified position" in {
         moveField should be(field.setStone(2, Stone.Black))
       }
-      "place the stone at the specified position, with is not allowed" in {
-        val moveField = MoveStone(playerWithStoneOnBoard, newField, 3, 1)
-        moveField should be(moveField)
-      }
       "move stone from 10 to 11" in {
         val oldField = field.setStone(10, Stone.Black)
-        val newField = MoveStone(player, oldField, 10, 11)
-        newField should be(oldField)
+        val newField = MoveStone(playerWithStoneOnBoard, oldField, 11, 10)
+        newField should be(field.setStone(11, Stone.Black))
       }
       "move stone from 11 to 10" in {
         val oldField = field.setStone(11, Stone.Black)
-        val newField = MoveStone(player, oldField, 11, 10)
-        newField should be(oldField)
+        val newField = MoveStone(playerWithStoneOnBoard, oldField, 10, 11)
+        newField should be(field.setStone(10, Stone.Black))
       }
       "move stone from 12 to 11" in {
         val oldField = field.setStone(12, Stone.Black)
-        val newField = MoveStone(player, oldField, 12, 11)
+        val newField = MoveStone(playerWithStoneOnBoard, oldField, 11, 12)
+        newField should be(field.setStone(11, Stone.Black))
+      }
+      "move stone from 6 to 14" in {
+        val oldField = field.setStone(6, Stone.Black)
+        val newField = MoveStone(playerWithStoneOnBoard, oldField, 14, 6)
+        newField should be(field.setStone(14, Stone.Black))
+      }
+      "move stone from 2 to 5" in {
+        val oldField = field.setStone(2, Stone.Black)
+        val newField = MoveStone(playerWithStoneOnBoard, oldField, 5, 2)
+        newField should be(field.setStone(5, Stone.Black))
+      }
+      "move stone from 5 to 2" in {
+        val oldField = field.setStone(5, Stone.Black)
+        val newField = MoveStone(playerWithStoneOnBoard, oldField, 2, 5)
+        newField should be(field.setStone(2, Stone.Black))
+      }
+      "move stone from 8 to 5" in {
+        val oldField = field.setStone(8, Stone.Black)
+        val newField = MoveStone(playerWithStoneOnBoard, oldField, 5, 8)
+        newField should be(field.setStone(5, Stone.Black))
+      }
+      "move stone failed" in {
+        val oldField = field.setStone(1, Stone.Black)
+        val newField = MoveStone(playerWithStoneOnBoard, oldField, 11, 1)
         newField should be(oldField)
+      }
+      "not jump with a stone from 1 to 2" in {
+        val player = Player(Stone.Black, 3, 0)
+        val oldField = field.setStone(1, Stone.Black)
+        val newField = MoveStone(player, oldField, 2, 1)
+        newField should be(field.setStone(2, Stone.Black))
       }
     }
   }

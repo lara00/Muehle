@@ -44,7 +44,7 @@ private class Switch(player: Player, field: Field, to: Int, from: Int)
     we can use the option from field 1 to field 12 to calculate the numbers from field 13 to field 24.
      */
     val from_ = if (from > 12) 25 - from else from
-    val to_ = if (to > 12) 25 - to else to
+    val to_ = if (from > 12) 25 - to else to
     val canSwitch = from_ match {
       /*The other fields, 10, 11, and 12, are compared with the allowed fields to which they may move.*/
       case 10 => to_ == 22 || to_ == 1 || to_ == 11
@@ -60,7 +60,7 @@ private class Switch(player: Player, field: Field, to: Int, from: Int)
       case _ =>
         (from_ % 3) match {
           case 0 =>
-            from_ - 1 == to_ || (12 + (from_ / 3) * -4) + from_ == to_
+            from_ - 1 == to_ || (12 + ((from_ / 3 - 1) * -4)) + from_ == to_
           case 1 =>
             (9 + (from_ / 3) * -2) + from_ == to_ || from_ + 1 == to_
           case 2 =>
@@ -72,7 +72,6 @@ private class Switch(player: Player, field: Field, to: Int, from: Int)
                 case 2 => from_ - 3 == to_
               }
             }
-          case _ => false
         }
     }
     canSwitch
