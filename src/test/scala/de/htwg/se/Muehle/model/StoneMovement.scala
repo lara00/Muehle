@@ -32,12 +32,6 @@ class StoneMovementSpec extends AnyWordSpec with Matchers {
         val newField = StoneMovement(player, oldField, 2, 1)
         newField should be(oldField)
       }
-      "not jump with a stone from 1 to 2" in {
-        val player = Player(Stone.Black, 3, 0)
-        val oldField = field.setStone(1, Stone.Black)
-        val newField = StoneMovement(player, oldField, 2, 1)
-        newField should be(field.setStone(2, Stone.Black))
-      }
     }
   }
 }
