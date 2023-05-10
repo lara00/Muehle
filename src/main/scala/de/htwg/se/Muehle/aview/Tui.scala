@@ -24,10 +24,8 @@ class Tui(controller: Controller) extends Observer:
     input match
       case "q" => controller.quit
       case intValueString if controller.field.isFieldValid(intValueString) =>
-        controller.activePlayer.statusplayer() match
-          case 0 => controller.put(intValueString.toInt)
-          case 1 => println("Not implementet"); sys.exit(0)
-          case 2 => println("Not implementet"); sys.exit(0)
+        // val x = readLine()
+        controller.put(intValueString.toInt, readLine().toInt)
       case stonestoput if stonestoput.matches("n[37]") =>
         controller.numberofstones(stonestoput.substring(1).toInt)
       case _: String => println(invalidInputMsg)

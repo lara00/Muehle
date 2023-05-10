@@ -5,9 +5,11 @@ import model.Field
 import model.Stone
 import model.Player
 import model.PlayerList
+import model.StoneMovement
 
 import util.Observable
 import util.Event
+import de.htwg.se.Muehle.model.StoneMovement
 
 case class Controller(
     var field: Field,
@@ -21,18 +23,19 @@ case class Controller(
     notifyObservers(Event.Set)
     notifyObservers(Event.Status)
   def quit: Unit = notifyObservers(Event.Quit)
-  def put(number: Int): Field =
-    field == field.setStone(number, activePlayer.name) match
+  def put(to: Int, from: Int): Field =
+    field == StoneMovement(activePlayer, field, to, from) match
       case false =>
-        field = field.setStone(number, activePlayer.name)
+        field = StoneMovement(activePlayer, field, to, from)
         val newPlayer = playerlist.getNextPlayer(activePlayer)
-        playerlist = playerlist.updateStonesInField(activePlayer)
+        if (activePlayer.stonetoput != 0)
+          playerlist = playerlist.updateStonesInField(activePlayer)
         activePlayer = newPlayer
         notifyObservers(Event.Set)
         notifyObservers(Event.Status)
         field
       case true =>
-        println("The field is not EMPTY, try again")
+        println("This move is not possible try again")
         field
   override def toString(): String = field.toString
   def inputText(): String =
