@@ -18,7 +18,7 @@ jobs:
   scalatest_sbt:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.5.1
+      - uses: actions/checkout@v2
       - name: Run tests
         run: sbt clean coverage test
       - name: Coverage Report
