@@ -6,6 +6,9 @@ import controller.Controller
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import de.htwg.se.Muehle.util._
+import java.io.StringReader
+import java.io.ByteArrayOutputStream
 
 class TuiSpec extends AnyWordSpec with Matchers {
   "The analyseInput function" when {
@@ -20,6 +23,9 @@ class TuiSpec extends AnyWordSpec with Matchers {
       "return false" in {
         tui.analyseInput("25") shouldBe false
       }
+      "return  false when end game" in {
+        tui.analyseInput("q") shouldBe false
+      }
       "put value and ask for another value on valid input" in {
         val mockInput = new java.io.StringReader("4\n")
         val tui = new Tui(controller)
@@ -29,7 +35,6 @@ class TuiSpec extends AnyWordSpec with Matchers {
         }
         isInputProcessed should be(true)
       }
-
     }
   }
 }

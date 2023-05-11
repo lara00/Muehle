@@ -8,25 +8,27 @@ import util.Event
 
 val invalidInputMsg =
   "Invalid input. Please enter a valid number between 1 and 24, or 'q' to quit"
+var loop = true
 
 class Tui(controller: Controller) extends Observer:
   controller.add(this)
   def run =
-    while (true) {
+    while (loop) {
       println(controller.field.toString())
       analyseInput(readLine)
     }
   override def update(e: Event): Unit =
     e match
-      case Event.Quit   => sys.exit(0)
+      case Event.Quit   => loop = false
       case Event.Set    => println(controller.field.toString())
       case Event.Status => println(controller.playerlist.printStonesToSet())
 
   def analyseInput(input: String): Boolean =
     input match
       case "q" =>
+        println("GoodBye")
         controller.quit
-        true
+        false
       case intValueString if controller.field.isFieldValid(intValueString) =>
         controller.put(intValueString.toInt, readLine().toInt)
         true
