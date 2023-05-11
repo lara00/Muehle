@@ -12,21 +12,27 @@ val invalidInputMsg =
 class Tui(controller: Controller) extends Observer:
   controller.add(this)
   def run =
-    println(controller.field.toString())
-    analyseInput(readLine)
+    while (true) {
+      println(controller.field.toString())
+      analyseInput(readLine)
+    }
   override def update(e: Event): Unit =
     e match
       case Event.Quit   => sys.exit(0)
       case Event.Set    => println(controller.field.toString())
       case Event.Status => println(controller.playerlist.printStonesToSet())
 
-  def analyseInput(input: String): Unit =
+  def analyseInput(input: String): Boolean =
     input match
-      case "q" => controller.quit
+      case "q" =>
+        controller.quit
+        true
       case intValueString if controller.field.isFieldValid(intValueString) =>
-        // val x = readLine()
         controller.put(intValueString.toInt, readLine().toInt)
+        true
       case stonestoput if stonestoput.matches("n[37]") =>
         controller.numberofstones(stonestoput.substring(1).toInt)
-      case _: String => println(invalidInputMsg)
-    analyseInput(readLine)
+        true
+      case _: String =>
+        println(invalidInputMsg)
+        false
