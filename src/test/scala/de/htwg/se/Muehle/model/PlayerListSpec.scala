@@ -11,6 +11,7 @@ class PlayerListSpec extends AnyWordSpec with Matchers {
       val playerList = PlayerList(players)
       playerList.getFirstPlayer should be(Player(Stone.White, 2, 0))
     }
+
     "return the next player" in {
       val players = List(Player(Stone.White, 2, 0), Player(Stone.Black, 2, 0))
       val playerList = PlayerList(players)
@@ -21,6 +22,7 @@ class PlayerListSpec extends AnyWordSpec with Matchers {
         Player(Stone.White, 2, 0)
       )
     }
+
     "update the stones in the field for the active player" in {
       val players = List(Player(Stone.White, 2, 0), Player(Stone.Black, 2, 0))
       val playerList = PlayerList(players)
@@ -30,23 +32,31 @@ class PlayerListSpec extends AnyWordSpec with Matchers {
         PlayerList(List(Player(Stone.White, 1, 1), Player(Stone.Black, 2, 0)))
       )
     }
-    "print the stones to set for each player" in {
+
+    "check if the next player is allowed to delete a stone" in {
+      val players = List(Player(Stone.White, 2, 0), Player(Stone.Black, 2, 0))
+      val playerList = PlayerList(players)
+      val activePlayer = Player(Stone.White, 2, 0)
+      val allowedToDelete = playerList.allowedtodeleteastone(activePlayer)
+      allowedToDelete should be(true)
+    }
+
+    "check if there are three stones on the field for the opponent player" in {
       val players = List(Player(Stone.White, 2, 0), Player(Stone.Black, 3, 0))
       val playerList = PlayerList(players)
-      val printed = playerList.printStonesToSet()
-      printed should be(
-        "WHITE Player: Stone to set: W W" + "\n" +
-          "BLACK Player: Stone to set: B B B" + "\n"
-      )
+      val activePlayer = Player(Stone.White, 2, 0)
+      val threeStonesOnField = playerList.threeStonesontheField(activePlayer)
+      threeStonesOnField should be(false)
     }
-    "created with a given input" should {
-      "create a list of two players with the given input and initial score of 0" in {
-        val input = 3
-        val playerList = PlayerList(input)
-        playerList.players should have size 2
-        playerList.players(0) should be(Player(Stone.White, input, 0))
-        playerList.players(1) should be(Player(Stone.Black, input, 0))
-      }
+
+    "update the stones after a mill for the active player" in {
+      val players = List(Player(Stone.White, 1, 1), Player(Stone.Black, 2, 0))
+      val playerList = PlayerList(players)
+      val activePlayer = Player(Stone.White, 1, 1)
+      val updatedPlayerList = playerList.updateStonesafterMill(activePlayer)
+      updatedPlayerList should be(
+        PlayerList(List(Player(Stone.White, 1, 0), Player(Stone.Black, 2, 0)))
+      )
     }
   }
 }

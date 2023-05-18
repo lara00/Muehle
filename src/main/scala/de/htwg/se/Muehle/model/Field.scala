@@ -1,5 +1,6 @@
 package de.htwg.se.Muehle.model
 import scala.util.{Try}
+import org.scalactic.Bool
 
 val minField = 1
 val maxField = 24
