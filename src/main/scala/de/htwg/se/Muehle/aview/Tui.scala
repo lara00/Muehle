@@ -14,14 +14,18 @@ class Tui(controller: Controller) extends Observer:
   controller.add(this)
   def run =
     while (loop) {
-      println(controller.field.toString())
+      println(controller.toString())
       analyseInput(readLine)
     }
   override def update(e: Event): Unit =
     e match
       case Event.Quit   => loop = false
-      case Event.Set    => println(controller.field.toString())
-      case Event.Status => println(controller.playerlist.printStonesToSet())
+      case Event.Set    => println(controller.toString())
+      case Event.Status => println(controller.printStonesToSet())
+      case Event.IsMill =>
+        println("Mühle")
+        val input = readLine().toInt
+        controller.isMill(input)
 
   def analyseInput(input: String): Boolean =
     input match
@@ -29,12 +33,28 @@ class Tui(controller: Controller) extends Observer:
         println("GoodBye")
         controller.quit
         false
-      case intValueString if controller.field.isFieldValid(intValueString) =>
+      case intValueString if controller.isValid(intValueString) =>
         controller.put(intValueString.toInt, readLine().toInt)
         true
-      case stonestoput if stonestoput.matches("n[37]") =>
-        controller.numberofstones(stonestoput.substring(1).toInt)
+      case "sG" =>
+        controller.bildGameSet(3, false)
         true
+      case "mG" =>
+        controller.bildGameSet(6, false)
+        true
+      case "lG" =>
+        controller.bildGameSet(9, false)
+        true
+      case "sSG" =>
+        controller.bildGameSet(3, true)
+        true
+      case "mSG" =>
+        controller.bildGameSet(6, true)
+        true
+      case "lSG" =>
+        controller.bildGameSet(9, true)
+        true
+
       case _: String =>
         println(invalidInputMsg)
         false

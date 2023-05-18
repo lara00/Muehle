@@ -1,6 +1,6 @@
 package de.htwg.se.Muehle.model
 
-//Factory method to hide complexity.
+//"State Pattern zusammen mit StoneMovment"
 object MoveStone {
   def apply(player: Player, field: Field, to: Int, from: Int): Field = {
     if (player.stonetoput == 0 && player.stoneintheField > 3)
@@ -10,32 +10,7 @@ object MoveStone {
       val move = new Jump(player, field, to, from)
       move.move(player, field, to, from)
   }
-}
-
-trait MoveStone {
-  def move(player: Player, field: Field, to: Int, from: Int): Field =
-    field
-}
-
-private class Switch(player: Player, field: Field, to: Int, from: Int)
-    extends MoveStone {
-  override def move(player: Player, field: Field, to: Int, from: Int): Field = {
-    // Move the stone
-    println(s"${player.name} moves a stone.")
-    if (switch(from, to))
-      field.movestone(from, to, player.name)
-    else field
-  }
-  /*1          2        3
-      4      5     6
-          7  8  9
-  10  11  12    13 14 15
-          16 17 18
-      19     20    21
-  22         23       24
-
-   */
-  private def switch(from: Int, to: Int): Boolean = {
+  def switch(from: Int, to: Int): Boolean = {
     /*
     Field 1 is symmetric to field 24, field 2 to field 23, field 3 to field 22, and so on.
     Any two adjacent fields always have the same possible ways to move to the next field, but with different signs.
@@ -76,6 +51,30 @@ private class Switch(player: Player, field: Field, to: Int, from: Int)
     }
     canSwitch
   }
+}
+trait MoveStone {
+  def move(player: Player, field: Field, to: Int, from: Int): Field =
+    field
+}
+private class Switch(player: Player, field: Field, to: Int, from: Int)
+    extends MoveStone {
+  override def move(player: Player, field: Field, to: Int, from: Int): Field = {
+    // Move the stone
+    println(s"${player.name} moves a stone.")
+    if (MoveStone.switch(from, to))
+      field.movestone(from, to, player.name)
+    else field
+  }
+  /*1          2        3
+      4      5     6
+          7  8  9
+  10  11  12    13 14 15
+          16 17 18
+      19     20    21
+  22         23       24
+
+   */
+
 }
 private class Jump(player: Player, field: Field, to: Int, from: Int)
     extends MoveStone {
