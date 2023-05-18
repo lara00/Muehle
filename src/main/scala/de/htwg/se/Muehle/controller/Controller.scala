@@ -67,7 +67,9 @@ case class Controller(
       case false =>
         gamefield = game
         notifyObservers(Event.Set)
-        if (gamefield.player.stonetoput != 0) notifyObservers(Event.Status)
+        if (gamefield.player.stonetoput != 0)
+          println(inputText())
+          notifyObservers(Event.Status)
         else println(inputText2())
         gamefield.field
     }
