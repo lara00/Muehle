@@ -1,7 +1,6 @@
 package de.htwg.se.Muehle
 package model
 
-/*Builder*/
 class Gamefield(
     val gamesetting: GameStap,
     val gamestrategy: PlayerStrategy
@@ -10,23 +9,28 @@ class Gamefield(
     s"Gamefield(playerlist=${gamesetting.playerlist}, singlegamer=${gamestrategy.getClass.getSimpleName})"
   }
 }
-
 class GamefieldBuilder {
   private var stonetoput: GameStap =
-    val playerlist = PlayerList(9)
-    GameStap(Field(), playerlist.getFirstPlayer, playerlist)
+    GameStap(Field(), PlayerList(9).getFirstPlayer, PlayerList(9))
+
   private var singlegamer: PlayerStrategy = HumanPlayer()
+
   def addStonesToPut(quantity: Int): GamefieldBuilder = {
-    val newList = PlayerList(quantity)
-    this.stonetoput = GameStap(Field(), newList.getFirstPlayer, newList)
+    this.stonetoput = GameStap(
+      Field(),
+      PlayerList(quantity).getFirstPlayer,
+      PlayerList(quantity)
+    )
     this
   }
+
   def addSingleGamer(singelegamer: Boolean): GamefieldBuilder = {
     singelegamer match
       case true  => this.singlegamer = AIPlayer()
       case false => this.singlegamer = HumanPlayer()
     this
   }
+
   def build(): Gamefield = {
     new Gamefield(stonetoput, singlegamer)
   }

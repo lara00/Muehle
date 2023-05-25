@@ -1,7 +1,5 @@
 package de.htwg.se.Muehle.model
 
-var currentIndex = 0;
-
 case class PlayerList(players: List[Player]) {
   def getFirstPlayer: Player = players.head
   def getNextPlayer(aktivePlayer: Player): Player =
@@ -46,5 +44,9 @@ object PlayerList {
       new Player(Stone.Black, input, 0)
     )
     PlayerList(players)
+  }
+  def apply(player1: Player, player2: Player): PlayerList = {
+    val player = List(player1, player2)
+    PlayerList(player)
   }
 }

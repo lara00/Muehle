@@ -1,11 +1,8 @@
 package de.htwg.se.Muehle.model
 
-/*Strategy Pattern*/
-trait MillChecker {
-  def isMill(number: Int, field: Field): Boolean
-}
-
-object VerticalAndHorizontalMillChecker extends MillChecker {
+case class Mill(
+    private val field: Field
+) {
   private val verticalMills = Seq(
     Seq(1, 2, 3),
     Seq(4, 5, 6),
@@ -27,7 +24,14 @@ object VerticalAndHorizontalMillChecker extends MillChecker {
     Seq(2, 5, 8),
     Seq(17, 20, 23)
   )
-  override def isMill(number: Int, field: Field): Boolean = {
+  def existsMill(): Boolean = {
+    val numberStream = Stream
+      .from(1)
+      .take(24)
+      .filter(number => field.fields(number) != Stone.Empty)
+    numberStream.exists(number => isMill(number))
+  }
+  def isMill(number: Int): Boolean = {
     isMill(number, field, verticalMills) || isMill(
       number,
       field,
@@ -41,28 +45,14 @@ object VerticalAndHorizontalMillChecker extends MillChecker {
   ): Boolean = {
     val millFields = millset.filter(_.contains(number)).head
     val otherFields = millFields.filter(_ != number)
-    field.fields(number) == field.fields(millFields(0)) && field.fields(
+    field.fields(number) == field.fields(
+      millFields(0)
+    ) && field.fields(
       number
     ) == field.fields(
       millFields(2)
     ) &&
-    field.fields(otherFields(0)) == field.fields(otherFields(1))
-  }
-}
-
-class Mill(
-    private val field: Field,
-    private val millChecker: MillChecker
-) {
-  def isMill(number: Int): Boolean = {
-    millChecker.isMill(number, field)
-  }
-
-  def existsMill(): Boolean = {
-    val numberStream = Stream
-      .from(1)
-      .take(24)
-      .filter(number => field.fields(number) != Stone.Empty)
-    numberStream.exists(number => isMill(number))
+    field.fields(otherFields(0)) == field.fields(otherFields(1)) && field
+      .fields(number) != Stone.Empty
   }
 }

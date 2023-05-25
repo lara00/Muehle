@@ -1,17 +1,11 @@
 package de.htwg.se.Muehle.model
 import scala.util.{Try}
-import org.scalactic.Bool
 
 val minField = 1
 val maxField = 24
 
 case class Field(
-    fields: Map[Int, Stone] = {
-      var m = Map.empty[Int, Stone]
-      var e = 1 to 24
-      for (i <- e) m += (i -> Stone.Empty)
-      m
-    }
+    fields: Map[Int, Stone] = (1 to 24).map(_ -> Stone.Empty).toMap
 ) {
   private val maxStoneLength = 5
   def size: Int = fields.size
@@ -37,49 +31,77 @@ case class Field(
     }
   }
   def stoneString(number: Int): String = fields(number).toString
-  def formatRow(fields: String*): String = {
+  def formatRow(fields: String*): String =
     fields.map(_.padTo(maxStoneLength, ' ')).mkString(" | ") + "\n"
-  }
-  def isFieldValid(intValueString: String): Boolean = {
-    val intValueOpt = Try(intValueString.toInt).toOption
-    intValueOpt.exists(intValue => intValue >= minField && intValue <= maxField)
-  }
-  private def row1_row7_format(a: Int, b: Int, c: Int): String =
-    formatRow(stoneString(a), "", "", stoneString(b), "", "", stoneString(c))
-
-  private def row2_row6_format(a: Int, b: Int, c: Int): String =
-    formatRow("", stoneString(a), "", stoneString(b), "", stoneString(c), "")
-
-  private def row3_row5_format(a: Int, b: Int, c: Int): String =
-    formatRow("", "", stoneString(a), stoneString(b), stoneString(c), "", "")
-
-  private def row4_format(
-      a: Int = 10,
-      b: Int = 11,
-      c: Int = 12,
-      d: Int = 13,
-      e: Int = 14,
-      f: Int = 15
-  ): String =
-    formatRow(
-      stoneString(a),
-      stoneString(b),
-      stoneString(c),
-      "",
-      stoneString(d),
-      stoneString(e),
-      stoneString(f)
+  def isFieldValid(intValueString: String): Boolean =
+    Try(intValueString.toInt).toOption.exists(intValue =>
+      (minField to maxField).contains(intValue)
     )
-  override def toString(): String = {
-    row1_row7_format(1, 2, 3) + row2_row6_format(4, 5, 6) + row3_row5_format(
-      7,
-      8,
-      9
-    ) + row4_format() +
-      row3_row5_format(16, 17, 18) + row2_row6_format(
-        19,
-        20,
-        21
-      ) + row1_row7_format(22, 23, 24)
-  }
+
+  private def rowFormat(fields: String*): String = formatRow(fields: _*)
+
+  override def toString(): String =
+    rowFormat(
+      stoneString(1),
+      "",
+      "",
+      stoneString(2),
+      "",
+      "",
+      stoneString(3)
+    ) +
+      rowFormat(
+        "",
+        stoneString(4),
+        "",
+        stoneString(5),
+        "",
+        stoneString(6),
+        ""
+      ) +
+      rowFormat(
+        "",
+        "",
+        stoneString(7),
+        stoneString(8),
+        stoneString(9),
+        "",
+        ""
+      ) +
+      rowFormat(
+        stoneString(10),
+        stoneString(11),
+        stoneString(12),
+        "",
+        stoneString(13),
+        stoneString(14),
+        stoneString(15)
+      ) +
+      rowFormat(
+        "",
+        "",
+        stoneString(16),
+        stoneString(17),
+        stoneString(18),
+        "",
+        ""
+      ) +
+      rowFormat(
+        "",
+        stoneString(19),
+        "",
+        stoneString(20),
+        "",
+        stoneString(21),
+        ""
+      ) +
+      rowFormat(
+        stoneString(22),
+        "",
+        "",
+        stoneString(23),
+        "",
+        "",
+        stoneString(24)
+      )
 }

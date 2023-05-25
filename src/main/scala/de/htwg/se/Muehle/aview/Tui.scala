@@ -5,56 +5,72 @@ import scala.io.StdIn.readLine
 import controller.Controller
 import util.Observer
 import util.Event
+import scala.util.{Try, Success, Failure}
 
 val invalidInputMsg =
   "Invalid input. Please enter a valid number between 1 and 24, or 'q' to quit"
 var loop = true
-
 class Tui(controller: Controller) extends Observer:
   controller.add(this)
-  def run =
+
+  def run(): Unit = {
     while (loop) {
       println(controller.toString())
-      analyseInput(readLine)
+      analyseInput(readLineTry())
     }
-  override def update(e: Event): Unit =
-    e match
-      case Event.Quit   => loop = false
-      case Event.Set    => println(controller.toString())
-      case Event.Status => println(controller.printStonesToSet())
-      case Event.IsMill =>
-        println("Mühle")
-        val input = readLine().toInt
-        controller.isMill(input)
+  }
 
-  def analyseInput(input: String): Boolean =
-    input match
-      case "q" =>
+  override def update(e: Event): Unit = e match {
+    case Event.Quit   => loop = false
+    case Event.Set    => println(controller.toString())
+    case Event.Status => println(controller.printStonesToSet())
+  }
+
+  def readLineTry(): Try[String] = Try(readLine())
+
+  def parseInputToIntOption(input: String): Try[Int] =
+    Try(input.toInt)
+
+  def analyseInput(input: Try[String]): Boolean = {
+    input match {
+      case Success("q") =>
         println("GoodBye")
         controller.quit
         false
-      case intValueString if controller.isValid(intValueString) =>
-        controller.put(intValueString.toInt, readLine().toInt)
+      case Success("z") =>
+        controller.undo
         true
-      case "sG" =>
+      case Success("y") =>
+        controller.redo
+        true
+      case Success("sG") =>
         controller.bildGameSet(3, false)
         true
-      case "mG" =>
+      case Success("mG") =>
         controller.bildGameSet(6, false)
         true
-      case "lG" =>
+      case Success("lG") =>
         controller.bildGameSet(9, false)
         true
-      case "sSG" =>
+      case Success("sSG") =>
         controller.bildGameSet(3, true)
         true
-      case "mSG" =>
+      case Success("mSG") =>
         controller.bildGameSet(6, true)
         true
-      case "lSG" =>
+      case Success("lSG") =>
         controller.bildGameSet(9, true)
         true
-
-      case _: String =>
-        println(invalidInputMsg)
-        false
+      case Success(intValueString) =>
+        parseInputToIntOption(intValueString) match {
+          case Success(intValue) if controller.isValid(intValueString) =>
+            val input = readLineTry().flatMap(parseInputToIntOption)
+            input.foreach(controller.retrunfield(intValue, _))
+            true
+          case _ =>
+            println(invalidInputMsg)
+            false
+        }
+      case Failure(_) => false
+    }
+  }

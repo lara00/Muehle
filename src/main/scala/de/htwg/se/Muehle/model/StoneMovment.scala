@@ -1,6 +1,6 @@
 package de.htwg.se.Muehle.model
 
-/*State Pattern ?*/
+/*State Pattern*/
 object StoneMovement {
   def apply(player: Player, field: Field, to: Int, from: Int): Field = {
     var movement = setstone(player, field, to)
@@ -12,7 +12,6 @@ object StoneMovement {
     movement
   }
   def setstone(player: Player, field: Field, to: Int): Field = {
-    println("Set a Stone")
     field.setStone(to, player.name)
   }
 }
