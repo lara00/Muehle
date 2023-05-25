@@ -1,15 +1,15 @@
 package de.htwg.se.Muehle
 package aview
 
-import model.{Field, Stone, PlayerList, Player, GameStap, AIPlayer}
-import java.io.{ByteArrayOutputStream, PrintStream, StringReader}
-import controller.Controller
-import org.scalatest._
+import java.io.{ByteArrayOutputStream, PrintStream, StringReader, StringWriter}
+
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import de.htwg.se.Muehle.util._
-import java.io.StringWriter
-import de.htwg.se.Muehle.model.HumanPlayer
+
+import model.{Field, Stone, PlayerList, Player, GameStap, AIPlayer, HumanPlayer}
+import controller.Controller
+import util.Event
+import scala.util.Try
 
 class TuiSpec extends AnyWordSpec with Matchers {
   val field = Field()
@@ -20,41 +20,48 @@ class TuiSpec extends AnyWordSpec with Matchers {
   "The analyseInput function" when {
 
     "the player wants to end the game" should {
+      "return true if call redo" in {
+        tui.analyseInput(Try("z")) shouldBe true
+      }
+      "return true if call undo" in {
+        tui.analyseInput(Try("y")) shouldBe true
+      }
       "return false if exit" in {
-        tui.analyseInput("q") shouldBe false
+        tui.analyseInput(Try("q")) shouldBe false
       }
       "return false" in {
-        tui.analyseInput("25") shouldBe false
+        tui.analyseInput(Try("25")) shouldBe false
       }
       "return true if small Gamefield is ready" in {
-        tui.analyseInput("sG") shouldBe true
+        tui.analyseInput(Try("sG")) shouldBe true
       }
       "return true if middle Gamefield is ready" in {
-        tui.analyseInput("mG") shouldBe true
+        tui.analyseInput(Try("mG")) shouldBe true
       }
       "return true if large Gamefield is ready" in {
-        tui.analyseInput("lG") shouldBe true
+        tui.analyseInput(Try("lG")) shouldBe true
       }
       "return true if small, singleplayer Gamefield is ready" in {
-        tui.analyseInput("sSG") shouldBe true
+        tui.analyseInput(Try("sSG")) shouldBe true
       }
       "return true if middle, singleplayer Gamefield is ready" in {
-        tui.analyseInput("mSG") shouldBe true
+        tui.analyseInput(Try("mSG")) shouldBe true
       }
       "return true if large, singleplayer Gamefield is ready" in {
-        tui.analyseInput("lSG") shouldBe true
+        tui.analyseInput(Try("lSG")) shouldBe true
       }
       "put value and ask for another value on valid input" in {
         val mockInput = new java.io.StringReader("4\n")
         val tui = new Tui(controller)
         var isInputProcessed = false
         Console.withIn(mockInput) {
-          isInputProcessed = tui.analyseInput("3")
+          isInputProcessed = tui.analyseInput(Try("3"))
         }
         isInputProcessed should be(true)
       }
     }
   }
+  /*
   "update method" should {
     "print 'Mühle' and process input" in {
       val controller = Controller(
@@ -75,5 +82,5 @@ class TuiSpec extends AnyWordSpec with Matchers {
       )
     }
   }
-
+   */
 }

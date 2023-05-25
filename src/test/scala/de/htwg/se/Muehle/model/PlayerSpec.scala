@@ -2,7 +2,6 @@ package de.htwg.se.Muehle.model
 
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
-import de.htwg.se.Muehle.model._
 
 class PlayerSpec extends AnyWordSpec with Matchers {
   "incrementStoneintheField" should {

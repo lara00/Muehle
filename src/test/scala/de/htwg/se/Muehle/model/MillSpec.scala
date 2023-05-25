@@ -9,16 +9,14 @@ class MillSpec extends AnyFlatSpec with Matchers {
       .setStone(1, Stone.White)
       .setStone(2, Stone.White)
       .setStone(3, Stone.White)
-    val millChecker = VerticalAndHorizontalMillChecker
-    val mill = new Mill(field, millChecker)
+    val mill = new Mill(field)
 
     val result = mill.existsMill()
     result should be(true)
   }
   it should "not detect a mill when it doesn't exist" in {
     val field = new Field()
-    val millChecker = VerticalAndHorizontalMillChecker
-    val mill = new Mill(field, millChecker)
+    val mill = new Mill(field)
 
     val result = mill.existsMill()
 

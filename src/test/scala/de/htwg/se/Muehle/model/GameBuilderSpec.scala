@@ -2,7 +2,6 @@ package de.htwg.se.Muehle.model
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import de.htwg.se.Muehle.model.{Gamefield, GamefieldBuilder}
 
 class GamefieldBuilderTest extends AnyWordSpec with Matchers {
 
