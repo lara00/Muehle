@@ -1,6 +1,4 @@
 package de.htwg.se.Muehle.model
-import de.htwg.se.Muehle.model.Field
-import de.htwg.se.Muehle.model.Stone
 
 case class Player(
     name: Stone,

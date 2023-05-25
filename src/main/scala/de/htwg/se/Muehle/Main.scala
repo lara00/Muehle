@@ -1,23 +1,17 @@
 package de.htwg.se.Muehle
 
 import de.htwg.se.Muehle.aview.Tui
-import scala.io.StdIn.readLine
 import controller.Controller
-import model.{Field, PlayerList, Stone}
-import model.GameStap
-import model.HumanPlayer
+import model.{Field, PlayerList, Stone, GameStap, HumanPlayer}
 
 object Main {
   def main(args: Array[String]): Unit = {
     println("Play Muehle")
-    val field = Field()
-    val players = PlayerList(7)
-    val humanPlayer = HumanPlayer()
     val controller = Controller(
-      GameStap(field, players.getFirstPlayer, players),
-      humanPlayer
+      GameStap(Field(), PlayerList(4).getFirstPlayer, PlayerList(4)),
+      HumanPlayer()
     )
     val tui = Tui(controller)
-    tui.run
+    tui.run()
   }
 }

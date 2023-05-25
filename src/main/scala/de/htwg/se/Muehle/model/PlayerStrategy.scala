@@ -1,8 +1,6 @@
 package de.htwg.se.Muehle.model
 
 import scala.util.Random
-import de.htwg.se.Muehle.model.Field
-import de.htwg.se.Muehle.controller.Controller
 
 /*Template Pattern*/
 trait PlayerStrategy {
@@ -16,7 +14,7 @@ trait PlayerStrategy {
 
 class HumanPlayer extends PlayerStrategy {
   protected def handleMove(gameStap: GameStap, to: Int, from: Int): GameStap = {
-    Gamemove.chainOfResponsibility(gameStap, to, from)
+    GameHandlerQuee.chainOfResponsibility(gameStap, to, from)
   }
   protected def handleResult(
       gameStap: GameStap,
@@ -32,7 +30,7 @@ class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
   private val playerlist: List[Int] = Nil
 
   protected def handleMove(gameStap: GameStap, to: Int, from: Int): GameStap = {
-    val gamefield = Gamemove.chainOfResponsibility(gameStap, to, from)
+    val gamefield = GameHandlerQuee.chainOfResponsibility(gameStap, to, from)
     gamefield match {
       case `gameStap` => gameStap
       // Mill not implemented
@@ -62,14 +60,17 @@ class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
     val randomNumber = field_is_Free(gamefield.field, gamefield.player.name)
     playerStoneski = to :: playerStoneski
     playerStoneski = randomNumber :: playerStoneski
-    Gamemove.chainOfResponsibility(gamefield, randomNumber, -1)
+    GameHandlerQuee.chainOfResponsibility(gamefield, randomNumber, -1)
   }
 
   private def handleStoneintheField(gamefield: GameStap): GameStap = {
-    val (newFrom, newTo) = generate_move(gamefield)
-    playerStoneski = newTo :: playerStoneski
-    playerStoneski = playerStoneski.filterNot(_ == newFrom)
-    Gamemove.chainOfResponsibility(gamefield, newTo, newFrom)
+    generate_move(gamefield) match {
+      case Some((newFrom, newTo)) =>
+        playerStoneski = newTo :: playerStoneski
+        playerStoneski = playerStoneski.filterNot(_ == newFrom)
+        GameHandlerQuee.chainOfResponsibility(gamefield, newTo, newFrom)
+      case None => handleDefaultMove(gamefield)
+    }
   }
 
   private def handleDefaultMove(gamefield: GameStap): GameStap = {
@@ -77,7 +78,11 @@ class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
     val randomElement = findValidRandomMove(gamefield)
     playerStoneski = randomNumber :: playerStoneski
     playerStoneski = playerStoneski.filterNot(_ == randomElement)
-    Gamemove.chainOfResponsibility(gamefield, randomNumber, randomElement)
+    GameHandlerQuee.chainOfResponsibility(
+      gamefield,
+      randomNumber,
+      randomElement
+    )
   }
 
   private def findValidRandomMove(gamefield: GameStap): Int = {
@@ -108,7 +113,7 @@ class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
     randomNumber
   }
 
-  private def generate_move(gamefield: GameStap): (Int, Int) = {
+  private def generate_move(gamefield: GameStap): Option[(Int, Int)] = {
     var loop = true
     val sequence: List[List[Int]] = List(
       List(1, 2, 10),
@@ -147,8 +152,8 @@ class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
           loop = false
         }
       }
-      from = findValidRandomMove(gamefield) // Aktualisierung von 'from'
+      from = findValidRandomMove(gamefield)
     }
-    resultOption
+    Some(resultOption)
   }
 }
