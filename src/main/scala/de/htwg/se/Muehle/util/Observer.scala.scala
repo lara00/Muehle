@@ -11,5 +11,5 @@ trait Observable:
 
 enum Event:
   case Quit
-  case Set
   case Status
+  case Mill

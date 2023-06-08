@@ -9,11 +9,11 @@ class ObservableSpec extends AnyFlatSpec with Matchers {
     var eventFired = false
     val observer1 = new Observer {
       def update(e: Event): Unit = {
-        if (e == Event.Set) eventFired = true
+        if (e == Event.Status) eventFired = true
       }
     }
     observable.add(observer1)
-    observable.notifyObservers(Event.Set)
+    observable.notifyObservers(Event.Status)
     eventFired shouldBe true
   }
 }

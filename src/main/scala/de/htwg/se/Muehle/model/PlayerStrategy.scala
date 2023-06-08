@@ -2,93 +2,118 @@ package de.htwg.se.Muehle.model
 
 import scala.util.Random
 
-/*Template Pattern*/
-trait PlayerStrategy {
-  final def makeMove(gameStap: GameStap, to: Int, from: Int): GameStap = {
+trait PlayerStrategy:
+  final def makeMove(
+      gameStap: GameStap,
+      to: Int,
+      from: Int
+  ): (GameStap, MoveEvents) =
     val gamefield = handleMove(gameStap, to, from)
     handleResult(gameStap, gamefield)
-  }
-  protected def handleMove(gameStap: GameStap, to: Int, from: Int): GameStap
-  protected def handleResult(gameStap: GameStap, gamefield: GameStap): GameStap
-}
-
-class HumanPlayer extends PlayerStrategy {
-  protected def handleMove(gameStap: GameStap, to: Int, from: Int): GameStap = {
-    GameHandlerQuee.chainOfResponsibility(gameStap, to, from)
-  }
+  protected def handleMove(
+      gameStap: GameStap,
+      to: Int,
+      from: Int
+  ): (GameStap, MoveEvents)
   protected def handleResult(
       gameStap: GameStap,
-      gamefield: GameStap
-  ): GameStap = {
+      gamefield: (GameStap, MoveEvents)
+  ): (GameStap, MoveEvents)
+
+class HumanPlayer extends PlayerStrategy:
+  protected def handleMove(
+      gameStap: GameStap,
+      to: Int,
+      from: Int
+  ): (GameStap, MoveEvents) =
+    gameStap.timetoSetMoveJumporMill(to, from)
+  protected def handleResult(
+      gameStap: GameStap,
+      gamefield: (GameStap, MoveEvents)
+  ): (GameStap, MoveEvents) =
     gamefield
-  }
-}
 
 class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
   private var aimuhle = false
-  var playerStoneski: List[Int] = aiStones
-  private val playerlist: List[Int] = Nil
+  var millgamestap =
+    new GameStap(Field(), new Player(Stone.White, 0, 0), PlayerList(3))
 
-  protected def handleMove(gameStap: GameStap, to: Int, from: Int): GameStap = {
-    val gamefield = GameHandlerQuee.chainOfResponsibility(gameStap, to, from)
-    gamefield match {
-      case `gameStap` => gameStap
-      // Mill not implemented
-      /*
-      case _
-          if gamefield.player.name == gameStap.player.name && gamefield.field != gameStap.field =>
-        playerStoneski = to :: playerStoneski
-        gamefield
-       */
-      case _ if gamefield.player.stonetoput != 0 =>
-        handleStonetoput(gamefield, to)
-      case _ if gamefield.player.stoneintheField > 3 =>
-        handleStoneintheField(gamefield)
-      case _ =>
-        handleDefaultMove(gamefield)
-    }
+  protected def handleMove(
+      gameStap: GameStap,
+      to: Int,
+      from: Int
+  ): (GameStap, MoveEvents) = {
+    aimuhle match
+      case false => {
+        if (gameStap.player.name != Stone.Black) {
+          val gamefield = gameStap.timetoSetMoveJumporMill(to, from)
+          gamefield(1) match
+            case MoveEvents.SetStone_Mill | MoveEvents.MoveStone_Mill =>
+              gamefield
+            case _ => {
+              gamefield(0) match {
+                case `gameStap` => (gameStap, gamefield(1))
+                case _ => makeautomove(gamefield(0))
+              }
+            }
+        } else {
+          makeautomove(gameStap)
+        }
+      }
+      case true => {
+        var deletestone = millgamestap.handleMill(generateRandomNumber)
+        while (deletestone(1) != MillEvents.DeleteStone) {
+          println(generateRandomNumber)
+          deletestone = millgamestap.handleMill(generateRandomNumber)
+        }
+        aimuhle = false
+        (deletestone(0), MoveEvents.SetStone)
+      }
+  }
+
+  def makeautomove(gameStap: GameStap): (GameStap, MoveEvents) = {
+    gameStap match
+            case _ if gameStap.player.stonetoput != 0 =>
+              handleStonetoput(gameStap, -1)
+            case _ if gameStap.player.stoneintheField > 3 =>
+              handleStoneintheField(gameStap)
+            case _ =>
+              handleDefaultMove(gameStap)
   }
 
   protected def handleResult(
       gameStap: GameStap,
-      gamefield: GameStap
-  ): GameStap = {
+      gamefield: (GameStap, MoveEvents)
+  ): (GameStap, MoveEvents) =
     gamefield
-  }
 
-  private def handleStonetoput(gamefield: GameStap, to: Int): GameStap = {
+  private def handleStonetoput(
+      gamefield: GameStap,
+      to: Int
+  ): (GameStap, MoveEvents) = {
     val randomNumber = field_is_Free(gamefield.field, gamefield.player.name)
-    playerStoneski = to :: playerStoneski
-    playerStoneski = randomNumber :: playerStoneski
-    GameHandlerQuee.chainOfResponsibility(gamefield, randomNumber, -1)
+    millcheck(randomNumber,-1, gamefield)
   }
 
-  private def handleStoneintheField(gamefield: GameStap): GameStap = {
-    generate_move(gamefield) match {
-      case Some((newFrom, newTo)) =>
-        playerStoneski = newTo :: playerStoneski
-        playerStoneski = playerStoneski.filterNot(_ == newFrom)
-        GameHandlerQuee.chainOfResponsibility(gamefield, newTo, newFrom)
-      case None => handleDefaultMove(gamefield)
-    }
-  }
-
-  private def handleDefaultMove(gamefield: GameStap): GameStap = {
+  private def handleDefaultMove(gamefield: GameStap): (GameStap, MoveEvents) = {
     val randomNumber = field_is_Free(gamefield.field, gamefield.player.name)
     val randomElement = findValidRandomMove(gamefield)
-    playerStoneski = randomNumber :: playerStoneski
-    playerStoneski = playerStoneski.filterNot(_ == randomElement)
-    GameHandlerQuee.chainOfResponsibility(
-      gamefield,
-      randomNumber,
-      randomElement
-    )
+    millcheck(randomNumber,randomElement, gamefield)
+  }
+  private def handleStoneintheField(
+      gamefield: GameStap
+  ): (GameStap, MoveEvents) = {
+    val move = generate_move(gamefield)
+    val newFrom = move(0)
+    val newTo = move(1)
+    millcheck(newTo,newFrom, gamefield)
   }
 
   private def findValidRandomMove(gamefield: GameStap): Int = {
     val random = new Random()
     var validMoveFound = false
     var randomElement = 0
+    var playerStoneski = gamefield.field.getBlackStonePositions
 
     while (!validMoveFound) {
       randomElement = playerStoneski(random.nextInt(playerStoneski.length))
@@ -113,7 +138,7 @@ class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
     randomNumber
   }
 
-  private def generate_move(gamefield: GameStap): Option[(Int, Int)] = {
+  private def generate_move(gamefield: GameStap): (Int, Int) = {
     var loop = true
     val sequence: List[List[Int]] = List(
       List(1, 2, 10),
@@ -154,6 +179,19 @@ class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
       }
       from = findValidRandomMove(gamefield)
     }
-    Some(resultOption)
+    resultOption
+  }
+  def generateRandomNumber: Int = {
+    val random = new Random()
+    random.nextInt(24) + 1
+  }
+  def millcheck(to:Int, from: Int, gamefield: GameStap) =  {
+    val mill = gamefield.timetoSetMoveJumporMill(to, from)
+    mill(1) match
+      case MoveEvents.SetStone_Mill | MoveEvents.MoveStone_Mill =>
+        aimuhle = true
+        millgamestap = mill(0)
+        gamefield.timetoSetMoveJumporMill(1, -1)
+      case _ => mill
   }
 }

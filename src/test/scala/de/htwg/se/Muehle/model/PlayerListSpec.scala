@@ -32,7 +32,7 @@ class PlayerListSpec extends AnyWordSpec with Matchers {
       )
     }
 
-    "check if the next player is allowed to delete a stone" in {
+    "check if the next player is not allowed to delete a stone" in {
       val players = List(Player(Stone.White, 2, 0), Player(Stone.Black, 2, 0))
       val playerList = PlayerList(players)
       val activePlayer = Player(Stone.White, 2, 0)
@@ -45,7 +45,7 @@ class PlayerListSpec extends AnyWordSpec with Matchers {
       val playerList = PlayerList(players)
       val activePlayer = Player(Stone.White, 2, 0)
       val threeStonesOnField = playerList.threeStonesontheField(activePlayer)
-      threeStonesOnField should be(false)
+      threeStonesOnField should be(true)
     }
 
     "update the stones after a mill for the active player" in {
