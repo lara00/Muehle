@@ -1,25 +1,12 @@
 package de.htwg.se.Muehle
 package controller
 
-import model.{
-  Stone,
-  Field,
-  PlayerList,
-  GameStap,
-  MillEvents,
-  PlayerStrategy,
-  GamefieldBuilder,
-  Mill,
-  MoveEvents
-}
+import model.{Stone,Field,PlayerList,GameStap,MillEvents,PlayerStrategy,GamefieldBuilder,Mill,MoveEvents}
 import util.{Observable, Event, UndoManager}
 import de.htwg.se.Muehle.model.AIPlayer
 import java.awt.Color
 
-case class Controller(
-    var gamefield: GameStap,
-    var playerstrategy: PlayerStrategy
-) extends Observable:
+case class Controller(var gamefield: GameStap,var playerstrategy: PlayerStrategy) extends Observable:
   var gamesize = 0;
   val undoManager = new UndoManager[GameStap]
 
@@ -60,11 +47,8 @@ case class Controller(
 
   def put(to: Int, from: Int): Unit =
     val move = playerstrategy.makeMove(gamefield, to, from)
-    undoManager.doStep(
-      gamefield,
-      PutCommand(Move(move(1), gamefield, playerstrategy, to, from))
-    )
-    move(1) match {
+    undoManager.doStep(gamefield,PutCommand(Move(move(1), gamefield, playerstrategy, to, from)))
+    move(1) match 
       case MoveEvents.SetStone_Mill | MoveEvents.MoveStone_Mill =>
         gamefield = move(0)
         notifyObservers(Event.Status)
@@ -72,7 +56,7 @@ case class Controller(
       case _ =>
         gamefield = move(0)
         notifyObservers(Event.Status)
-    }
+        
   override def toString(): String = gamefield.field.toString
 
   def isValid(a: String): Boolean = gamefield.field.isFieldValid(a)
@@ -82,12 +66,7 @@ case class Controller(
   def PlayerStatics(): (Int, Int, Int, Int) =
     val player1 = gamefield.playerlist.getFirstPlayer
     val player2 = gamefield.playerlist.getNextPlayer(player1)
-    (
-      player1.stonetoput,
-      player1.stoneintheField,
-      player2.stonetoput,
-      player2.stoneintheField
-    )
+    (player1.stonetoput,player1.stoneintheField,player2.stonetoput,player2.stoneintheField)
 
   def setormove(): Boolean =
     gamefield.player.stonetoput != 0
@@ -98,7 +77,7 @@ case class Controller(
         if (gamefield.playerlist.threeStonesontheField(gamefield.getNextPlayer))
           s"${gamefield.player.name}, jump with a stone."
         else
-          s"${gamefield.player.name}, click on the field where you want to place the stone, and then click on the stone you want to move."
+          s"${gamefield.player.name}, Click to place the stone, then click to move it."
       case _ => s"${gamefield.player.name}, press on a field to place a stone."
 
   def getGameState(value: Int): Int =
