@@ -10,6 +10,7 @@ import model.{Field, Stone, PlayerList, Player, GameStap, AIPlayer, HumanPlayer}
 import controller.Controller
 import util.Event
 import scala.util.Try
+import scalafx.scene.text.FontWeight.Black
 
 class TuiSpec extends AnyWordSpec with Matchers {
   val field = Field()
@@ -61,26 +62,24 @@ class TuiSpec extends AnyWordSpec with Matchers {
       }
     }
   }
-  /*
   "update method" should {
     "print 'Mühle' and process input" in {
       val controller = Controller(
         GameStap(
-          field.setStone(5, Stone.Black),
-          Player(Stone.White, 0, 4),
+          field.setStone(4, Stone.Black).setStone(6,Stone.Black).setStone(1,Stone.White),
+          Player(Stone.Black, 0, 4),
           PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4)))
         ),
         HumanPlayer()
       )
-      val input = new java.io.StringReader("5\n")
+      val input = new java.io.StringReader("1\n")
+      val tui = new Tui(controller)
       Console.withIn(input) {
-        val tui = new Tui(controller)
-        tui.update(Event.IsMill)
+        controller.put(5,-1)
       }
       controller.gamefield.playerlist should be(
-        PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 3)))
+        PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4)))
       )
     }
   }
-   */
 }

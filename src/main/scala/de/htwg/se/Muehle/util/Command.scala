@@ -17,7 +17,7 @@ class UndoManager[T]:
     command.doStep(t)
 
   def undoStep(t: T): T =
-    undoStack match {
+    undoStack match 
       case Nil => t
       case head :: stack => {
         val result = head.undoStep(t)
@@ -25,10 +25,9 @@ class UndoManager[T]:
         redoStack = head :: redoStack
         result
       }
-    }
 
   def redoStep(t: T): T =
-    redoStack match {
+    redoStack match 
       case Nil => t
       case head :: stack => {
         val result = head.redoStep(t)
@@ -36,4 +35,3 @@ class UndoManager[T]:
         undoStack = head :: undoStack
         result
       }
-    }

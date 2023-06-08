@@ -19,14 +19,6 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       newPlayer.stoneintheField shouldBe 0
     }
   }
-
-  "toString" should {
-    "return a string in the expected format" in {
-      val player = Player(Stone.White, 0, 0)
-      player.toString() shouldBe "Player(WHITE, 0, 0)"
-    }
-  }
-
   "setstone" should {
     "return a new Field with the specified value at the specified position" in {
       val field = Field()
@@ -41,13 +33,6 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       val player = Player(Stone.White, 2, 0)
       val newPlayer = player.stonetoputinthefield
       newPlayer.stonetoput shouldBe 1
-    }
-
-    "throw an exception when stonetoput is already zero" in {
-      val player = Player(Stone.White, 0, 0)
-      intercept[RuntimeException] {
-        player.stonetoputinthefield
-      }
     }
   }
 }

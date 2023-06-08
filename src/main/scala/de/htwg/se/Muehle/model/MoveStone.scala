@@ -1,26 +1,32 @@
 package de.htwg.se.Muehle.model
 
-//"State Pattern zusammen mit StoneMovment"
-object MoveStone {
-  def apply(player: Player, field: Field, to: Int, from: Int): Field = {
+object MoveStone:
+  def apply(player: Player, field: Field, to: Int, from: Int): Field = 
     if (player.stonetoput == 0 && player.stoneintheField > 3)
       val movestone = new Switch(player, field, to, from)
       movestone.move(player, field, to, from)
     else
       val move = new Jump(player, field, to, from)
       move.move(player, field, to, from)
-  }
-  def switch(from: Int, to: Int): Boolean = {
-    /*
-    Field 1 is symmetric to field 24, field 2 to field 23, field 3 to field 22, and so on.
-    Any two adjacent fields always have the same possible ways to move to the next field, but with different signs.
-    For example, it is possible to move from field 1 to field 2, and from field 1 to field 10 by adding 1 (+1) and 9 (+9), respectively.
-    Similarly, we can use the symmetry of a Mühle field to calculate the numbers between fields. For example, since 25 - 24 = 1 and 25 - 13 = 12,
-    we can use the option from field 1 to field 12 to calculate the numbers from field 13 to field 24.
-     */
+
+  /*1          2        3
+      4      5     6
+          7  8  9
+  10  11  12    13 14 15
+          16 17 18
+      19     20    21
+  22         23       24
+
+  Field 1 is symmetric to field 24, field 2 to field 23, field 3 to field 22, and so on.
+  Any two adjacent fields always have the same possible ways to move to the next field, but with different signs.
+  For example, it is possible to move from field 1 to field 2, and from field 1 to field 10 by adding 1 (+1) and 9 (+9), respectively.
+  Similarly, we can use the symmetry of a Mühle field to calculate the numbers between fields. For example, since 25 - 24 = 1 and 25 - 13 = 12,
+  we can use the option from field 1 to field 12 to calculate the numbers from field 13 to field 24.
+   */
+  def switch(from: Int, to: Int): Boolean = 
     val from_ = if (from > 12) 25 - from else from
     val to_ = if (from > 12) 25 - to else to
-    val canSwitch = from_ match {
+    val canSwitch = from_ match
       /*The other fields, 10, 11, and 12, are compared with the allowed fields to which they may move.*/
       case 10 => to_ == 22 || to_ == 1 || to_ == 11
       case 11 => to_ == 4 || to_ == 10 || to_ == 12 || to_ == 19
@@ -33,7 +39,7 @@ object MoveStone {
       Rest 2 | 2 (-+1, +3) - 5 (+-1, +-3) - 8 (+-1, -3) // No simplifying formula found yet
       Rest 0 | 3 (+1, +12) - 6 (-1, +8) - 9 (+1, +9) // (12 + (from / 3) [integer result] * -4) + from*/
       case _ =>
-        (from_ % 3) match {
+        (from_ % 3) match 
           case 0 =>
             from_ - 1 == to_ || (12 + ((from_ / 3 - 1) * -4)) + from_ == to_
           case 1 =>
@@ -41,46 +47,26 @@ object MoveStone {
           case 2 =>
             from_ + 1 == to_ || from_ - 1 == to_ || {
               val div = from_ / 3
-              div match {
+              div match 
                 case 0 => from_ + 3 == to_
                 case 1 => Math.abs(from_ - to_) == 3
                 case 2 => from_ - 3 == to_
-              }
             }
-        }
-    }
     canSwitch
-  }
-}
-trait MoveStone {
+
+trait MoveStone:
   def move(player: Player, field: Field, to: Int, from: Int): Field =
     field
-}
+
 private class Switch(player: Player, field: Field, to: Int, from: Int)
-    extends MoveStone {
-  override def move(player: Player, field: Field, to: Int, from: Int): Field = {
+    extends MoveStone:
+  override def move(player: Player, field: Field, to: Int, from: Int): Field = 
     // Move the stone
-    println(s"${player.name} moves a stone.")
-    if (MoveStone.switch(from, to))
-      field.movestone(from, to, player.name)
-    else field
-  }
-  /*1          2        3
-      4      5     6
-          7  8  9
-  10  11  12    13 14 15
-          16 17 18
-      19     20    21
-  22         23       24
+    if (MoveStone.switch(from, to)) field.movestone(from, to, player.name) else field
 
-   */
-
-}
 private class Jump(player: Player, field: Field, to: Int, from: Int)
-    extends MoveStone {
-  override def move(player: Player, field: Field, to: Int, from: Int): Field = {
+    extends MoveStone:
+  override def move(player: Player, field: Field, to: Int, from: Int): Field =
     // Jump with the stone
-    println(s"${player.name} jumps with a stone.")
     field.movestone(from, to, player.name)
-  }
-}
+

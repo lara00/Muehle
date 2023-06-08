@@ -1,0 +1,114 @@
+package de.htwg.se.Muehle
+package aview
+package gui
+
+import scala.swing._
+import scala.swing.event.ButtonClicked
+import scala.collection.mutable
+import java.awt.{Color}
+import controller.Controller
+
+class MillField(controller: Controller) extends GridBagPanel:
+  val buttonPosition_ = mutable.Map[Int, Button]()
+  var ismill = false
+  private var clickedButtons = 0
+  private var button1: (RoundButton, Int) = (null, 0)
+  private val buttonPositions = List(
+    (0, 0),
+    (0, 3),
+    (0, 6),
+    (1, 1),
+    (1, 3),
+    (1, 5),
+    (2, 2),
+    (2, 3),
+    (2, 4),
+    (3, 0),
+    (3, 1),
+    (3, 2),
+    (3, 4),
+    (3, 5),
+    (3, 6),
+    (4, 2),
+    (4, 3),
+    (4, 4),
+    (5, 1),
+    (5, 3),
+    (5, 5),
+    (6, 0),
+    (6, 3),
+    (6, 6)
+  )
+  private val fieldSize = 800
+  private val buttonSize = 75
+  private val buttonStates = Array.fill(buttonPositions.length)(Color.lightGray)
+  background = new Color(220, 220, 220)
+  preferredSize = new Dimension(fieldSize, fieldSize)
+
+  override protected def paintComponent(g: Graphics2D): Unit =
+    super.paintComponent(g)
+    g.setColor(Color.black)
+    val buttonPosition = buttonPosition_
+    val buttonPositionsToConnect = List(
+      (1, 3),
+      (1, 22),
+      (2, 8),
+      (3, 24),
+      (4, 6),
+      (4, 19),
+      (6, 21),
+      (7, 9),
+      (7, 16),
+      (9, 18),
+      (10, 12),
+      (13, 15),
+      (16, 18),
+      (19, 21),
+      (22, 24)
+    )
+
+    for ((startIndex, endIndex) <- buttonPositionsToConnect)
+      val button1Pos = buttonPosition(startIndex).location
+      val button2Pos = buttonPosition(endIndex).location
+      val startX = button1Pos.x + buttonSize / 2
+      val startY = button1Pos.y + buttonSize / 2
+      val endX = button2Pos.x + buttonSize / 2
+      val endY = button2Pos.y + buttonSize / 2
+      g.drawLine(startX, startY, endX, endY)
+
+  for (((row, col), index) <- buttonPositions.zipWithIndex)
+    val button = new RoundButton(s"${index + 1}")
+    buttonPosition_ += (index + 1) -> (button)
+
+    layout(button) = new Constraints:
+      grid = (col, row)
+      insets = new Insets(5, 5, 5, 5)
+    button.preferredSize = new Dimension(buttonSize, buttonSize)
+    button.reactions += { case ButtonClicked(_) =>
+      if (ismill) ismill = controller.handleMillCase(index)
+      else handleNonMillCase(index, button)
+    }
+
+  private def handleNonMillCase(index: Int, button: RoundButton): Unit =
+    controller.setormove() match
+      case true => controller.put(index + 1, -1)
+      case false =>
+        clickedButtons match
+          case 0 =>
+            button1 = (button, index + 1)
+            clickedButtons += 1
+          case 1 =>
+            clickedButtons = 0
+            controller.put(button1._2, index + 1)
+          case _ =>
+
+  def update(controller: Controller): Unit =
+    for (
+      (button, index) <-
+        contents.collect { case b: RoundButton => b }.zipWithIndex
+    )
+      val gameState = controller.getGameState(index + 1)
+      button.background = gameState match
+        case 1 => Color.lightGray
+        case 2 => Color.white
+        case 3 => Color.black

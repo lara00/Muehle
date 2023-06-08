@@ -1,11 +1,7 @@
 package de.htwg.se.Muehle
 package controller
 
-import model.{GameStap, PlayerStrategy}
+import model.{GameStap, PlayerStrategy, MoveEvents, MillEvents}
 
-case class Move(
-    gamefield: GameStap,
-    playerstrategy: PlayerStrategy,
-    to: Int,
-    from: Int
-)
+case class Move(event : MoveEvents | MillEvents ,gamefield:
+     GameStap, playerstrategy: PlayerStrategy, to: Int,from: Int)
