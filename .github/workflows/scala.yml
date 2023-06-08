@@ -20,13 +20,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run tests
-        run: sbt clean coverage test -Djava.awt.headless=true
+        run: sbt clean coverage test
       - name: Coverage Report
-        run: sbt coverageReport -Djava.awt.headless=true
+        run: sbt coverageReport
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2.0.0
-      - name: Ignore test failures
-        if: ${{ failure() }}
-        run: echo "Ignoring test failures"
 
 

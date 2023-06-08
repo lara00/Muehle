@@ -13,6 +13,6 @@ object Main:
       HumanPlayer()
     )
     val tui = Tui(controller)
-    val gui = new SwingGui(controller,true)
+    val gui = new SwingGui(controller)
     tui.run()
   
