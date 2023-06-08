@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build with sbt
-        run: sbt test
+        run: sbt test -Djava.awt.headless=true
       - name: compile with sbt
         run: sbt compile
 
@@ -25,8 +25,5 @@ jobs:
         run: sbt coverageReport
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2.0.0
-      - name: Ignore test failures
-        if: ${{ failure() }}
-        run: echo "Ignoring test failures"
 
 
