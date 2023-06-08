@@ -12,7 +12,7 @@ import controller.Controller
 import util.Event
 import util.Observer
 
-class SwingGui(controller: Controller) extends Frame with Observer:
+class SwingGui(controller: Controller, instanz : Boolean) extends Frame with Observer:
   controller.add(this)
   title = "MILL"
   open()
@@ -39,7 +39,8 @@ class SwingGui(controller: Controller) extends Frame with Observer:
   menuBar = createMenuBar()
   pack()
   maximize()
-  visible = true
+  if(instanz)
+    visible = true
   redraw
 
   override def update(e: util.Event): Unit = e match {
@@ -97,7 +98,8 @@ class SwingGui(controller: Controller) extends Frame with Observer:
     menuBar
 
   override def open(): Unit =
-  super.open()
+  if(instanz)
+    super.open()
   listenTo(this)
   reactions += {
     case WindowClosing(_) => controller.quit("")

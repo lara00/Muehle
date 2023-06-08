@@ -30,7 +30,7 @@ class QuitConfirmationDialog(controller: Controller) extends Dialog:
       close(); System.exit(1)
     case ButtonClicked(`newRoundButton`) =>
       controller.bildGameSet(9, false); dispose()
-      new SwingGui(controller)
+      new SwingGui(controller, false)
   }
 
   def showQuitConfirmationDialog: Unit = 
