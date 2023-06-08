@@ -15,8 +15,7 @@ import util.Observer
 class SwingGui(controller: Controller, instanz : Boolean) extends Frame with Observer:
   controller.add(this)
   title = "MILL"
-  if(instanz)
-    open()
+  if (instanz) open()
 
   val millField: MillField = new MillField(controller)
   val showStones = new ShowStones(controller)
@@ -40,12 +39,11 @@ class SwingGui(controller: Controller, instanz : Boolean) extends Frame with Obs
   menuBar = createMenuBar()
   pack()
   maximize()
-  if(instanz)
-    visible = true
+  //visible = instanz
   redraw
 
   override def update(e: util.Event): Unit = e match {
-    case Event.Quit => QuitConfirmationDialog(controller).showQuitConfirmationDialog
+    case Event.Quit => if (instanz) QuitConfirmationDialog(controller).showQuitConfirmationDialog
     case Event.Status => redraw
     case Event.Mill =>
       gameStand.contents.clear()
@@ -99,7 +97,6 @@ class SwingGui(controller: Controller, instanz : Boolean) extends Frame with Obs
     menuBar
 
   override def open(): Unit =
-  if(instanz)
     super.open()
   listenTo(this)
   reactions += {

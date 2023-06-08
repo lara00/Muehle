@@ -20,7 +20,7 @@ class SwingGuiSpec extends AnyFlatSpec with Matchers {
       HumanPlayer()
     )
     controller.gamesize = 4
-    val swingGui = new SwingGui(controller, false)
+    val swingGui = new SwingGui(controller, true)
     swingGui.gameStandLabel.text shouldBe "WHITE, press on a field to place a stone."
 
     SwingUtilities.invokeLater(new Runnable {
