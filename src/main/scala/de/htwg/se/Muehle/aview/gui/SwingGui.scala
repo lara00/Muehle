@@ -15,7 +15,8 @@ import util.Observer
 class SwingGui(controller: Controller, instanz : Boolean) extends Frame with Observer:
   controller.add(this)
   title = "MILL"
-  open()
+  if(instanz)
+    open()
 
   val millField: MillField = new MillField(controller)
   val showStones = new ShowStones(controller)
