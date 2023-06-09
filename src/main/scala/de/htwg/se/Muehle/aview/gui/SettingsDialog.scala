@@ -2,7 +2,7 @@ package de.htwg.se.Muehle
 package aview.gui
 
 import scala.swing.event.ButtonClicked
-import scala.swing.{ ButtonGroup, Dialog, Label, RadioButton, Swing, BoxPanel, Orientation}
+import scala.swing._
 import controller.Controller
 
 class SettingsDialog(controller: Controller) extends Dialog:

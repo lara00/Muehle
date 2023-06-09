@@ -7,11 +7,21 @@ import scala.swing.event._
 import java.awt.{Color}
 import de.htwg.se.Muehle.controller.Controller
 
-class ShowStones(controller : Controller) extends Panel:
+class ShowStones(controller : Controller):
+  def createBoxPanel(color: Color, stones: Int, delete: Int): BoxPanel = 
+    val boxpanel = new BoxPanel(Orientation.Vertical):
+      contents += new BoxPanel(Orientation.Horizontal):
+        contents += new Label("Stones to Set")
+        contents += Swing.HStrut(300)
+        contents += new Label("Delete Stones")
+      contents += new BoxPanel(Orientation.Horizontal):
+        contents += createImagePanel(stones, color)
+        contents += createImagePanel(delete, controller.iswhite(color))
+    boxpanel
+
   def createImagePanel(value: Int, color: Color): Panel =
     new Panel:
       val stonesCount: Int = value
-
       override def paintComponent(g: Graphics2D): Unit = 
         super.paintComponent(g)
         val imageSize = new Dimension(40, 40)
@@ -29,8 +39,3 @@ class ShowStones(controller : Controller) extends Panel:
 
       preferredSize = new Dimension(value * (40), 80)
       background = controller.iswhite(color)
-      listenTo(mouse.clicks)
-
-      reactions += { case e: MouseClicked =>
-        repaint()
-      }
