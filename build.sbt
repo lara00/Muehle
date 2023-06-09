@@ -12,5 +12,4 @@ lazy val root = project
     libraryDependencies += "org.scala-lang.modules" %% "scala-swing" % "3.0.0",
     libraryDependencies += "org.scalafx" %% "scalafx" % "20.0.0-R31",
     testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-Djava.awt.headless=true")
-
   )

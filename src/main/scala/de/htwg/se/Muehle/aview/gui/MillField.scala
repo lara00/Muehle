@@ -49,7 +49,7 @@ class MillField(controller: Controller) extends GridBagPanel:
     g.setColor(Color.black)
     val buttonPosition = buttonPosition_
     val buttonPositionsToConnect = 
-      List((1, 3), (1, 22), (2, 8),(3, 24), (4, 6), (4, 19), (6, 21), 
+      List((1, 3), (1, 22), (2, 8),(3, 24), (4, 6), (4, 19), (6, 21),  (17,23),
       (7, 9), (7, 16), (9, 18), (10, 12), (13, 15),(16, 18), (19, 21), (22, 24))
 
     buttonPositionsToConnect.foreach { case (startIndex, endIndex) =>

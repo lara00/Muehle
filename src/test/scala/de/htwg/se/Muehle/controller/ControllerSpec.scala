@@ -8,6 +8,7 @@ import org.scalatest.wordspec.AnyWordSpec
 
 import model.{Field, Stone, PlayerList, Player, GameStap, AIPlayer, HumanPlayer}
 import util.{Observable, Event, Observer}
+import java.awt.Color
 
 class ControllerSpec extends AnyWordSpec with Matchers {
   val field = Field()
@@ -117,6 +118,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           .setStone(24, Stone.Black)
       )
       controller.put(22, 23)
+      controller.mill(23)
       controller.mill(24)
 
       controller.gamefield.field should be(
@@ -213,6 +215,74 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         Controller(GameStap(field, players.getFirstPlayer, players), AIPlayer())
       controller.put(1, -1)
       controller.gamefield.field should be(field.setStone(1, Stone.White))
+    }
+  }
+  "calling PlayerStatics" should {
+    "return the correct player statistics" in {
+      val field = Field()
+      val players = PlayerList(2)
+      val controller =
+        Controller(GameStap(field, players.getFirstPlayer, players), AIPlayer())
+      val (stonesToPut1, stonesInField1, stonesToPut2, stonesInField2) =
+        controller.PlayerStatics()
+      stonesToPut1 should be(2)
+      stonesInField1 should be(0)
+      stonesToPut2 should be(2)
+      stonesInField2 should be(0)
+    }
+  }
+
+  "calling getGameState" should {
+    "return the correct game state" in {
+      val field =
+        Field()
+          .setStone(1, Stone.White)
+          .setStone(
+            2,
+            Stone.Black
+          )
+      val players = PlayerList(2)
+      val controller =
+        Controller(GameStap(field, players.getFirstPlayer, players), AIPlayer())
+      controller.getGameState(3) should be(1) // Stone.Empty
+      controller.getGameState(1) should be(2) // Stone.White
+      controller.getGameState(2) should be(3) // Stone.Black
+    }
+  }
+
+  "calling handleMillCase" should {
+    "return the correct result" in {
+      val con = Controller(
+        GameStap(
+          Field()
+            .setStone(1, Stone.White)
+            .setStone(2, Stone.White)
+            .setStone(3, Stone.White)
+            .setStone(4, Stone.Black),
+          PlayerList(7).getFirstPlayer,
+          PlayerList(7)
+        ),
+        AIPlayer()
+      )
+      con.handleMillCase(3) should be(false)
+      val controller =
+        Controller(
+          GameStap(Field(), PlayerList(2).getFirstPlayer, PlayerList(2)),
+          AIPlayer()
+        )
+      controller.handleMillCase(1) should be(true)
+    }
+  }
+
+  "calling iswhite" should {
+    "return the correct color" in {
+      val field =
+        Field()
+      val players = PlayerList(2)
+      val controller =
+        Controller(GameStap(field, players.getFirstPlayer, players), AIPlayer())
+      controller.iswhite(Color.WHITE) should be(Color.BLACK)
+      controller.iswhite(Color.BLACK) should be(Color.WHITE)
     }
   }
 }

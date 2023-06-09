@@ -39,7 +39,7 @@ class RoundButton(text: String) extends Button(text):
         baseColor.getBlue,baseColor.getAlpha - i * colorStep)
       g.setColor(color)
       g.fillOval(x, y, circleRadius * 2, circleRadius * 2)
-
+      
   borderPainted = false
   focusPainted = false
   contentAreaFilled = false

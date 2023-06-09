@@ -20,7 +20,7 @@ class QuitConfirmationDialog(controller: Controller) extends Dialog:
       listenTo(endButton, newRoundButton)
         reactions += {
           case ButtonClicked(`endButton`) => close(); System.exit(1)
-          case ButtonClicked(`newRoundButton`) => controller.bildGameSet(9, false); close(); new SwingGui(controller)
+          case ButtonClicked(`newRoundButton`) => controller.bildGameSet(9, false); close()
       }
 
   def showQuitConfirmationDialog: Unit = 
