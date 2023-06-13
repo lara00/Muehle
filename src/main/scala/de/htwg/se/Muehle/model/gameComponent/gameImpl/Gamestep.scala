@@ -42,11 +42,9 @@ case class GameStap(field: Field, player: Player, playerlist: PlayerList) extend
       case _ => 
         (this, MillEvents.WrongDelete)
     
-  private def SetStone(newfield: Field): IGameStap =
-      GameStap(newfield, getNextPlayer, updatedStonesInField)
+  private def SetStone(newfield: Field): IGameStap = GameStap(newfield, getNextPlayer, updatedStonesInField)
 
-  private def MoveStone(newfield: Field): IGameStap =  
-      GameStap(newfield, getNextPlayer, playerlist)
+  private def MoveStone(newfield: Field): IGameStap = GameStap(newfield, getNextPlayer, playerlist)
 
   private def SetStone_Mill(newfield: Field): IGameStap =
       val updatedPlayerList = playerlist.updateStonesInField(player)

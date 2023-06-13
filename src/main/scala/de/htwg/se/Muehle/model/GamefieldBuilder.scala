@@ -22,5 +22,4 @@ class GamefieldBuilder():
       case true  => singlegamer = AIPlayer(); this
       case false => singlegamer = HumanPlayer(); this
 
-  def build(): Gamefield =
-    new Gamefield(stonetoput, singlegamer)
+  def build(): Gamefield = new Gamefield(stonetoput, singlegamer)
