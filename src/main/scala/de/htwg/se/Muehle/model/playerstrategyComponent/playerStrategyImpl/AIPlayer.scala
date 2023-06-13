@@ -1,51 +1,26 @@
 package de.htwg.se.Muehle.model
+package playerstrategyComponent.playerStrategyImpl
 
 import scala.util.Random
+import de.htwg.se.Muehle.model.fieldComponent.Field
+import de.htwg.se.Muehle.model.MoveEvents
+import de.htwg.se.Muehle.model.Stone
+import de.htwg.se.Muehle.model.gameComponent.IGameStap
+import de.htwg.se.Muehle.model.playerstrategyComponent.IPlayerStrategy
 
-trait PlayerStrategy:
-  final def makeMove(
-      gameStap: GameStap,
-      to: Int,
-      from: Int
-  ): (GameStap, MoveEvents) =
-    val gamefield = handleMove(gameStap, to, from)
-    handleResult(gameStap, gamefield)
-  protected def handleMove(
-      gameStap: GameStap,
-      to: Int,
-      from: Int
-  ): (GameStap, MoveEvents)
-  protected def handleResult(
-      gameStap: GameStap,
-      gamefield: (GameStap, MoveEvents)
-  ): (GameStap, MoveEvents)
 
-class HumanPlayer extends PlayerStrategy:
-  protected def handleMove(
-      gameStap: GameStap,
-      to: Int,
-      from: Int
-  ): (GameStap, MoveEvents) =
-    gameStap.timetoSetMoveJumporMill(to, from)
-  protected def handleResult(
-      gameStap: GameStap,
-      gamefield: (GameStap, MoveEvents)
-  ): (GameStap, MoveEvents) =
-    gamefield
-
-class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
+class AIPlayer(aiStones: List[Int] = Nil) extends IPlayerStrategy {
   private var aimuhle = false
-  var millgamestap =
-    new GameStap(Field(), new Player(Stone.White, 0, 0), PlayerList(3))
+  var millgamestap: IGameStap = null
 
   protected def handleMove(
-      gameStap: GameStap,
+      gameStap: IGameStap,
       to: Int,
       from: Int
-  ): (GameStap, MoveEvents) = {
+  ): (IGameStap, MoveEvents) = {
     aimuhle match
       case false => {
-        if (gameStap.player.name != Stone.Black) {
+        if (gameStap.playername != Stone.Black) {
           val gamefield = gameStap.timetoSetMoveJumporMill(to, from)
           gamefield(1) match
             case MoveEvents.SetStone_Mill | MoveEvents.MoveStone_Mill =>
@@ -71,53 +46,53 @@ class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
       }
   }
 
-  def makeautomove(gameStap: GameStap): (GameStap, MoveEvents) = {
+  def makeautomove(gameStap: IGameStap): (IGameStap, MoveEvents) = {
     gameStap match
-            case _ if gameStap.player.stonetoput != 0 =>
+            case _ if gameStap.stonesofaktiveplayer != 0 =>
               handleStonetoput(gameStap, -1)
-            case _ if gameStap.player.stoneintheField > 3 =>
+            case _ if gameStap.stonesofaktiveplayer > 3 =>
               handleStoneintheField(gameStap)
             case _ =>
               handleDefaultMove(gameStap)
   }
 
   protected def handleResult(
-      gameStap: GameStap,
-      gamefield: (GameStap, MoveEvents)
-  ): (GameStap, MoveEvents) =
+      gameStap: IGameStap,
+      gamefield: (IGameStap, MoveEvents)
+  ): (IGameStap, MoveEvents) =
     gamefield
 
   private def handleStonetoput(
-      gamefield: GameStap,
+      gamefield: IGameStap,
       to: Int
-  ): (GameStap, MoveEvents) = {
-    val randomNumber = field_is_Free(gamefield.field, gamefield.player.name)
+  ): (IGameStap, MoveEvents) = {
+    val randomNumber = field_is_Free(gamefield.gfield, gamefield.playername)
     millcheck(randomNumber,-1, gamefield)
   }
 
-  private def handleDefaultMove(gamefield: GameStap): (GameStap, MoveEvents) = {
-    val randomNumber = field_is_Free(gamefield.field, gamefield.player.name)
+  private def handleDefaultMove(gamefield: IGameStap): (IGameStap, MoveEvents) = {
+    val randomNumber = field_is_Free(gamefield.gfield, gamefield.playername)
     val randomElement = findValidRandomMove(gamefield)
     millcheck(randomNumber,randomElement, gamefield)
   }
   private def handleStoneintheField(
-      gamefield: GameStap
-  ): (GameStap, MoveEvents) = {
+      gamefield: IGameStap
+  ): (IGameStap, MoveEvents) = {
     val move = generate_move(gamefield)
     val newFrom = move(0)
     val newTo = move(1)
     millcheck(newTo,newFrom, gamefield)
   }
 
-  private def findValidRandomMove(gamefield: GameStap): Int = {
+  private def findValidRandomMove(gamefield: IGameStap): Int = {
     val random = new Random()
     var validMoveFound = false
     var randomElement = 0
-    var playerStoneski = gamefield.field.getBlackStonePositions
+    var playerStoneski = gamefield.gfield.getBlackStonePositions
 
     while (!validMoveFound) {
       randomElement = playerStoneski(random.nextInt(playerStoneski.length))
-      if (gamefield.field.fields(randomElement) == gamefield.player.name)
+      if (gamefield.gfield.fields(randomElement) == gamefield.playername)
         validMoveFound = true
       else
         playerStoneski = playerStoneski.filterNot(_ == randomElement)
@@ -138,7 +113,7 @@ class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
     randomNumber
   }
 
-  private def generate_move(gamefield: GameStap): (Int, Int) = {
+  private def generate_move(gamefield: IGameStap): (Int, Int) = {
     var loop = true
     val sequence: List[List[Int]] = List(
       List(1, 2, 10),
@@ -172,7 +147,7 @@ class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
       val listto = sequence(from - 1)
       val shuffledElements = Random.shuffle(listto.tail)
       shuffledElements.foreach { element =>
-        if (gamefield.field.fields(element) == Stone.Empty) {
+        if (gamefield.gfield.fields(element) == Stone.Empty) {
           resultOption = (from, element)
           loop = false
         }
@@ -185,7 +160,7 @@ class AIPlayer(aiStones: List[Int] = Nil) extends PlayerStrategy {
     val random = new Random()
     random.nextInt(24) + 1
   }
-  def millcheck(to:Int, from: Int, gamefield: GameStap) =  {
+  def millcheck(to:Int, from: Int, gamefield: IGameStap) =  {
     val mill = gamefield.timetoSetMoveJumporMill(to, from)
     mill(1) match
       case MoveEvents.SetStone_Mill | MoveEvents.MoveStone_Mill =>

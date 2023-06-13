@@ -1,11 +1,11 @@
 package de.htwg.se.Muehle
 package aview.gui
-import controller.Controller
 
 import scala.swing._
 import scala.swing.event.ButtonClicked
+import controller.controllerComponent.IController
 
-class QuitConfirmationDialog(controller: Controller) extends Dialog:
+class QuitConfirmationDialog(controller: IController) extends Dialog:
   title = "Quit Game"
 
   peer.setUndecorated(true)

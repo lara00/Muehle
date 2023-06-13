@@ -1,6 +1,10 @@
-package de.htwg.se.Muehle.model
+package de.htwg.se.Muehle.model.playerComponent
+
+import de.htwg.se.Muehle.model.fieldComponent.Field
+import de.htwg.se.Muehle.model.Stone
 
 case class Player(name: Stone, stonetoput: Int, stoneintheField: Int) :
+  def pname: Stone = name
   def stonetoputinthefield: Player = 
     this.copy(stonetoput = stonetoput - 1)
 

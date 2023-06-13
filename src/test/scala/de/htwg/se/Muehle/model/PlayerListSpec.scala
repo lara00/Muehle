@@ -2,6 +2,7 @@ package de.htwg.se.Muehle.model
 
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
+import de.htwg.se.Muehle.model.playerComponent.Player
 
 class PlayerListSpec extends AnyWordSpec with Matchers {
   "PlayerList" should {

@@ -5,9 +5,9 @@ package gui
 import scala.swing._
 import scala.swing.event._
 import java.awt.{Color}
-import de.htwg.se.Muehle.controller.Controller
+import de.htwg.se.Muehle.controller.controllerComponent.IController
 
-class ShowStones(controller : Controller):
+class ShowStones(controller : IController):
   def createBoxPanel(color: Color, stones: Int, delete: Int): BoxPanel = 
     val boxpanel = new BoxPanel(Orientation.Vertical):
       contents += new BoxPanel(Orientation.Horizontal):

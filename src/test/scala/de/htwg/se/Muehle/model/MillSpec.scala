@@ -2,6 +2,8 @@ package de.htwg.se.Muehle.model
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.flatspec.AnyFlatSpec
+import de.htwg.se.Muehle.model.fieldComponent.Field
+import de.htwg.se.Muehle.model.gameComponent.gameImpl.Mill
 
 class MillSpec extends AnyFlatSpec with Matchers {
   "A Mill" should "detect a mill when it exists" in {

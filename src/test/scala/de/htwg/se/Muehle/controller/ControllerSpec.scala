@@ -6,9 +6,14 @@ import java.io.StringReader
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-import model.{Field, Stone, PlayerList, Player, GameStap, AIPlayer, HumanPlayer}
+import model.{Stone, PlayerList}
 import util.{Observable, Event, Observer}
 import java.awt.Color
+import de.htwg.se.Muehle.model.fieldComponent.Field
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.*
+import de.htwg.se.Muehle.model.playerComponent.Player
+import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
+import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
 
 class ControllerSpec extends AnyWordSpec with Matchers {
   val field = Field()
@@ -19,7 +24,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     "creating input text" should {
       "return the correct output" in {
         val expectedOutput =
-          s"Give the number or the field where you want to set a stone, ${controller.gamefield.player.name} or q (quit)" + "\n" + controller.gamefield.playerlist
+          s"Give the number or the field where you want to set a stone, ${controller.gamefield.playername} or q (quit)" + "\n" + controller.gamefield.gplayerlist
             .printStonesToSet()
       }
     }
@@ -56,9 +61,9 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         HumanPlayer()
       )
       controller.undo
-      controller.gamefield.field should be(Field())
+      controller.gamefield.gfield should be(Field())
       controller.redo
-      controller.gamefield.field should be(
+      controller.gamefield.gfield should be(
         Field()
       )
       controller.put(1, -1)
@@ -70,7 +75,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         .setStone(10, Stone.White)
         .setStone(3, Stone.Black)
         .setStone(2, Stone.Black)
-      controller.gamefield.field should be(expectedRound4)
+      controller.gamefield.gfield should be(expectedRound4)
 
       controller.put(22, -1)
       controller.mill(2)
@@ -79,11 +84,11 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         .setStone(10, Stone.White)
         .setStone(22, Stone.White)
         .setStone(3, Stone.Black)
-      controller.gamefield.field should be(expectedRound5)
+      controller.gamefield.gfield should be(expectedRound5)
       controller.put(6, -1)
       controller.put(7, -1)
       controller.put(8, -1)
-      controller.gamefield.field should be(
+      controller.gamefield.gfield should be(
         field
           .setStone(1, Stone.White)
           .setStone(10, Stone.White)
@@ -94,7 +99,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           .setStone(3, Stone.Black)
       )
       controller.put(23, 22)
-      controller.gamefield.field should be(
+      controller.gamefield.gfield should be(
         field
           .setStone(1, Stone.White)
           .setStone(10, Stone.White)
@@ -107,7 +112,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.undo
       controller.put(23, 22)
       controller.put(24, 3)
-      controller.gamefield.field should be(
+      controller.gamefield.gfield should be(
         field
           .setStone(1, Stone.White)
           .setStone(10, Stone.White)
@@ -121,7 +126,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.mill(23)
       controller.mill(24)
 
-      controller.gamefield.field should be(
+      controller.gamefield.gfield should be(
         field
           .setStone(1, Stone.White)
           .setStone(10, Stone.White)
@@ -132,7 +137,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       )
 
       controller.undo
-      controller.gamefield.field should be(
+      controller.gamefield.gfield should be(
         field
           .setStone(1, Stone.White)
           .setStone(10, Stone.White)
@@ -163,7 +168,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         AIPlayer()
       )
       controller.put(1, -1)
-      controller.gamefield.playerlist should be(
+      controller.gamefield.gplayerlist should be(
         PlayerList(List(Player(Stone.White, 3, 1), Player(Stone.Black, 3, 1)))
       )
       val simulatefield = Field()
@@ -183,7 +188,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         PlayerList(List(Player(Stone.White, 0, 3), Player(Stone.Black, 0, 3)))
       )
       controller.put(10, 1)
-      controller.gamefield.playerlist should be(
+      controller.gamefield.gplayerlist should be(
         PlayerList(List(Player(Stone.White, 0, 3), Player(Stone.Black, 0, 3)))
       )
       val simulatefieldtomove = Field()
@@ -204,7 +209,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4)))
       )
       controller.put(8, 5)
-      controller.gamefield.playerlist should be(
+      controller.gamefield.gplayerlist should be(
         PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4)))
       )
     }
@@ -214,7 +219,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val controller =
         Controller(GameStap(field, players.getFirstPlayer, players), AIPlayer())
       controller.put(1, -1)
-      controller.gamefield.field should be(field.setStone(1, Stone.White))
+      controller.gamefield.gfield should be(field.setStone(1, Stone.White))
     }
   }
   "calling PlayerStatics" should {
@@ -224,7 +229,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val controller =
         Controller(GameStap(field, players.getFirstPlayer, players), AIPlayer())
       val (stonesToPut1, stonesInField1, stonesToPut2, stonesInField2) =
-        controller.PlayerStatics()
+        controller.PlayerStatics
       stonesToPut1 should be(2)
       stonesInField1 should be(0)
       stonesToPut2 should be(2)

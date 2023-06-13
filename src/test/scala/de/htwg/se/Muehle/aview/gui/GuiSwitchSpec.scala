@@ -5,8 +5,7 @@ import org.scalatest.concurrent.Eventually
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-import de.htwg.se.Muehle.controller.Controller
-import de.htwg.se.Muehle.model.{PlayerList, GameStap, Field, HumanPlayer}
+import de.htwg.se.Muehle.model.fieldComponent.Field
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -16,6 +15,10 @@ import scala.swing.event.ActionEvent
 import javax.swing.SwingUtilities
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import de.htwg.se.Muehle.model.PlayerList
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayer
+import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
+import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
 
 class SwingGuiSpec extends AnyFlatSpec with Matchers {
   "SwingGui" should "update player statistics and game stand label" in {

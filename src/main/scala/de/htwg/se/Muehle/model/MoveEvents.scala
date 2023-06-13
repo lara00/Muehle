@@ -7,8 +7,3 @@ enum MoveEvents:
   case MoveStone_Mill
   case NoMove
 
-enum MillEvents:
-  case DeleteStone
-  case EndGame
-  case WrongDelete
-

@@ -2,6 +2,9 @@ package de.htwg.se.Muehle.model
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import de.htwg.se.Muehle.model.fieldComponent.Field
+import de.htwg.se.Muehle.model.playerComponent.Player
+import de.htwg.se.Muehle.model.gameComponent.gameImpl.StoneMovement
 
 class StoneMovementSpec extends AnyWordSpec with Matchers {
   "StoneMovement" should {

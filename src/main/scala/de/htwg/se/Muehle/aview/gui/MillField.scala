@@ -6,9 +6,9 @@ import scala.swing._
 import scala.swing.event.ButtonClicked
 import scala.collection.mutable
 import java.awt.{Color}
-import controller.Controller
+import de.htwg.se.Muehle.controller.controllerComponent.IController
 
-class MillField(controller: Controller) extends GridBagPanel:
+class MillField(controller: IController) extends GridBagPanel:
   var ismill = false
   private var clickedButtons = 0
   val buttonPosition_ = mutable.Map[Int, Button]()
@@ -37,7 +37,7 @@ class MillField(controller: Controller) extends GridBagPanel:
     }
 
   private def handleNonMillCase(index: Int, button: RoundButton): Unit =
-    controller.setormove() match
+    controller.setormove match
       case true => controller.put(index + 1, -1)
       case false =>
         clickedButtons match
@@ -56,7 +56,7 @@ class MillField(controller: Controller) extends GridBagPanel:
     val (pos1, pos2) = (buttonPosition(startIndex).location, buttonPosition(endIndex).location)
     g.drawLine(pos1.x + buttonSize / 2, pos1.y + buttonSize / 2, pos2.x + buttonSize / 2, pos2.y + buttonSize / 2)}
 
-  def update(controller: Controller): Unit =
+  def update(controller: IController): Unit =
     for ((button, index) <- contents.collect { case b: RoundButton => b }.zipWithIndex)
       val gameState = controller.getGameState(index + 1)
       button.background = gameState match

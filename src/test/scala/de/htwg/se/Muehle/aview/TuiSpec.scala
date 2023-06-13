@@ -6,11 +6,17 @@ import java.io.{ByteArrayOutputStream, PrintStream, StringReader, StringWriter}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-import model.{Field, Stone, PlayerList, Player, GameStap, AIPlayer, HumanPlayer}
-import controller.Controller
 import util.Event
 import scala.util.Try
 import scalafx.scene.text.FontWeight.Black
+import de.htwg.se.Muehle.model.fieldComponent.Field
+import de.htwg.se.Muehle.model.PlayerList
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayer
+import de.htwg.se.Muehle.model.Stone
+import de.htwg.se.Muehle.model.playerComponent.Player
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayer
+import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
+import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
 
 class TuiSpec extends AnyWordSpec with Matchers {
   val field = Field()
@@ -77,7 +83,7 @@ class TuiSpec extends AnyWordSpec with Matchers {
       Console.withIn(input) {
         controller.put(5,-1)
       }
-      controller.gamefield.playerlist should be(
+      controller.gamefield.gplayerlist should be(
         PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4)))
       )
     }

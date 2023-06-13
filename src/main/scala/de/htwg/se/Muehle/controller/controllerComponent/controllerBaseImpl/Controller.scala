@@ -1,14 +1,18 @@
 package de.htwg.se.Muehle
-package controller
+package controller.controllerComponent.controllerBaseImpl
 
-import model.{Stone,Field,PlayerList,GameStap,MillEvents,PlayerStrategy,GamefieldBuilder,Mill,MoveEvents}
+import model.{Stone,MillEvents,GamefieldBuilder,MoveEvents}
 import util.{Observable, Event, UndoManager}
-import de.htwg.se.Muehle.model.AIPlayer
 import java.awt.Color
+import de.htwg.se.Muehle.model.fieldComponent.Field
+import de.htwg.se.Muehle.model.gameComponent.IGameStap
+import de.htwg.se.Muehle.controller.controllerComponent.IController
+import de.htwg.se.Muehle.model.playerstrategyComponent.IPlayerStrategy
 
-case class Controller(var gamefield: GameStap,var playerstrategy: PlayerStrategy) extends Observable:
+
+case class Controller(var gamefield: IGameStap ,var playerstrategy: IPlayerStrategy) extends  IController with Observable:
   var gamesize = 0;
-  val undoManager = new UndoManager[GameStap]
+  val undoManager = new UndoManager[IGameStap]
 
   def undo: Unit =
     gamefield = undoManager.undoStep(gamefield)
@@ -36,9 +40,9 @@ case class Controller(var gamefield: GameStap,var playerstrategy: PlayerStrategy
       case MillEvents.DeleteStone =>
         gamefield = mill(0)
         notifyObservers(Event.Status)
-        if (playerstrategy.getClass() == new AIPlayer().getClass())
+        /*if (playerstrategy.getClass() == new AIPlayer().getClass())
           gamefield = playerstrategy.makeMove(gamefield, 1, -1)(0)
-          notifyObservers(Event.Status)
+          notifyObservers(Event.Status)*/
       case MillEvents.EndGame =>
         gamefield = mill(0)
         notifyObservers(Event.Quit)
@@ -57,31 +61,31 @@ case class Controller(var gamefield: GameStap,var playerstrategy: PlayerStrategy
         gamefield = move(0)
         notifyObservers(Event.Status)
         
-  override def toString(): String = gamefield.field.toString
+  override def toString(): String = gamefield.gfield.toString
 
-  def isValid(a: String): Boolean = gamefield.field.isFieldValid(a)
+  def isValid(a: String): Boolean = gamefield.gfield.isFieldValid(a)
 
-  def printStonesToSet(): String = gamefield.playerlist.printStonesToSet()
+  def printStonesToSet: String = gamefield.gplayerlist.printStonesToSet()
 
-  def PlayerStatics(): (Int, Int, Int, Int) =
-    val player1 = gamefield.playerlist.getFirstPlayer
-    val player2 = gamefield.playerlist.getNextPlayer(player1)
+  def PlayerStatics: (Int, Int, Int, Int) =
+    val player1 = gamefield.gplayerlist.getFirstPlayer
+    val player2 = gamefield.gplayerlist.getNextPlayer(player1)
     (player1.stonetoput,player1.stoneintheField,player2.stonetoput,player2.stoneintheField)
 
-  def setormove(): Boolean =
-    gamefield.player.stonetoput != 0
+  def setormove: Boolean =
+    gamefield.gplayer.stonetoput != 0
 
-  def getGameStandLabelText(): String =
-    gamefield.player.stonetoput match
+  def getGameStandLabelText: String =
+    gamefield.gplayer.stonetoput match
       case 0 =>
-        if (gamefield.playerlist.threeStonesontheField(gamefield.getNextPlayer))
-          s"${gamefield.player.name}, jump with a stone."
+        if (gamefield.gplayerlist.threeStonesontheField(gamefield.getNextPlayer))
+          s"${gamefield.playername}, jump with a stone."
         else
-          s"${gamefield.player.name}, Click to place the stone, then click to move it."
-      case _ => s"${gamefield.player.name}, press on a field to place a stone."
+          s"${gamefield.playername}, Click to place the stone, then click to move it."
+      case _ => s"${gamefield.playername}, press on a field to place a stone."
 
   def getGameState(value: Int): Int =
-    gamefield.field.fields(value) match
+    gamefield.gfield.fields(value) match
       case Stone.Empty => 1
       case Stone.White => 2
       case Stone.Black => 3
@@ -95,3 +99,5 @@ case class Controller(var gamefield: GameStap,var playerstrategy: PlayerStrategy
 
   def iswhite(color: Color): Color =
     if (color == Color.WHITE) Color.BLACK else Color.WHITE
+
+  def playername: Stone = gamefield.playername
