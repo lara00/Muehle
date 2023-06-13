@@ -1,13 +1,17 @@
-package de.htwg.se.Muehle.model
+package de.htwg.se.Muehle.model.gameComponent.gameImpl
 
-object MoveStone:
-  def apply(player: Player, field: Field, to: Int, from: Int): Field = 
-    if (player.stonetoput == 0 && player.stoneintheField > 3)
-      val movestone = new Switch(player, field, to, from)
-      movestone.move(player, field, to, from)
-    else
-      val move = new Jump(player, field, to, from)
-      move.move(player, field, to, from)
+import de.htwg.se.Muehle.model.playerComponent.Player
+import de.htwg.se.Muehle.model.fieldComponent.Field
+
+object StoneMovement:
+  def apply(player: Player, field: Field, to: Int, from: Int): Field =
+    from match
+      case -1 => field.setStone(to, player.name)
+      case i if (1 to 24).contains(i) =>
+        if (player.stonetoput == 0 && player.stoneintheField > 3)
+          if (switch(from, to)) field.movestone(from, to, player.name) else field
+        else
+          field.movestone(from, to, player.name)
 
   /*1          2        3
       4      5     6
@@ -23,7 +27,7 @@ object MoveStone:
   Similarly, we can use the symmetry of a Mühle field to calculate the numbers between fields. For example, since 25 - 24 = 1 and 25 - 13 = 12,
   we can use the option from field 1 to field 12 to calculate the numbers from field 13 to field 24.
    */
-  def switch(from: Int, to: Int): Boolean = 
+  private def switch(from: Int, to: Int): Boolean = 
     val from_ = if (from > 12) 25 - from else from
     val to_ = if (from > 12) 25 - to else to
     val canSwitch = from_ match
@@ -54,19 +58,4 @@ object MoveStone:
             }
     canSwitch
 
-trait MoveStone:
-  def move(player: Player, field: Field, to: Int, from: Int): Field =
-    field
-
-private class Switch(player: Player, field: Field, to: Int, from: Int)
-    extends MoveStone:
-  override def move(player: Player, field: Field, to: Int, from: Int): Field = 
-    // Move the stone
-    if (MoveStone.switch(from, to)) field.movestone(from, to, player.name) else field
-
-private class Jump(player: Player, field: Field, to: Int, from: Int)
-    extends MoveStone:
-  override def move(player: Player, field: Field, to: Int, from: Int): Field =
-    // Jump with the stone
-    field.movestone(from, to, player.name)
 

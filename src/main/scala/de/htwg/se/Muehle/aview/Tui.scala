@@ -2,17 +2,16 @@ package de.htwg.se.Muehle
 package aview
 
 import scala.io.StdIn.readLine
-import controller.Controller
-import util.Observer
-import util.Event
+import util.{Observer, Event}
 import scala.util.{Try, Success, Failure}
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import controller.controllerComponent.IController
 
 val invalidInputMsg =
   "Invalid input. Please enter a valid number between 1 and 24, or 'q' to quit"
 var loop = true
-class Tui(controller: Controller) extends Observer:
+class Tui(controller: IController) extends Observer:
   controller.add(this)
 
   def run(): Unit = 
@@ -23,8 +22,8 @@ class Tui(controller: Controller) extends Observer:
   override def update(e: Event): Unit = e match 
     case Event.Quit   => loop = false
     case Event.Status => 
-      println(controller.printStonesToSet())
-      println(controller.getGameStandLabelText())
+      println(controller.printStonesToSet)
+      println(controller.getGameStandLabelText)
       println(controller.toString())
     case Event.Mill =>
       println("Mill delete a Stone")

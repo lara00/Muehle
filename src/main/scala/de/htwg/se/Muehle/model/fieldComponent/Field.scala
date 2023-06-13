@@ -1,6 +1,7 @@
-package de.htwg.se.Muehle.model
+package de.htwg.se.Muehle.model.fieldComponent
 
 import scala.util.{Try}
+import de.htwg.se.Muehle.model.Stone
 
 case class Field(
     fields: Map[Int, Stone] = (1 to 24).map(_ -> Stone.Empty).toMap):

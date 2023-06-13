@@ -8,11 +8,11 @@ import scala.swing.event._
 import scala.swing._
 import scalafx.scene.layout.Pane
 
-import controller.Controller
 import util.Event
 import util.Observer
+import controller.controllerComponent.IController
 
-class SwingGui(controller: Controller) extends Frame with Observer:
+class SwingGui(controller: IController) extends Frame with Observer:
   controller.add(this)
   title = "MILL"
   open()
@@ -49,13 +49,13 @@ class SwingGui(controller: Controller) extends Frame with Observer:
     case Event.Mill => aktualiseMill
 
   private def aktualiseMill: Unit =
-    gameStand.text  = s"${controller.gamefield.player.name}, delete a stone."
+    gameStand.text  = s"${controller.playername}, delete a stone."
     gameStand.revalidate()
     gameStand.repaint()
     millField.ismill = true
 
   private def redraw: Unit =
     millField.update(controller)
-    gameStand.text = controller.getGameStandLabelText()
+    gameStand.text = controller.getGameStandLabelText
     mainPanel.revalidate()
     mainPanel.repaint()

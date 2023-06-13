@@ -1,5 +1,8 @@
 package de.htwg.se.Muehle.model
 
+import de.htwg.se.Muehle.model.playerComponent.Player
+import de.htwg.se.Muehle.model.Stone
+
 case class PlayerList(players: List[Player]):
   def getFirstPlayer: Player = players.head
 

@@ -2,6 +2,7 @@ package de.htwg.se.Muehle.model
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import de.htwg.se.Muehle.model.fieldComponent.Field
 
 class FieldSpec extends AnyWordSpec with Matchers {
   val field = Field()
