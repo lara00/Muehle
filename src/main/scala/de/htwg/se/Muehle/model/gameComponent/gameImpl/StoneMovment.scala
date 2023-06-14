@@ -1,17 +1,17 @@
 package de.htwg.se.Muehle.model.gameComponent.gameImpl
 
-import de.htwg.se.Muehle.model.playerComponent.Player
-import de.htwg.se.Muehle.model.fieldComponent.Field
+import de.htwg.se.Muehle.model.fieldComponent.IField
+import de.htwg.se.Muehle.model.playerComponent.IPlayer
 
 object StoneMovement:
-  def apply(player: Player, field: Field, to: Int, from: Int): Field =
+  def apply(player: IPlayer, field: IField, to: Int, from: Int): IField =
     from match
-      case -1 => field.setStone(to, player.name)
+      case -1 => field.setStone(to, player.pname)
       case i if (1 to 24).contains(i) =>
-        if (player.stonetoput == 0 && player.stoneintheField > 3)
-          if (switch(from, to)) field.movestone(from, to, player.name) else field
+        if (player.pstonetoput == 0 && player.pstoneinField > 3)
+          if (switch(from, to)) field.movestone(from, to, player.pname) else field
         else
-          field.movestone(from, to, player.name)
+          field.movestone(from, to, player.pname)
 
   /*1          2        3
       4      5     6

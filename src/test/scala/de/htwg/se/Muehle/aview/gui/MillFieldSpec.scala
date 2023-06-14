@@ -1,11 +1,10 @@
 package de.htwg.se.Muehle.aview.gui
 
-import de.htwg.se.Muehle.model.fieldComponent.Field
+import de.htwg.se.Muehle.model.fieldComponent.IField
 
 import javax.swing.SwingUtilities
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.se.Muehle.aview.gui
 import de.htwg.se.Muehle.Default.given
 
@@ -13,10 +12,8 @@ import javax.swing.SwingUtilities
 import scala.swing.event.ActionEvent
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
 
-class SwingGuiSpec extends AnyFlatSpec with Matchers {
-  "SwingGui" should "update player statistics and game stand label" in {
-    //val swingGui = new SwingGui()
-    //swingGui.controller.bildGameSet(4,false)
+class MillFieldSpec extends AnyFlatSpec with Matchers {
+  "MillField" should "update player statistics and game stand label" in {
     val con = Controller()
     System.setProperty("java.awt.headless", "true")
     SwingUtilities.invokeLater(new Runnable {

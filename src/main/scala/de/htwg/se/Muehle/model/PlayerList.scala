@@ -1,23 +1,24 @@
 package de.htwg.se.Muehle.model
 
-import de.htwg.se.Muehle.model.playerComponent.Player
+import de.htwg.se.Muehle.Default.given
 import de.htwg.se.Muehle.model.Stone
+import de.htwg.se.Muehle.model.playerComponent.IPlayer
 
-case class PlayerList(players: List[Player]):
-  def getFirstPlayer: Player = players.head
+case class PlayerList(players: List[IPlayer]):
+  def getFirstPlayer: IPlayer = players.head
 
-  def getNextPlayer(aktivePlayer: Player): Player = players.find(_ != aktivePlayer).get
+  def getNextPlayer(aktivePlayer: IPlayer): IPlayer = players.find(_ != aktivePlayer).get
 
-  def allowedtodeleteastone(aktivePlayer: Player): Boolean =
+  def allowedtodeleteastone(aktivePlayer: IPlayer): Boolean =
     val nextplayer = getNextPlayer(aktivePlayer)
-    (nextplayer.stoneintheField != 3 || nextplayer.stonetoput != 0) &&
-    (nextplayer.stoneintheField + nextplayer.stonetoput != 3)
+    (nextplayer.pstoneinField != 3 || nextplayer.pstonetoput != 0) &&
+    (nextplayer.pstoneinField + nextplayer.pstonetoput != 3)
 
-  def threeStonesontheField(player: Player): Boolean =
+  def threeStonesontheField(player: IPlayer): Boolean =
     val nextplayer = getNextPlayer(player)
-    nextplayer.stoneintheField == 3 || (nextplayer.stoneintheField + nextplayer.stonetoput == 3)
+    nextplayer.pstoneinField == 3 || (nextplayer.pstoneinField + nextplayer.pstonetoput == 3)
 
-  def updateStones(player: Player, increment: Boolean): PlayerList = {
+  def updateStones(player: IPlayer, increment: Boolean): PlayerList = {
     PlayerList(players.map { p =>
       p match
         case `player` if increment =>
@@ -27,16 +28,16 @@ case class PlayerList(players: List[Player]):
     })
   }
 
-  def updateStonesInField(aktivePlayer: Player): PlayerList = updateStones(aktivePlayer, increment = true)
+  def updateStonesInField(aktivePlayer: IPlayer): PlayerList = updateStones(aktivePlayer, increment = true)
 
-  def updateStonesafterMill(aktivePlayer: Player): PlayerList = updateStones(aktivePlayer, increment = false)
+  def updateStonesafterMill(aktivePlayer: IPlayer): PlayerList = updateStones(aktivePlayer, increment = false)
 
   def printStonesToSet(): String =
-    players.map { player => val playedStones = List.fill(player.stonetoput)(if (player.name == Stone.White) "W" else "B").mkString(" ")
-        s"${player.name} Player: Stone to set: $playedStones"}.mkString("\n")
+    players.map { player => val playedStones = List.fill(player.pstonetoput)(if (player.pname == Stone.White) "W" else "B").mkString(" ")
+        s"${player.pname} Player: Stone to set: $playedStones"}.mkString("\n")
 
 object PlayerList:
-  def apply(input: Int): PlayerList = PlayerList(List(new Player(Stone.White, input, 0), new Player(Stone.Black, input, 0)))
+  def apply(input: Int): PlayerList = given_IPlayer.pplayerList(input)
   
-  def apply(player1: Player, player2: Player): PlayerList = PlayerList(List(player1, player2))
+  def apply(player1: IPlayer, player2: IPlayer): PlayerList = PlayerList(List(player1, player2))
   

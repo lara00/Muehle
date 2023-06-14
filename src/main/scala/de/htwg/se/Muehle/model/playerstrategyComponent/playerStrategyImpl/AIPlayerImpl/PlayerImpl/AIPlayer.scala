@@ -2,12 +2,10 @@ package de.htwg.se.Muehle.model
 package playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl
 
 import scala.util.Random
-import de.htwg.se.Muehle.model.fieldComponent.Field
-import de.htwg.se.Muehle.model.MoveEvents
-import de.htwg.se.Muehle.model.Stone
+import de.htwg.se.Muehle.model.{MoveEvents, Stone}
+import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.gameComponent.IGameStap
 import de.htwg.se.Muehle.model.playerstrategyComponent.IPlayerStrategy
-
 
 class AIPlayer(aiStones: List[Int] = Nil) extends IPlayerStrategy {
   var aimuhle = false
@@ -38,9 +36,9 @@ class AIPlayer(aiStones: List[Int] = Nil) extends IPlayerStrategy {
 
   def makeautomove(gameStap: IGameStap): (IGameStap, MoveEvents) = {
     gameStap match
-            case _ if gameStap.gplayer.stonetoput != 0 =>
+            case _ if gameStap.gplayer.pstonetoput != 0 =>
               handleStonetoput(gameStap, -1)
-            case _ if gameStap.gplayer.stoneintheField > 3 =>
+            case _ if gameStap.gplayer.pstoneinField > 3 =>
               handleStoneintheField(gameStap)
             case _ =>
               handleDefaultMove(gameStap)
@@ -58,12 +56,12 @@ class AIPlayer(aiStones: List[Int] = Nil) extends IPlayerStrategy {
 
   private def findValidRandomMove(gamefield: IGameStap): Int = {
   val playerStoneski = gamefield.gfield.getBlackStonePositions.to(LazyList)
-  playerStoneski.filter(element => gamefield.gfield.fields(element) == gamefield.playername)
-  .drop(scala.util.Random.nextInt(playerStoneski.count(element => gamefield.gfield.fields(element) == gamefield.playername))).head
+  playerStoneski.filter(element => gamefield.gfield.stones_field(element) == gamefield.playername)
+  .drop(scala.util.Random.nextInt(playerStoneski.count(element => gamefield.gfield.stones_field(element) == gamefield.playername))).head
   }
 
 
-  private def field_is_Free(field: Field, stone: Stone): Int = LazyList.continually(generateRandomNumber).find(number => field.setStone(number, stone) != field).getOrElse(0)
+  private def field_is_Free(field: IField, stone: Stone): Int = LazyList.continually(generateRandomNumber).find(number => field.setStone(number, stone) != field).getOrElse(0)
 
   private def generate_move(gamefield: IGameStap): (Int, Int) = {
   val sequence: List[List[Int]] = List(
@@ -71,10 +69,10 @@ class AIPlayer(aiStones: List[Int] = Nil) extends IPlayerStrategy {
     List(7, 12, 8), List(8, 7, 5, 9), List(9, 8, 13), List(10, 1, 11, 22), List(11, 10, 4, 12, 19), List(12, 11, 7, 16),
     List(13, 9, 18, 14), List(14, 6, 13, 15, 21), List(15, 14, 3, 24), List(16, 12, 17), List(17, 20, 18), List(18, 17, 13),
     List(19, 11, 20), List(20, 19, 17, 21, 23), List(21, 20, 14), List(22, 23, 24), List(23, 22, 20, 24), List(24, 23, 15))
-  val validMoves = gamefield.gfield.getBlackStonePositions.filter(position => sequence(position - 1).tail.exists(element => gamefield.gfield.fields(element) == Stone.Empty))
+  val validMoves = gamefield.gfield.getBlackStonePositions.filter(position => sequence(position - 1).tail.exists(element => gamefield.gfield.stones_field(element) == Stone.Empty))
   Random.shuffle(validMoves).headOption match
     case Some(from) =>
-      val toOptions = sequence(from - 1).tail.filter(element => gamefield.gfield.fields(element) == Stone.Empty)
+      val toOptions = sequence(from - 1).tail.filter(element => gamefield.gfield.stones_field(element) == Stone.Empty)
       val randomTo = Random.shuffle(toOptions).head
       (from, randomTo)
     case None =>(0, 0)

@@ -9,17 +9,18 @@ import org.scalatest.wordspec.AnyWordSpec
 import model.{Stone, PlayerList}
 import util.{Observable, Event, Observer}
 import java.awt.Color
-import de.htwg.se.Muehle.model.fieldComponent.Field
+import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.*
-import de.htwg.se.Muehle.model.playerComponent.Player
+import de.htwg.se.Muehle.model.playerComponent.IPlayer
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl.AIPlayer
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
 import de.htwg.se.Muehle.Default.given
+import de.htwg.se.Muehle.model.PlayerList
 
 class ControllerSpec extends AnyWordSpec with Matchers {
-  val field = Field()
+  val field = given_IField
   val players = PlayerList(7)
   val controller = Controller()
   "A Controller" when {
@@ -32,7 +33,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
     "converting to a string" should {
       "return the correct representation of the field" in {
-        val field: Field = Field()
+        val field: IField = given_IField
         val players: PlayerList =PlayerList(7)
         val controller = Controller()
         controller.toString should be(
@@ -111,8 +112,8 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val controller: Controller = Controller()
       controller.bildGameSet(4 , true)
       controller.put(1, -1)
-      controller.gamefield.gplayerlist should be(PlayerList(List(Player(Stone.White, 3, 1), Player(Stone.Black, 3, 1))))
-      val simulatefield = Field().setStone(1, Stone.White).setStone(15, Stone.White).setStone(20, Stone.White).setStone(19, Stone.Black)
+      controller.gamefield.gplayerlist should be(PlayerList(List(given_IPlayer.pplayer(Stone.White, 3, 1), given_IPlayer.pplayer(Stone.Black, 3, 1))))
+      val simulatefield = given_IField.setStone(1, Stone.White).setStone(15, Stone.White).setStone(20, Stone.White).setStone(19, Stone.Black)
         .setStone(4, Stone.Black)
         .setStone(15, Stone.Black)
         .setStone(1, Stone.White)
@@ -121,11 +122,13 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val r = AIPlayer(playerStoneski)
       controller.playerstrategy = r
 
-      controller.gamefield = GameStap(simulatefield,Player(Stone.White, 1, 3),PlayerList(List(Player(Stone.White, 1, 3), Player(Stone.Black, 0, 4))))
+      controller.gamefield = GameStap(simulatefield,given_IPlayer.pplayer(Stone.White, 1, 3),
+      PlayerList(List(given_IPlayer.pplayer(Stone.White, 1, 3), given_IPlayer.pplayer(Stone.Black, 0, 4))))
       controller.put(22, -1)
       controller.mill(4)
-      controller.gamefield.gplayerlist should be(PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 3))))
-      val simulatefieldtomove = Field().setStone(1, Stone.White).setStone(15, Stone.White)
+      controller.gamefield.gplayerlist should be(
+        PlayerList(List(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 3))))
+      val simulatefieldtomove = given_IField.setStone(1, Stone.White).setStone(15, Stone.White)
         .setStone(20, Stone.White)
         .setStone(5, Stone.White)
         .setStone(19, Stone.Black)
@@ -136,9 +139,10 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val playerstrategymove = AIPlayer(playerStoneskitomove)
       controller.playerstrategy = playerstrategymove
       controller.gamefield = GameStap(
-        simulatefieldtomove,Player(Stone.White, 0, 4),PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4))))
+        simulatefieldtomove,given_IPlayer.pplayer(Stone.White, 0, 4),
+        PlayerList(List(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 4))))
       controller.put(8, 5)
-      controller.gamefield.gplayerlist should be(PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4))))
+      controller.gamefield.gplayerlist should be(PlayerList(List(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 4))))
     }
     "case the put is not possible" in {
       val controller = Controller()
@@ -171,7 +175,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
   }
   "calling PlayerStatics" should {
     "return the correct player statistics" in {
-      val field = Field()
+      val field = given_IField
       val players = PlayerList(2)
       val controller = Controller()
       controller.bildGameSet(2,false)

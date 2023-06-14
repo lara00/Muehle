@@ -3,11 +3,12 @@ package de.htwg.se.Muehle.model
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.*
-import de.htwg.se.Muehle.model.fieldComponent.Field
-import de.htwg.se.Muehle.model.{Gamefield, GamefieldBuilder}
+import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl.AIPlayer
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
+import de.htwg.se.Muehle.model.PlayerList
+import de.htwg.se.Muehle.Default.given
 
 class GamefieldBuilderTest extends AnyWordSpec with Matchers {
 
@@ -20,7 +21,7 @@ class GamefieldBuilderTest extends AnyWordSpec with Matchers {
         .addSingleGamer(true)
         .build()
 
-      gamefield.gamesetting.gplayer.stonetoput shouldBe 5
+      gamefield.gamesetting.gplayer.pstonetoput shouldBe 5
       gamefield.gamestrategy shouldBe an[AIPlayer]
     }
 
@@ -29,7 +30,7 @@ class GamefieldBuilderTest extends AnyWordSpec with Matchers {
 
       val gamefield = builder.build()
 
-      gamefield.gamesetting.gplayer.stonetoput shouldBe 9
+      gamefield.gamesetting.gplayer.pstonetoput shouldBe 4
       gamefield.gamestrategy shouldBe a[HumanPlayer]
     }
 
@@ -45,7 +46,7 @@ class GamefieldBuilderTest extends AnyWordSpec with Matchers {
 
     "provide a string representation of the Gamefield" in {
       val players = PlayerList(9)
-      val gamesetting = GameStap(Field(), players.getFirstPlayer, PlayerList(9))
+      val gamesetting = GameStap(given_IField, players.getFirstPlayer, PlayerList(9))
       val gamestrategy = HumanPlayer()
       val gamefield = new Gamefield(gamesetting, gamestrategy)
 

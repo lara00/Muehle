@@ -1,11 +1,9 @@
 package de.htwg.se.Muehle
 package controller.controllerComponent.controllerBaseImpl
-import util.{Command, Event, Observable}
-import model.{MillList, MillEvents}
-import de.htwg.se.Muehle.model.MoveEvents
-import de.htwg.se.Muehle.model.PlayerList
+
 import de.htwg.se.Muehle.model.gameComponent.IGameStap
-import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
+import model.{MillList, MillEvents, MoveEvents}
+import util.{Command, Event, Observable}
 
 class PutCommand(move: Move) extends Command[IGameStap] {
   override def noStep(t: IGameStap): IGameStap = move.gamefield
@@ -16,7 +14,7 @@ class PutCommand(move: Move) extends Command[IGameStap] {
   }
 
   override def undoStep(t: IGameStap): IGameStap = {
-        GameStap(
+        t.newGamestap(
           move.gamefield.gfield
             .deleteStone(move.to, move.gamefield.playername)
             .setStone(move.from, move.gamefield.playername),
@@ -26,7 +24,7 @@ class PutCommand(move: Move) extends Command[IGameStap] {
   }
 
   override def redoStep(t: IGameStap): IGameStap = {
-        GameStap(move.gamefield.gfield
+        t.newGamestap(move.gamefield.gfield
             .deleteStone(move.to, move.gamefield.playername),
           move.gamefield.gplayer,
           move.gamefield.gplayerlist)
