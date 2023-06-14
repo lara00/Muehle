@@ -4,13 +4,18 @@ package controller.controllerComponent.controllerBaseImpl
 import model.{Stone,MillEvents,GamefieldBuilder,MoveEvents}
 import util.{Observable, Event, UndoManager}
 import java.awt.Color
-import de.htwg.se.Muehle.model.fieldComponent.Field
 import de.htwg.se.Muehle.model.gameComponent.IGameStap
 import de.htwg.se.Muehle.controller.controllerComponent.IController
 import de.htwg.se.Muehle.model.playerstrategyComponent.IPlayerStrategy
+import com.google.inject.Inject
+
+import net.codingwell.scalaguice.InjectorExtensions._
+import net.codingwell.scalaguice.InjectorExtensions.ScalaInjector
+import de.htwg.se.Muehle.Default.{given}
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl.AIPlayer
 
 
-case class Controller(var gamefield: IGameStap ,var playerstrategy: IPlayerStrategy) extends  IController with Observable:
+class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStrategy) extends IController with Observable {
   var gamesize = 0;
   val undoManager = new UndoManager[IGameStap]
 
@@ -40,9 +45,9 @@ case class Controller(var gamefield: IGameStap ,var playerstrategy: IPlayerStrat
       case MillEvents.DeleteStone =>
         gamefield = mill(0)
         notifyObservers(Event.Status)
-        /*if (playerstrategy.getClass() == new AIPlayer().getClass())
+        if (playerstrategy.getClass() == new AIPlayer().getClass())
           gamefield = playerstrategy.makeMove(gamefield, 1, -1)(0)
-          notifyObservers(Event.Status)*/
+          notifyObservers(Event.Status)
       case MillEvents.EndGame =>
         gamefield = mill(0)
         notifyObservers(Event.Quit)
@@ -101,3 +106,4 @@ case class Controller(var gamefield: IGameStap ,var playerstrategy: IPlayerStrat
     if (color == Color.WHITE) Color.BLACK else Color.WHITE
 
   def playername: Stone = gamefield.playername
+}

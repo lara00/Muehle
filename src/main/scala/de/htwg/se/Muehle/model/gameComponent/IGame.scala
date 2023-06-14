@@ -4,6 +4,7 @@ import de.htwg.se.Muehle.model.fieldComponent.Field
 import de.htwg.se.Muehle.model.playerComponent.Player
 import de.htwg.se.Muehle.model.PlayerList
 import de.htwg.se.Muehle.model.{Stone, MoveEvents, MillEvents}
+import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
 
 trait IGameStap {
   def gplayer: Player

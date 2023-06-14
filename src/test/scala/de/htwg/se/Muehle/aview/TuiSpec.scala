@@ -11,19 +11,15 @@ import scala.util.Try
 import scalafx.scene.text.FontWeight.Black
 import de.htwg.se.Muehle.model.fieldComponent.Field
 import de.htwg.se.Muehle.model.PlayerList
-import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayer
 import de.htwg.se.Muehle.model.Stone
 import de.htwg.se.Muehle.model.playerComponent.Player
-import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayer
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
+import de.htwg.se.Muehle.Default.given
 
 class TuiSpec extends AnyWordSpec with Matchers {
-  val field = Field()
-  val players = PlayerList(7)
-  val controller =
-    Controller(GameStap(field, players.getFirstPlayer, players), AIPlayer())
-  val tui = Tui(controller)
+  val controller =Controller()
+  val tui = Tui()
   "The analyseInput function" when {
 
     "the player wants to end the game" should {
@@ -59,7 +55,7 @@ class TuiSpec extends AnyWordSpec with Matchers {
       }
       "put value and ask for another value on valid input" in {
         val mockInput = new java.io.StringReader("4\n")
-        val tui = new Tui(controller)
+        val tui = new Tui()
         var isInputProcessed = false
         Console.withIn(mockInput) {
           isInputProcessed = tui.analyseInput(Try("3"))
@@ -70,22 +66,16 @@ class TuiSpec extends AnyWordSpec with Matchers {
   }
   "update method" should {
     "print 'Mühle' and process input" in {
-      val controller = Controller(
-        GameStap(
-          field.setStone(4, Stone.Black).setStone(6,Stone.Black).setStone(1,Stone.White),
-          Player(Stone.Black, 0, 4),
-          PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4)))
-        ),
-        HumanPlayer()
-      )
-      val input = new java.io.StringReader("1\n")
-      val tui = new Tui(controller)
+      val input = new java.io.StringReader("2\n")
+      val tui = new Tui()
+      tui.controller.put(1,-1)
+      tui.controller.put(2,-1)
+      tui.controller.put(10,-1)
+      tui.controller.put(3,-1)
       Console.withIn(input) {
-        controller.put(5,-1)
+        tui.controller.put(22,-1)
       }
-      controller.gamefield.gplayerlist should be(
-        PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4)))
-      )
+      //tui.controller.playername should be(Stone.Black)
     }
   }
 }

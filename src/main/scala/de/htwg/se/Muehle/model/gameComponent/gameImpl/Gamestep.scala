@@ -28,7 +28,7 @@ case class GameStap(field: Field, player: Player, playerlist: PlayerList) extend
     (player.stonetoput, Mill(newField).isMill(to), newField != field, from) match 
       case (n, false, true, -1) if n != 0 => (SetStone(newField), MoveEvents.SetStone)
       case (n, true, true, -1) if n != 0 => (SetStone_Mill(newField),MoveEvents.SetStone_Mill)
-      case (_, false, true,_) => (MoveStone(newField), MoveEvents.SetStone)
+      case (_, false, true,_) => (MoveStone(newField), MoveEvents.MoveStone)
       case (_, true, true,_) => (GameStap(newField,player,playerlist), MoveEvents.MoveStone_Mill)
       case _ => (this, MoveEvents.NoMove)
     

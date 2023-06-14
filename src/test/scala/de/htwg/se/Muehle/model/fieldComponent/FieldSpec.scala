@@ -1,8 +1,9 @@
-package de.htwg.se.Muehle.model
+package de.htwg.se.Muehle.model.fieldComponent
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.se.Muehle.model.fieldComponent.Field
+import de.htwg.se.Muehle.model.Stone
 
 class FieldSpec extends AnyWordSpec with Matchers {
   val field = Field()
@@ -71,6 +72,16 @@ class FieldSpec extends AnyWordSpec with Matchers {
         val updatedField = newField.setStone(2, Stone.White)
         val sameField = updatedField.movestone(1, 2, Stone.Black)
         sameField should be(updatedField)
+      }
+    }
+      "getStonePositions" should {
+      "return the positions of stones of the specified type" in {
+        val newField = field.setStone(1, Stone.Black)
+        val whitePositions = newField.getWhiteStonePositions
+        val blackPositions = newField.getBlackStonePositions
+        
+        whitePositions should be(Nil)
+        blackPositions should be(List(1))
       }
     }
     "printed" should {

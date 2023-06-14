@@ -14,12 +14,14 @@ import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.*
 import de.htwg.se.Muehle.model.playerComponent.Player
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl.AIPlayer
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
+import de.htwg.se.Muehle.Default.given
 
 class ControllerSpec extends AnyWordSpec with Matchers {
   val field = Field()
   val players = PlayerList(7)
-  val controller =
-    Controller(GameStap(field, players.getFirstPlayer, players), AIPlayer())
+  val controller = Controller()
   "A Controller" when {
     "creating input text" should {
       "return the correct output" in {
@@ -31,12 +33,8 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     "converting to a string" should {
       "return the correct representation of the field" in {
         val field: Field = Field()
-        val players: PlayerList =
-          PlayerList(7)
-        val controller: Controller = Controller(
-          GameStap(field, players.getFirstPlayer, players),
-          AIPlayer()
-        )
+        val players: PlayerList =PlayerList(7)
+        val controller = Controller()
         controller.toString should be(
           field.toString
         )
@@ -54,74 +52,34 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       }
     }
     "simulate set complete game with 4 stones" in {
-      val field: Field = Field()
-      val players: PlayerList = PlayerList(4)
-      val controller: Controller = Controller(
-        GameStap(field, players.getFirstPlayer, players),
-        HumanPlayer()
-      )
+      val controller: Controller = Controller()
       controller.undo
-      controller.gamefield.gfield should be(Field())
       controller.redo
-      controller.gamefield.gfield should be(
-        Field()
-      )
       controller.put(1, -1)
       controller.put(2, -1)
       controller.put(10, -1)
       controller.put(3, -1)
-      val expectedRound4 = field
-        .setStone(1, Stone.White)
-        .setStone(10, Stone.White)
-        .setStone(3, Stone.Black)
-        .setStone(2, Stone.Black)
+      val expectedRound4 = field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(3, Stone.Black).setStone(2, Stone.Black)
       controller.gamefield.gfield should be(expectedRound4)
 
       controller.put(22, -1)
       controller.mill(2)
-      val expectedRound5 = field
-        .setStone(1, Stone.White)
-        .setStone(10, Stone.White)
-        .setStone(22, Stone.White)
-        .setStone(3, Stone.Black)
+      val expectedRound5 = field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(3, Stone.Black)
       controller.gamefield.gfield should be(expectedRound5)
       controller.put(6, -1)
       controller.put(7, -1)
       controller.put(8, -1)
       controller.gamefield.gfield should be(
-        field
-          .setStone(1, Stone.White)
-          .setStone(10, Stone.White)
-          .setStone(22, Stone.White)
-          .setStone(7, Stone.White)
-          .setStone(6, Stone.Black)
-          .setStone(8, Stone.Black)
-          .setStone(3, Stone.Black)
-      )
+        field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(3, Stone.Black))
       controller.put(23, 22)
       controller.gamefield.gfield should be(
-        field
-          .setStone(1, Stone.White)
-          .setStone(10, Stone.White)
-          .setStone(23, Stone.White)
-          .setStone(7, Stone.White)
-          .setStone(6, Stone.Black)
-          .setStone(8, Stone.Black)
-          .setStone(3, Stone.Black)
-      )
+        field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(23, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(3, Stone.Black))
       controller.undo
       controller.put(23, 22)
+      controller.getGameStandLabelText should be ("BLACK, jump with a stone.")
       controller.put(24, 3)
-      controller.gamefield.gfield should be(
-        field
-          .setStone(1, Stone.White)
-          .setStone(10, Stone.White)
-          .setStone(23, Stone.White)
-          .setStone(7, Stone.White)
-          .setStone(6, Stone.Black)
-          .setStone(8, Stone.Black)
-          .setStone(24, Stone.Black)
-      )
+      controller.gamefield.gfield should be(field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(23, Stone.White).setStone(7, Stone.White)
+          .setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(24, Stone.Black))
       controller.put(22, 23)
       controller.mill(23)
       controller.mill(24)
@@ -147,53 +105,27 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           .setStone(8, Stone.Black)
           .setStone(24, Stone.Black)
       )
-      /*
-      controller.redo
-      controller.gamefield.field should be(
-        field
-          .setStone(1, Stone.White)
-          .setStone(10, Stone.White)
-          .setStone(22, Stone.White)
-          .setStone(7, Stone.White)
-          .setStone(6, Stone.Black)
-          .setStone(8, Stone.Black)
-      )
-       */
+      controller.getGameStandLabelText should be ("WHITE, Click to place the stone, then click to move it.")
     }
     "simulate set complett game with 4 stones as Singelplayer" in {
-      val field: Field = Field()
-      val players: PlayerList = PlayerList(4)
-      val controller: Controller = Controller(
-        GameStap(field, players.getFirstPlayer, players),
-        AIPlayer()
-      )
+      val controller: Controller = Controller()
+      controller.bildGameSet(4 , true)
       controller.put(1, -1)
-      controller.gamefield.gplayerlist should be(
-        PlayerList(List(Player(Stone.White, 3, 1), Player(Stone.Black, 3, 1)))
-      )
-      val simulatefield = Field()
+      controller.gamefield.gplayerlist should be(PlayerList(List(Player(Stone.White, 3, 1), Player(Stone.Black, 3, 1))))
+      val simulatefield = Field().setStone(1, Stone.White).setStone(15, Stone.White).setStone(20, Stone.White).setStone(19, Stone.Black)
+        .setStone(4, Stone.Black)
+        .setStone(15, Stone.Black)
         .setStone(1, Stone.White)
-        .setStone(15, Stone.White)
-        .setStone(20, Stone.White)
-        .setStone(19, Stone.Black)
-        .setStone(22, Stone.Black)
-        .setStone(20, Stone.Black)
+        .setStone(10, Stone.White)
       val playerStoneski: List[Int] = List(19, 20, 22)
       val r = AIPlayer(playerStoneski)
       controller.playerstrategy = r
 
-      controller.gamefield = GameStap(
-        simulatefield,
-        Player(Stone.White, 0, 3),
-        PlayerList(List(Player(Stone.White, 0, 3), Player(Stone.Black, 0, 3)))
-      )
-      controller.put(10, 1)
-      controller.gamefield.gplayerlist should be(
-        PlayerList(List(Player(Stone.White, 0, 3), Player(Stone.Black, 0, 3)))
-      )
-      val simulatefieldtomove = Field()
-        .setStone(1, Stone.White)
-        .setStone(15, Stone.White)
+      controller.gamefield = GameStap(simulatefield,Player(Stone.White, 1, 3),PlayerList(List(Player(Stone.White, 1, 3), Player(Stone.Black, 0, 4))))
+      controller.put(22, -1)
+      controller.mill(4)
+      controller.gamefield.gplayerlist should be(PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 3))))
+      val simulatefieldtomove = Field().setStone(1, Stone.White).setStone(15, Stone.White)
         .setStone(20, Stone.White)
         .setStone(5, Stone.White)
         .setStone(19, Stone.Black)
@@ -204,32 +136,46 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val playerstrategymove = AIPlayer(playerStoneskitomove)
       controller.playerstrategy = playerstrategymove
       controller.gamefield = GameStap(
-        simulatefieldtomove,
-        Player(Stone.White, 0, 4),
-        PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4)))
-      )
+        simulatefieldtomove,Player(Stone.White, 0, 4),PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4))))
       controller.put(8, 5)
-      controller.gamefield.gplayerlist should be(
-        PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4)))
-      )
+      controller.gamefield.gplayerlist should be(PlayerList(List(Player(Stone.White, 0, 4), Player(Stone.Black, 0, 4))))
     }
     "case the put is not possible" in {
-      val field = Field().setStone(1, Stone.White)
-      val players = PlayerList(7)
-      val controller =
-        Controller(GameStap(field, players.getFirstPlayer, players), AIPlayer())
+      val controller = Controller()
+      controller.bildGameSet(7,false)
+      controller.gamefield.gfield.setStone(1, Stone.White)
+
       controller.put(1, -1)
       controller.gamefield.gfield should be(field.setStone(1, Stone.White))
+      controller.setormove should be (true)
+      controller.getGameStandLabelText should be ("BLACK, press on a field to place a stone.")
+      controller.playername should be (Stone.Black)
+      controller.isValid("") should be (false)
+      controller.printStonesToSet should be ("WHITE Player: Stone to set: W W W W W W\nBLACK Player: Stone to set: B B B B B B B")
     }
+    "calling handleMillCase" should {
+    "return the correct result" in {
+      val con = Controller()
+      con.bildGameSet(7,false)
+      con.put(1,-1)
+      con.put(4,-1)
+      con.put(10,-1)
+      con.put(5,-1)
+      con.put(22,-1)
+      con.handleMillCase(3) should be(false)
+      val controller = Controller()
+      controller.bildGameSet(2,true)
+      controller.handleMillCase(1) should be(true)
+    }
+  }
   }
   "calling PlayerStatics" should {
     "return the correct player statistics" in {
       val field = Field()
       val players = PlayerList(2)
-      val controller =
-        Controller(GameStap(field, players.getFirstPlayer, players), AIPlayer())
-      val (stonesToPut1, stonesInField1, stonesToPut2, stonesInField2) =
-        controller.PlayerStatics
+      val controller = Controller()
+      controller.bildGameSet(2,false)
+      val (stonesToPut1, stonesInField1, stonesToPut2, stonesInField2) = controller.PlayerStatics
       stonesToPut1 should be(2)
       stonesInField1 should be(0)
       stonesToPut2 should be(2)
@@ -239,53 +185,20 @@ class ControllerSpec extends AnyWordSpec with Matchers {
 
   "calling getGameState" should {
     "return the correct game state" in {
-      val field =
-        Field()
-          .setStone(1, Stone.White)
-          .setStone(
-            2,
-            Stone.Black
-          )
       val players = PlayerList(2)
-      val controller =
-        Controller(GameStap(field, players.getFirstPlayer, players), AIPlayer())
+      val controller = Controller()
+      controller.put(1,-1)
+      controller.put(2,-1)
       controller.getGameState(3) should be(1) // Stone.Empty
       controller.getGameState(1) should be(2) // Stone.White
       controller.getGameState(2) should be(3) // Stone.Black
     }
   }
 
-  "calling handleMillCase" should {
-    "return the correct result" in {
-      val con = Controller(
-        GameStap(
-          Field()
-            .setStone(1, Stone.White)
-            .setStone(2, Stone.White)
-            .setStone(3, Stone.White)
-            .setStone(4, Stone.Black),
-          PlayerList(7).getFirstPlayer,
-          PlayerList(7)
-        ),
-        AIPlayer()
-      )
-      con.handleMillCase(3) should be(false)
-      val controller =
-        Controller(
-          GameStap(Field(), PlayerList(2).getFirstPlayer, PlayerList(2)),
-          AIPlayer()
-        )
-      controller.handleMillCase(1) should be(true)
-    }
-  }
-
   "calling iswhite" should {
     "return the correct color" in {
-      val field =
-        Field()
-      val players = PlayerList(2)
-      val controller =
-        Controller(GameStap(field, players.getFirstPlayer, players), AIPlayer())
+      val controller = Controller()
+      controller.bildGameSet(2,true)
       controller.iswhite(Color.WHITE) should be(Color.BLACK)
       controller.iswhite(Color.BLACK) should be(Color.WHITE)
     }

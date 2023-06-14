@@ -1,4 +1,4 @@
-package de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl
+package de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl
 
 import de.htwg.se.Muehle.model.MoveEvents
 import de.htwg.se.Muehle.model.gameComponent.IGameStap

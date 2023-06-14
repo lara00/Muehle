@@ -7,7 +7,7 @@ import scala.swing.event._
 import java.awt.{Color}
 import de.htwg.se.Muehle.controller.controllerComponent.IController
 
-class ShowStones(controller : IController):
+class ShowStones(controller : IController) {
   def createBoxPanel(color: Color, stones: Int, delete: Int): BoxPanel = 
     val boxpanel = new BoxPanel(Orientation.Vertical):
       contents += new BoxPanel(Orientation.Horizontal):
@@ -39,3 +39,4 @@ class ShowStones(controller : IController):
 
       preferredSize = new Dimension(value * (40), 80)
       background = controller.iswhite(color)
+}
