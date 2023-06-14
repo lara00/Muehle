@@ -5,7 +5,7 @@ import scala.swing.event.ButtonClicked
 import scala.swing._
 import de.htwg.se.Muehle.controller.controllerComponent.IController
 
-class SettingsDialog(controller: IController) extends Dialog:
+class SettingsDialog(controller: IController) extends Dialog {
   val sizes = Seq(3, 4, 5, 6, 7, 8, 9)
   val singleplayer = Seq(false, true)
   val sizeGroup = new ButtonGroup
@@ -32,3 +32,4 @@ class SettingsDialog(controller: IController) extends Dialog:
 
   pack()
   centerOnScreen()
+}

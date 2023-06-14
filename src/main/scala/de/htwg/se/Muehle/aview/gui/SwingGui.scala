@@ -12,7 +12,7 @@ import util.Event
 import util.Observer
 import controller.controllerComponent.IController
 
-class SwingGui(controller: IController) extends Frame with Observer:
+class SwingGui(using var controller: IController) extends Frame with Observer {
   controller.add(this)
   title = "MILL"
   open()
@@ -59,3 +59,4 @@ class SwingGui(controller: IController) extends Frame with Observer:
     gameStand.text = controller.getGameStandLabelText
     mainPanel.revalidate()
     mainPanel.repaint()
+}

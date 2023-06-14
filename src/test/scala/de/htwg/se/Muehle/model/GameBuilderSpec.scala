@@ -6,7 +6,8 @@ import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.*
 import de.htwg.se.Muehle.model.fieldComponent.Field
 import de.htwg.se.Muehle.model.{Gamefield, GamefieldBuilder}
 import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
-
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl.AIPlayer
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
 
 class GamefieldBuilderTest extends AnyWordSpec with Matchers {
 

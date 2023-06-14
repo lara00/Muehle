@@ -1,38 +1,27 @@
 package de.htwg.se.Muehle.aview.gui
 
-import org.scalatest._
-import org.scalatest.concurrent.Eventually
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.matchers.should.Matchers
-
 import de.htwg.se.Muehle.model.fieldComponent.Field
 
+import javax.swing.SwingUtilities
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import javax.swing.SwingUtilities
-import scala.swing.event.ActionEvent
+import org.scalatest.wordspec.AnyWordSpec
+import de.htwg.se.Muehle.aview.gui
+import de.htwg.se.Muehle.Default.given
 
 import javax.swing.SwingUtilities
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
-import de.htwg.se.Muehle.model.PlayerList
-import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayer
+import scala.swing.event.ActionEvent
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
-import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
 
 class SwingGuiSpec extends AnyFlatSpec with Matchers {
   "SwingGui" should "update player statistics and game stand label" in {
-    val controller = Controller(
-      GameStap(Field(), PlayerList(4).getFirstPlayer, PlayerList(4)),
-      HumanPlayer()
-    )
-    controller.gamesize = 4
-
+    //val swingGui = new SwingGui()
+    //swingGui.controller.bildGameSet(4,false)
+    val con = Controller()
     System.setProperty("java.awt.headless", "true")
-
     SwingUtilities.invokeLater(new Runnable {
       override def run(): Unit = {
-        val millField = MillField(controller)
+        val millField = MillField(con)
         millField.buttonPosition_(1).doClick()
         millField.buttonPosition_(2).doClick()
         millField.buttonPosition_(10).doClick()

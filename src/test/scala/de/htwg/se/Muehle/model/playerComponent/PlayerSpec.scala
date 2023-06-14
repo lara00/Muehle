@@ -1,11 +1,18 @@
-package de.htwg.se.Muehle.model
+package de.htwg.se.Muehle.model.playerComponent
 
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 import de.htwg.se.Muehle.model.fieldComponent.Field
 import de.htwg.se.Muehle.model.playerComponent.Player
+import de.htwg.se.Muehle.model.Stone
 
 class PlayerSpec extends AnyWordSpec with Matchers {
+  "name" should {
+    "be a Stone" in {
+      val player = Player(Stone.White, 0, 0)
+      player.pname shouldBe Stone.White
+    }
+  }
   "incrementStoneintheField" should {
     "increment the stoneintheField field by 1" in {
       val player = Player(Stone.White, 0, 0)

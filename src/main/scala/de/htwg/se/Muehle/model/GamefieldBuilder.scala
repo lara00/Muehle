@@ -3,9 +3,11 @@ package model
 
 import de.htwg.se.Muehle.model.fieldComponent.Field
 import de.htwg.se.Muehle.model.playerstrategyComponent.IPlayerStrategy
-import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.*
 import de.htwg.se.Muehle.model.gameComponent.IGameStap
 import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
+import Default.{given}
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl.AIPlayer
 
 class Gamefield(val gamesetting: IGameStap, val gamestrategy: IPlayerStrategy)
 

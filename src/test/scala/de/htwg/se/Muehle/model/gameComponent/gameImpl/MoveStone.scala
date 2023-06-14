@@ -1,11 +1,11 @@
-package de.htwg.se.Muehle.model
+package de.htwg.se.Muehle.model.gameComponent.gameImpl
 
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.se.Muehle.model.fieldComponent.Field
 import de.htwg.se.Muehle.model.playerComponent.Player
-import de.htwg.se.Muehle.model.gameComponent.gameImpl.StoneMovement
+import de.htwg.se.Muehle.model.Stone
 
 
 class MoveStoneSpec extends AnyWordSpec with Matchers {
