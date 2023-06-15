@@ -3,7 +3,6 @@ package de.htwg.se.Muehle.model.gameComponent.gameImpl
 import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.Stone
 
-
 case class Mill(private val field: IField):
   private val verticalMills = Seq(Seq(1, 2, 3), Seq(4, 5, 6), Seq(7, 8, 9), Seq(10, 11, 12), Seq(13, 14, 15), Seq(16, 17, 18), Seq(19, 20, 21), Seq(22, 23, 24))
   

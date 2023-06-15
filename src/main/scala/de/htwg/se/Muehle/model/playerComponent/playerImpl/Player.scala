@@ -3,8 +3,9 @@ package de.htwg.se.Muehle.model.playerComponent.playerImpl
 import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.playerComponent.IPlayer
 import de.htwg.se.Muehle.model.{PlayerList, Stone}
+import com.google.inject.Inject
 
-case class Player(name: Stone, stonetoput: Int, stoneintheField: Int) extends IPlayer :
+case class Player(name: Stone, stonetoput: Int, stoneintheField: Int) extends IPlayer:
   def pname: Stone = name
   def pstonetoput: Int = stonetoput
   def pstoneinField: Int = stoneintheField

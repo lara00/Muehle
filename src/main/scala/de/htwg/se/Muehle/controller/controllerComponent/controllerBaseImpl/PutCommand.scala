@@ -2,7 +2,7 @@ package de.htwg.se.Muehle
 package controller.controllerComponent.controllerBaseImpl
 
 import de.htwg.se.Muehle.model.gameComponent.IGameStap
-import model.{MillList, MillEvents, MoveEvents}
+import model.{MillEvents, MoveEvents}
 import util.{Command, Event, Observable}
 
 class PutCommand(move: Move) extends Command[IGameStap] {

@@ -8,7 +8,7 @@ import com.google.inject.Key
 import de.htwg.se.Muehle.model.MoveEvents
 import de.htwg.se.Muehle.model.gameComponent.IGameStap
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
-import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl.AIPlayer
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.AIPlayer
 
 trait IPlayerStrategy extends AbstractModule:
   final def makeMove(gameStap: IGameStap, to: Int, from: Int): (IGameStap, MoveEvents) = handleResult(gameStap, handleMove(gameStap, to, from))

@@ -5,7 +5,7 @@ import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.*
 import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
-import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl.AIPlayer
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.AIPlayer
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
 import de.htwg.se.Muehle.model.PlayerList
 import de.htwg.se.Muehle.Default.given

@@ -11,10 +11,14 @@ import de.htwg.se.Muehle.Default.given
 import javax.swing.SwingUtilities
 import scala.swing.event.ActionEvent
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
+import java.awt.Graphics2D
 
 class MillFieldSpec extends AnyFlatSpec with Matchers {
   "MillField" should "update player statistics and game stand label" in {
     val con = Controller()
+    val e = QuitConfirmationDialog(con)
+    val r = ShowStones(con)
+    val t = SettingsDialog(con)
     System.setProperty("java.awt.headless", "true")
     SwingUtilities.invokeLater(new Runnable {
       override def run(): Unit = {
@@ -33,6 +37,7 @@ class MillFieldSpec extends AnyFlatSpec with Matchers {
         millField.buttonPosition_(10).doClick()
         millField.buttonPosition_(1).doClick()
         millField.buttonPosition_(1).doClick()
+        millField.update(con)
       }
     })
   }

@@ -1,5 +1,5 @@
 package de.htwg.se.Muehle.model
-package playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl
+package playerstrategyComponent.playerStrategyImpl.AIPlayerImpl
 
 import scala.util.Random
 import de.htwg.se.Muehle.model.{MoveEvents, Stone}
@@ -14,14 +14,14 @@ class AIPlayer(aiStones: List[Int] = Nil) extends IPlayerStrategy {
   protected def handleMove(gameStap: IGameStap, to: Int, from: Int): (IGameStap, MoveEvents) = {
     aimuhle match
       case false => automove_withoutmill(gameStap,to,from)
-      case true => {
-        val finalDeletestone = LazyList.continually(millgamestap.handleMill(generateRandomNumber))
-        .dropWhile(deletestone => deletestone(1) != MillEvents.DeleteStone).head
-        aimuhle = false
-        (finalDeletestone(0), MoveEvents.SetStone)
-      }
+      case true => automove_withmill()
   }
-
+  def automove_withmill() = {
+    val finalDeletestone = LazyList.continually(millgamestap.handleMill(generateRandomNumber))
+    .dropWhile(deletestone => deletestone(1) != MillEvents.DeleteStone).head
+    aimuhle = false
+    (finalDeletestone(0), MoveEvents.SetStone)
+  }
   def automove_withoutmill(gameStap: IGameStap, to: Int, from: Int) = {
     if (gameStap.playername != Stone.Black)
       val gamefield = gameStap.timetoSetMoveJumporMill(to, from)
