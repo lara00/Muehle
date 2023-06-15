@@ -1,11 +1,14 @@
-package de.htwg.se.Muehle.model
+package de.htwg.se.Muehle
+package model
 
 import de.htwg.se.Muehle.Default.given
 import de.htwg.se.Muehle.model.Stone
 import de.htwg.se.Muehle.model.playerComponent.IPlayer
 import com.google.inject.Inject
+import com.google.inject.Injector
+import com.google.inject.Guice
 
-case class PlayerList  @Inject()(players: List[IPlayer]):
+case class PlayerList @Inject()(players: List[IPlayer]):
   def getFirstPlayer: IPlayer = players.head
 
   def getNextPlayer(aktivePlayer: IPlayer): IPlayer = players.find(_ != aktivePlayer).get
@@ -41,4 +44,3 @@ object PlayerList:
   def apply(input: Int): PlayerList = given_IPlayer.pplayerList(input)
   
   def apply(player1: IPlayer, player2: IPlayer): PlayerList = PlayerList(List(player1, player2))
-  

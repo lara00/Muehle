@@ -27,10 +27,12 @@ class Module extends AbstractModule with ScalaModule {
 
   override def configure(): Unit = {
     bind[IField].toInstance(Field())
-    bind[IPlayer].toInstance(Player(Stone.White, defaultSize, 0))
     bind[PlayerList].toInstance(PlayerList(defaultSize))
-    bind[IPlayerStrategy].to[HumanPlayer] 
     bind[IGameStap].toInstance(GameStap(Field(), Player(Stone.White, defaultSize, 0), PlayerList(defaultSize)))
     bind[IController].toInstance(Controller(GameStap(Field(), Player(Stone.White, defaultSize, 0), PlayerList(defaultSize)), HumanPlayer()))
   }
+}
+
+object Default {
+  given IPlayer = Player(Stone.White, 4 ,0)
 }

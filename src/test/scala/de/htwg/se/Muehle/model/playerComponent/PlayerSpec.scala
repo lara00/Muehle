@@ -1,4 +1,5 @@
-package de.htwg.se.Muehle.model.playerComponent
+package de.htwg.se.Muehle
+package model.playerComponent
 
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
@@ -6,6 +7,8 @@ import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.playerComponent.IPlayer
 import de.htwg.se.Muehle.model.Stone
 import de.htwg.se.Muehle.Default.given
+import com.google.inject.Injector
+import com.google.inject.Guice
 
 class PlayerSpec extends AnyWordSpec with Matchers {
   "name" should {
@@ -31,7 +34,8 @@ class PlayerSpec extends AnyWordSpec with Matchers {
   }
   "setstone" should {
     "return a new Field with the specified value at the specified position" in {
-      val field = given_IField
+      val injector: Injector = Guice.createInjector(new Module())
+      val field = injector.getInstance(classOf[IField])
       val player1 = given_IPlayer.pplayer(Stone.White, 0, 0)
       val newField = player1.setstone(field, player1, 1)
       newField.stones_field(1) shouldBe Stone.White

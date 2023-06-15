@@ -22,9 +22,9 @@ import com.google.inject.Guice
 import de.htwg.se.Muehle.controller.controllerComponent.IController
 
 class ControllerSpec extends AnyWordSpec with Matchers {
-  val field = given_IField
-  val players = PlayerList(7)
   val injector: Injector = Guice.createInjector(new Module())
+  val field = injector.getInstance(classOf[IField])
+  val players = PlayerList(7)
   val controller = injector.getInstance(classOf[IController])
   "A Controller" when {
     "creating input text" should {
@@ -36,7 +36,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
     "converting to a string" should {
       "return the correct representation of the field" in {
-        val field: IField = given_IField
+        val field: IField = injector.getInstance(classOf[IField])
         val players: PlayerList =PlayerList(7)
         val controller = injector.getInstance(classOf[IController])
         controller.toString should be(
@@ -116,7 +116,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.bildGameSet(4 , true)
       controller.put(1, -1)
       controller.getPalyerList should be(PlayerList(List(given_IPlayer.pplayer(Stone.White, 3, 1), given_IPlayer.pplayer(Stone.Black, 3, 1))))
-      val simulatefield = given_IField.setStone(1, Stone.White).setStone(15, Stone.White).setStone(20, Stone.White).setStone(19, Stone.Black)
+      val simulatefield = injector.getInstance(classOf[IField]).setStone(1, Stone.White).setStone(15, Stone.White).setStone(20, Stone.White).setStone(19, Stone.Black)
         .setStone(4, Stone.Black).setStone(15, Stone.Black).setStone(1, Stone.White).setStone(10, Stone.White)
       val playerStoneski: List[Int] = List(19, 20, 22)
       val r = AIPlayer(playerStoneski)
@@ -127,7 +127,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.mill(4)
       controller.getPalyerList should be(
         PlayerList(List(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 3))))
-      val simulatefieldtomove = given_IField.setStone(1, Stone.White).setStone(15, Stone.White)
+      val simulatefieldtomove = injector.getInstance(classOf[IField]).setStone(1, Stone.White).setStone(15, Stone.White)
         .setStone(20, Stone.White)
         .setStone(5, Stone.White)
         .setStone(19, Stone.Black)
@@ -174,7 +174,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
   }
   "calling PlayerStatics" should {
     "return the correct player statistics" in {
-      val field = given_IField
+      val field = injector.getInstance(classOf[IField])
       val players = PlayerList(2)
       val controller = injector.getInstance(classOf[IController])
       controller.bildGameSet(2,false)

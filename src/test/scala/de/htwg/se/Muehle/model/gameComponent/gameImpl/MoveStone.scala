@@ -1,4 +1,5 @@
-package de.htwg.se.Muehle.model.gameComponent.gameImpl
+package de.htwg.se.Muehle
+package model.gameComponent.gameImpl
 
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
@@ -7,11 +8,13 @@ import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.playerComponent.IPlayer
 import de.htwg.se.Muehle.model.Stone
 import de.htwg.se.Muehle.Default.given
+import com.google.inject.Injector
+import com.google.inject.Guice
 
 
 class MoveStoneSpec extends AnyWordSpec with Matchers {
-  val player = given_IPlayer.pplayer(Stone.Black, 7, 0)
-  val field = given_IField
+  val injector: Injector = Guice.createInjector(new Module())
+  val field = injector.getInstance(classOf[IField])
   "MoveStone" when {
     "player has stone on the board and stonetoput is 0" should {
       val playerWithStoneOnBoard = given_IPlayer.pplayer(Stone.Black, 0, 4)

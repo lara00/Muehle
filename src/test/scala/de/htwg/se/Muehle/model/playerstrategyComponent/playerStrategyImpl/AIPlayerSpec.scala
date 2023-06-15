@@ -1,4 +1,5 @@
-package de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl
+package de.htwg.se.Muehle
+package model.playerstrategyComponent.playerStrategyImpl
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -11,35 +12,39 @@ import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.playerComponent.playerImpl.Player
 import de.htwg.se.Muehle.model.Stone
 import de.htwg.se.Muehle.Default.given
+import com.google.inject.Injector
+import com.google.inject.Guice
 
 class AIPlayerSpec extends AnyWordSpec with Matchers {
+  val injector: Injector = Guice.createInjector(new Module())
+  val field = injector.getInstance(classOf[IField])
   "An AIPlayer" when {
     "using a MockAIPlayer" should {
       val aiPlayer = new AIPlayer()
 
       "a move without mill" in {
-        val gameStap: IGameStap = GameStap(given_IField, PlayerList(4).getFirstPlayer, PlayerList(4))
+        val gameStap: IGameStap = GameStap(field, PlayerList(4).getFirstPlayer, PlayerList(4))
         val (newGameStap, moveEvent) = aiPlayer.makeMove(gameStap, 3, -1)
         moveEvent should be(MoveEvents.SetStone)
       }
 
       "make a move without mill" in {
         val p1 = PlayerList(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 4))
-        val gameStap: IGameStap = GameStap(given_IField, p1.getFirstPlayer, p1)
+        val gameStap: IGameStap = GameStap(field, p1.getFirstPlayer, p1)
         val (newGameStap, moveEvent) = aiPlayer.makeMove(gameStap, 3, 2)
         moveEvent should be(MoveEvents.NoMove)
       }
 
       "make a move without" in {
         val p1 = PlayerList(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 4))
-        val gameStap: IGameStap = GameStap(given_IField.setStone(3, Stone.White).setStone(24, Stone.Black), p1.getFirstPlayer, p1)
+        val gameStap: IGameStap = GameStap(field.setStone(3, Stone.White).setStone(24, Stone.Black), p1.getFirstPlayer, p1)
         val (newGameStap, moveEvent) = aiPlayer.makeMove(gameStap, 2, 3)
         moveEvent should be(MoveEvents.MoveStone)
       }
 
       "make a move with" in {
         val p1 = PlayerList(given_IPlayer.pplayer(Stone.White, 0, 3), given_IPlayer.pplayer(Stone.Black, 0, 3))
-        val gameStap: IGameStap = GameStap(given_IField.setStone(3, Stone.White).setStone(24, Stone.Black), p1.getFirstPlayer, p1)
+        val gameStap: IGameStap = GameStap(field.setStone(3, Stone.White).setStone(24, Stone.Black), p1.getFirstPlayer, p1)
         val (newGameStap, moveEvent) = aiPlayer.makeMove(gameStap, 2, 3)
         moveEvent should be(MoveEvents.MoveStone)
       }

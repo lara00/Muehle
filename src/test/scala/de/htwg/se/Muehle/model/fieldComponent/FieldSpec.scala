@@ -1,13 +1,18 @@
-package de.htwg.se.Muehle.model.fieldComponent
+package de.htwg.se.Muehle
+package model
+package fieldComponent
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.Stone
 import de.htwg.se.Muehle.Default.given
+import com.google.inject.Injector
+import com.google.inject.Guice
 
 class FieldSpec extends AnyWordSpec with Matchers {
-  val field = given_IField
+  val injector: Injector = Guice.createInjector(new Module())
+  val field = injector.getInstance(classOf[IField])
   "A Field" when {
     "its size is checked" should {
       "return 24" in {
