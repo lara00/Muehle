@@ -3,8 +3,9 @@ package de.htwg.se.Muehle.model
 import de.htwg.se.Muehle.Default.given
 import de.htwg.se.Muehle.model.Stone
 import de.htwg.se.Muehle.model.playerComponent.IPlayer
+import com.google.inject.Inject
 
-case class PlayerList(players: List[IPlayer]):
+case class PlayerList  @Inject()(players: List[IPlayer]):
   def getFirstPlayer: IPlayer = players.head
 
   def getNextPlayer(aktivePlayer: IPlayer): IPlayer = players.find(_ != aktivePlayer).get

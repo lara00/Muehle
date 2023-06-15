@@ -20,4 +20,3 @@ object Default {
   given IField = Field()
   given IPlayer = Player(Stone.White, 4,0)
 }
-

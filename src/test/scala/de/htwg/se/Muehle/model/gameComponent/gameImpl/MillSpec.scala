@@ -24,7 +24,7 @@ class MillSpec extends AnyFlatSpec with Matchers {
     result should be(true)
   }
   it should "not detect a mill when it doesn't exist" in {
-    val field =given_IField
+    val field = given_IField
     val mill = new Mill(field)
     val result = mill.existsMill()
     result should be(false)

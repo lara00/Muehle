@@ -14,10 +14,9 @@ import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.*
 import de.htwg.se.Muehle.model.playerComponent.IPlayer
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
-import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl.AIPlayer
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
 import de.htwg.se.Muehle.Default.given
-import de.htwg.se.Muehle.model.PlayerList
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.AIPlayer
 
 class ControllerSpec extends AnyWordSpec with Matchers {
   val field = given_IField
@@ -114,14 +113,10 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.put(1, -1)
       controller.gamefield.gplayerlist should be(PlayerList(List(given_IPlayer.pplayer(Stone.White, 3, 1), given_IPlayer.pplayer(Stone.Black, 3, 1))))
       val simulatefield = given_IField.setStone(1, Stone.White).setStone(15, Stone.White).setStone(20, Stone.White).setStone(19, Stone.Black)
-        .setStone(4, Stone.Black)
-        .setStone(15, Stone.Black)
-        .setStone(1, Stone.White)
-        .setStone(10, Stone.White)
+        .setStone(4, Stone.Black).setStone(15, Stone.Black).setStone(1, Stone.White).setStone(10, Stone.White)
       val playerStoneski: List[Int] = List(19, 20, 22)
       val r = AIPlayer(playerStoneski)
       controller.playerstrategy = r
-
       controller.gamefield = GameStap(simulatefield,given_IPlayer.pplayer(Stone.White, 1, 3),
       PlayerList(List(given_IPlayer.pplayer(Stone.White, 1, 3), given_IPlayer.pplayer(Stone.Black, 0, 4))))
       controller.put(22, -1)

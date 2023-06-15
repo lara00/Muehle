@@ -1,19 +1,18 @@
 package de.htwg.se.Muehle
 package controller.controllerComponent.controllerBaseImpl
 
-import java.awt.Color
-
-import com.google.inject.Inject
-import com.google.inject.name.Names
-import com.google.inject.Key
-
-import model.{Stone, MillEvents, GamefieldBuilder, MoveEvents}
+import model.{Stone,MillEvents,GamefieldBuilder,MoveEvents}
 import util.{Observable, Event, UndoManager}
-
-import de.htwg.se.Muehle.Default.given
-import de.htwg.se.Muehle.controller.controllerComponent.IController
+import java.awt.Color
 import de.htwg.se.Muehle.model.gameComponent.IGameStap
+import de.htwg.se.Muehle.controller.controllerComponent.IController
 import de.htwg.se.Muehle.model.playerstrategyComponent.{IPlayerStrategy, IGameInjector}
+
+import net.codingwell.scalaguice.InjectorExtensions.ScalaInjector
+import de.htwg.se.Muehle.Default.{given}
+
+import com.google.inject.{Key, Inject}
+import com.google.inject.name.Names
 
 
 class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStrategy) extends IController with Observable {
@@ -46,7 +45,7 @@ class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStra
       case MillEvents.DeleteStone =>
         gamefield = mill(0)
         notifyObservers(Event.Status)
-        if (playerstrategy == IGameInjector.createInjector().getInstance(Key.get(classOf[IPlayerStrategy], Names.named("AIPlayer"))))
+        if (playerstrategy == IGameInjector.createInjector().getInstance(Key.get(classOf[IPlayerStrategy], Names.named("AIPlayer"))).getClass())
           gamefield = playerstrategy.makeMove(gamefield, 1, -1)(0)
           notifyObservers(Event.Status)
       case MillEvents.EndGame =>

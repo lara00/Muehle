@@ -7,6 +7,7 @@ import scala.util.{Try, Success, Failure}
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import controller.controllerComponent.IController
+import com.google.inject.Inject
 
 val invalidInputMsg =
   "Invalid input. Please enter a valid number between 1 and 24, or 'q' to quit"

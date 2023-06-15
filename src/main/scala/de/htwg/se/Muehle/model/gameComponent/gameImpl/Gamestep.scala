@@ -7,7 +7,7 @@ import de.htwg.se.Muehle.model.gameComponent.IGameStap
 import de.htwg.se.Muehle.model.playerComponent.IPlayer
 import de.htwg.se.Muehle.model.{MillEvents, MoveEvents, PlayerList, Stone}
 
-case class GameStap(field: IField, player: IPlayer, playerlist: PlayerList) extends IGameStap:
+case class GameStap @Inject()(field: IField, player: IPlayer, playerlist: PlayerList) extends IGameStap:
   def newGamestap(field: IField, player: IPlayer, playerlist: PlayerList) = GameStap(field, player,playerlist)
   def gplayer: IPlayer = player
   def gplayerlist: PlayerList = playerlist
