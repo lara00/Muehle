@@ -9,13 +9,14 @@ import de.htwg.se.Muehle.controller.controllerComponent.IController
 import de.htwg.se.Muehle.model.playerstrategyComponent.{IPlayerStrategy, IGameInjector}
 
 import net.codingwell.scalaguice.InjectorExtensions.ScalaInjector
-import de.htwg.se.Muehle.Default.{given}
 
 import com.google.inject.{Key, Inject}
 import com.google.inject.name.Names
+import de.htwg.se.Muehle.model.fieldComponent.IField
+import de.htwg.se.Muehle.model.PlayerList
 
 
-class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStrategy) extends IController with Observable {
+class Controller @Inject()(var gamefield: IGameStap, var playerstrategy: IPlayerStrategy) extends IController with Observable {
   var gamesize = 0;
   val undoManager = new UndoManager[IGameStap]
 
@@ -71,6 +72,18 @@ class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStra
   def isValid(a: String): Boolean = gamefield.gfield.isFieldValid(a)
 
   def printStonesToSet: String = gamefield.gplayerlist.printStonesToSet()
+
+  def getField: IField = gamefield.gfield
+
+  def getPlayerStrategy: IPlayerStrategy = playerstrategy
+
+  def getPalyerList: PlayerList = gamefield.gplayerlist
+
+  def getGamestape: IGameStap = gamefield
+
+  def controllerGamestap(g : IGameStap): Unit = gamefield = g
+  
+  def controllerPlayerstrategy(p : IPlayerStrategy): Unit = playerstrategy = p
 
   def PlayerStatics: (Int, Int, Int, Int) =
     val player1 = gamefield.gplayerlist.getFirstPlayer

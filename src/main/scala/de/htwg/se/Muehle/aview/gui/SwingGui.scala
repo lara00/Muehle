@@ -12,7 +12,7 @@ import util.Event
 import util.Observer
 import controller.controllerComponent.IController
 
-class SwingGui(using var controller: IController) extends Frame with Observer {
+class SwingGui(var controller: IController) extends Frame with Observer {
   controller.add(this)
   title = "MILL"
   open()

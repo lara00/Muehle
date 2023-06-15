@@ -1,4 +1,3 @@
-/*
 package de.htwg.se.Muehle
 
 
@@ -19,8 +18,8 @@ import de.htwg.se.Muehle.model.PlayerList
 import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
 import de.htwg.se.Muehle.model.gameComponent.IGameStap
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
-import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
 import de.htwg.se.Muehle.model.playerstrategyComponent.IPlayerStrategy
+import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
 
 
 class Module extends AbstractModule with ScalaModule {
@@ -32,7 +31,6 @@ class Module extends AbstractModule with ScalaModule {
     bind[PlayerList].toInstance(PlayerList(defaultSize))
     bind[IPlayerStrategy].to[HumanPlayer] 
     bind[IGameStap].toInstance(GameStap(Field(), Player(Stone.White, defaultSize, 0), PlayerList(defaultSize)))
-    bind[IController].toInstance(Controller(GameStap(Field(), Player(Stone.White, defaultSize, 0), PlayerList(defaultSize))), HumanPlayer)
+    bind[IController].toInstance(Controller(GameStap(Field(), Player(Stone.White, defaultSize, 0), PlayerList(defaultSize)), HumanPlayer()))
   }
 }
-*/

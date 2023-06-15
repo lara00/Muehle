@@ -13,10 +13,14 @@ import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.{PlayerList, Stone}
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.Muehle.Default.given
+import com.google.inject.Guice
+import com.google.inject.Injector
+import de.htwg.se.Muehle.controller.controllerComponent.IController
 
 class TuiSpec extends AnyWordSpec with Matchers {
-  val controller = Controller()
-  val tui = Tui()
+  val injector: Injector = Guice.createInjector(new Module())
+  val controller = injector.getInstance(classOf[IController])
+  val tui = Tui(controller)
   "The analyseInput function" when {
 
     "the player wants to end the game" should {
@@ -52,7 +56,7 @@ class TuiSpec extends AnyWordSpec with Matchers {
       }
       "put value and ask for another value on valid input" in {
         val mockInput = new java.io.StringReader("4\n")
-        val tui = new Tui()
+        val tui = new Tui(controller)
         var isInputProcessed = false
         Console.withIn(mockInput) {
           isInputProcessed = tui.analyseInput(Try("3"))
@@ -64,7 +68,7 @@ class TuiSpec extends AnyWordSpec with Matchers {
   "update method" should {
     "print 'Mühle' and process input" in {
       val input = new java.io.StringReader("2\n")
-      val tui = new Tui()
+      val tui = new Tui(controller)
       tui.controller.put(1,-1)
       tui.controller.put(2,-1)
       tui.controller.put(10,-1)
