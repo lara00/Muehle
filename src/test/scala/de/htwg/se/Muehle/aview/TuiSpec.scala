@@ -9,16 +9,13 @@ import org.scalatest.wordspec.AnyWordSpec
 import util.Event
 import scala.util.Try
 import scalafx.scene.text.FontWeight.Black
-import de.htwg.se.Muehle.model.fieldComponent.Field
-import de.htwg.se.Muehle.model.PlayerList
-import de.htwg.se.Muehle.model.Stone
-import de.htwg.se.Muehle.model.playerComponent.Player
+import de.htwg.se.Muehle.model.fieldComponent.IField
+import de.htwg.se.Muehle.model.{PlayerList, Stone}
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
-import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
 import de.htwg.se.Muehle.Default.given
 
 class TuiSpec extends AnyWordSpec with Matchers {
-  val controller =Controller()
+  val controller = Controller()
   val tui = Tui()
   "The analyseInput function" when {
 
@@ -75,7 +72,6 @@ class TuiSpec extends AnyWordSpec with Matchers {
       Console.withIn(input) {
         tui.controller.put(22,-1)
       }
-      //tui.controller.playername should be(Stone.Black)
     }
   }
 }

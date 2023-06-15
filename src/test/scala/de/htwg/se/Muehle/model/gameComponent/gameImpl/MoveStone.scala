@@ -3,18 +3,19 @@ package de.htwg.se.Muehle.model.gameComponent.gameImpl
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import de.htwg.se.Muehle.model.fieldComponent.Field
-import de.htwg.se.Muehle.model.playerComponent.Player
+import de.htwg.se.Muehle.model.fieldComponent.IField
+import de.htwg.se.Muehle.model.playerComponent.IPlayer
 import de.htwg.se.Muehle.model.Stone
+import de.htwg.se.Muehle.Default.given
 
 
 class MoveStoneSpec extends AnyWordSpec with Matchers {
-  val player = Player(Stone.Black, 7, 0)
-  val field = Field()
+  val player = given_IPlayer.pplayer(Stone.Black, 7, 0)
+  val field = given_IField
   "MoveStone" when {
     "player has stone on the board and stonetoput is 0" should {
-      val playerWithStoneOnBoard = Player(Stone.Black, 0, 4)
-      val newField = field.setStone(1, playerWithStoneOnBoard.name)
+      val playerWithStoneOnBoard = given_IPlayer.pplayer(Stone.Black, 0, 4)
+      val newField = field.setStone(1, playerWithStoneOnBoard.pname)
       val moveField = StoneMovement(playerWithStoneOnBoard, newField, 2, 1)
 
       "place the stone at the specified position" in {
@@ -61,7 +62,7 @@ class MoveStoneSpec extends AnyWordSpec with Matchers {
         newField should be(oldField)
       }
       "not jump with a stone from 1 to 2" in {
-        val player = Player(Stone.Black, 3, 0)
+        val player = given_IPlayer.pplayer(Stone.Black, 3, 0)
         val oldField = field.setStone(1, Stone.Black)
         val newField = StoneMovement(player, oldField, 2, 1)
         newField should be(field.setStone(2, Stone.Black))

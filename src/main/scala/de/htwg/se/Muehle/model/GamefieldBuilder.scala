@@ -1,27 +1,28 @@
 package de.htwg.se.Muehle
 package model
 
-import de.htwg.se.Muehle.model.fieldComponent.Field
-import de.htwg.se.Muehle.model.playerstrategyComponent.IPlayerStrategy
-import de.htwg.se.Muehle.model.gameComponent.IGameStap
-import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
+import com.google.inject.{Injector, Guice, Key}
+import com.google.inject.name.Names
+
+import fieldComponent.IField
+import gameComponent.IGameStap
+import playerstrategyComponent.{IPlayerStrategy, IGameInjector}
+
 import Default.{given}
-import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
-import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl.AIPlayer
 
 class Gamefield(val gamesetting: IGameStap, val gamestrategy: IPlayerStrategy)
 
 class GamefieldBuilder():
-  private var stonetoput: IGameStap = GameStap(Field(), PlayerList(9).getFirstPlayer, PlayerList(9))
-  private var singlegamer: IPlayerStrategy = HumanPlayer()
-
+  private var stonetoput: IGameStap = given_IGameStap
+  private var singlegamer: IPlayerStrategy = given_IPlayerStrategy
+  
   def addStonesToPut(quantity: Int): GamefieldBuilder =
-    stonetoput = GameStap(Field(), PlayerList(quantity).getFirstPlayer, PlayerList(quantity))
+    stonetoput = stonetoput.newGamestap(given_IField, PlayerList(quantity).getFirstPlayer, PlayerList(quantity))
     this
 
   def addSingleGamer(singelegamer: Boolean): GamefieldBuilder =
     singelegamer match
-      case true  => singlegamer = AIPlayer(); this
-      case false => singlegamer = HumanPlayer(); this
+      case true  => singlegamer = IGameInjector.createInjector().getInstance(Key.get(classOf[IPlayerStrategy], Names.named("AIPlayer"))); this
+      case false => singlegamer = IGameInjector.createInjector().getInstance(Key.get(classOf[IPlayerStrategy], Names.named("HumanPlayer"))); this
 
   def build(): Gamefield = new Gamefield(stonetoput, singlegamer)

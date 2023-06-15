@@ -1,18 +1,19 @@
 package de.htwg.se.Muehle
 package controller.controllerComponent.controllerBaseImpl
 
-import model.{Stone,MillEvents,GamefieldBuilder,MoveEvents}
-import util.{Observable, Event, UndoManager}
 import java.awt.Color
-import de.htwg.se.Muehle.model.gameComponent.IGameStap
-import de.htwg.se.Muehle.controller.controllerComponent.IController
-import de.htwg.se.Muehle.model.playerstrategyComponent.IPlayerStrategy
-import com.google.inject.Inject
 
-import net.codingwell.scalaguice.InjectorExtensions._
-import net.codingwell.scalaguice.InjectorExtensions.ScalaInjector
-import de.htwg.se.Muehle.Default.{given}
-import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.PlayerImpl.AIPlayer
+import com.google.inject.Inject
+import com.google.inject.name.Names
+import com.google.inject.Key
+
+import model.{Stone, MillEvents, GamefieldBuilder, MoveEvents}
+import util.{Observable, Event, UndoManager}
+
+import de.htwg.se.Muehle.Default.given
+import de.htwg.se.Muehle.controller.controllerComponent.IController
+import de.htwg.se.Muehle.model.gameComponent.IGameStap
+import de.htwg.se.Muehle.model.playerstrategyComponent.{IPlayerStrategy, IGameInjector}
 
 
 class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStrategy) extends IController with Observable {
@@ -45,7 +46,7 @@ class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStra
       case MillEvents.DeleteStone =>
         gamefield = mill(0)
         notifyObservers(Event.Status)
-        if (playerstrategy.getClass() == new AIPlayer().getClass())
+        if (playerstrategy == IGameInjector.createInjector().getInstance(Key.get(classOf[IPlayerStrategy], Names.named("AIPlayer"))))
           gamefield = playerstrategy.makeMove(gamefield, 1, -1)(0)
           notifyObservers(Event.Status)
       case MillEvents.EndGame =>
@@ -75,13 +76,13 @@ class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStra
   def PlayerStatics: (Int, Int, Int, Int) =
     val player1 = gamefield.gplayerlist.getFirstPlayer
     val player2 = gamefield.gplayerlist.getNextPlayer(player1)
-    (player1.stonetoput,player1.stoneintheField,player2.stonetoput,player2.stoneintheField)
+    (player1.pstonetoput,player1.pstoneinField,player2.pstonetoput,player2.pstoneinField)
 
   def setormove: Boolean =
-    gamefield.gplayer.stonetoput != 0
+    gamefield.gplayer.pstonetoput != 0
 
   def getGameStandLabelText: String =
-    gamefield.gplayer.stonetoput match
+    gamefield.gplayer.pstonetoput match
       case 0 =>
         if (gamefield.gplayerlist.threeStonesontheField(gamefield.getNextPlayer))
           s"${gamefield.playername}, jump with a stone."
@@ -90,7 +91,7 @@ class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStra
       case _ => s"${gamefield.playername}, press on a field to place a stone."
 
   def getGameState(value: Int): Int =
-    gamefield.gfield.fields(value) match
+    gamefield.gfield.stones_field(value) match
       case Stone.Empty => 1
       case Stone.White => 2
       case Stone.Black => 3

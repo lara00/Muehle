@@ -2,11 +2,12 @@ package de.htwg.se.Muehle.model.fieldComponent
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import de.htwg.se.Muehle.model.fieldComponent.Field
+import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.Stone
+import de.htwg.se.Muehle.Default.given
 
 class FieldSpec extends AnyWordSpec with Matchers {
-  val field = Field()
+  val field = given_IField
   "A Field" when {
     "its size is checked" should {
       "return 24" in {
@@ -18,9 +19,9 @@ class FieldSpec extends AnyWordSpec with Matchers {
       val field2 = newField.setStone(1, Stone.Black)
       val field3 = newField.setStone(1, Stone.White)
       "return a new Field with the specified value at the specified position" in {
-        newField.fields(1) should be(Stone.Black)
-        field2.fields(1) should be(Stone.Black)
-        field3.fields(1) should be(Stone.Black)
+        newField.stones_field(1) should be(Stone.Black)
+        field2.stones_field(1) should be(Stone.Black)
+        field3.stones_field(1) should be(Stone.Black)
       }
     }
     "isFieldValid" should {
@@ -41,20 +42,20 @@ class FieldSpec extends AnyWordSpec with Matchers {
       "return a new Field with the specified position set to Empty" in {
         val newField = field.setStone(1, Stone.Black)
         val updatedField = newField.deleteStone(1, Stone.Black)
-        updatedField.fields(1) should be(Stone.Empty)
+        updatedField.stones_field(1) should be(Stone.Empty)
       }
       "return the same Field if a other Stone in the Field" in {
         val newField = field.setStone(1, Stone.White)
         val updatedField = newField.deleteStone(1, Stone.Black)
-        updatedField.fields(1) should be(Stone.White)
+        updatedField.stones_field(1) should be(Stone.White)
       }
     }
     "movestone" should {
       "return a new Field with the specified stone moved to the new position" in {
         val newField = field.setStone(1, Stone.Black)
         val updatedField = newField.movestone(1, 2, Stone.Black)
-        updatedField.fields(1) should be(Stone.Empty)
-        updatedField.fields(2) should be(Stone.Black)
+        updatedField.stones_field(1) should be(Stone.Empty)
+        updatedField.stones_field(2) should be(Stone.Black)
       }
       "return the same Field if the stone is not moved to an empty position" in {
         val newField = field.setStone(1, Stone.Black)
