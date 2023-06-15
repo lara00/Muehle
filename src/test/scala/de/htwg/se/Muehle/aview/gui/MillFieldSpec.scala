@@ -16,9 +16,6 @@ import java.awt.Graphics2D
 class MillFieldSpec extends AnyFlatSpec with Matchers {
   "MillField" should "update player statistics and game stand label" in {
     val con = Controller()
-    val e = QuitConfirmationDialog(con)
-    val r = ShowStones(con)
-    val t = SettingsDialog(con)
     System.setProperty("java.awt.headless", "true")
     SwingUtilities.invokeLater(new Runnable {
       override def run(): Unit = {
