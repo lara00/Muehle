@@ -5,6 +5,8 @@ import de.htwg.se.Muehle.model.playerstrategyComponent.IPlayerStrategy
 import de.htwg.se.Muehle.util.Observable
 import de.htwg.se.Muehle.model.Stone
 import java.awt.Color
+import de.htwg.se.Muehle.model.fieldComponent.IField
+import de.htwg.se.Muehle.model.PlayerList
 
 trait IController extends Observable {
   var gamesize: Int
@@ -13,6 +15,12 @@ trait IController extends Observable {
   def redo: Unit
 
   def bildGameSet(number: Int, singlegamer: Boolean): Unit
+  def getField: IField
+  def getPlayerStrategy: IPlayerStrategy
+  def getPalyerList: PlayerList
+  def getGamestape: IGameStap
+  def controllerGamestap(g : IGameStap): Unit
+  def controllerPlayerstrategy(p : IPlayerStrategy): Unit
 
   def quit(readsonforquit: String): Unit
   def mill(delete: Int): Unit

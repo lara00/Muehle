@@ -13,11 +13,12 @@ import Default.{given}
 class Gamefield(val gamesetting: IGameStap, val gamestrategy: IPlayerStrategy)
 
 class GamefieldBuilder():
-  private var stonetoput: IGameStap = given_IGameStap
-  private var singlegamer: IPlayerStrategy = given_IPlayerStrategy
+  val injector: Injector = Guice.createInjector(new Module())
+  private var stonetoput: IGameStap = injector.getInstance(classOf[IGameStap])
+  private var singlegamer: IPlayerStrategy = IGameInjector.createInjector().getInstance(Key.get(classOf[IPlayerStrategy], Names.named("HumanPlayer")))
   
   def addStonesToPut(quantity: Int): GamefieldBuilder =
-    stonetoput = stonetoput.newGamestap(given_IField, PlayerList(quantity).getFirstPlayer, PlayerList(quantity))
+    stonetoput = stonetoput.newGamestap(injector.getInstance(classOf[IField]), PlayerList(quantity).getFirstPlayer, PlayerList(quantity))
     this
 
   def addSingleGamer(singelegamer: Boolean): GamefieldBuilder =

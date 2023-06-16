@@ -1,4 +1,5 @@
-package de.htwg.se.Muehle.model
+package de.htwg.se.Muehle
+package model
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -9,6 +10,8 @@ import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlay
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
 import de.htwg.se.Muehle.model.PlayerList
 import de.htwg.se.Muehle.Default.given
+import com.google.inject.Injector
+import com.google.inject.Guice
 
 class GamefieldBuilderTest extends AnyWordSpec with Matchers {
 
@@ -46,7 +49,9 @@ class GamefieldBuilderTest extends AnyWordSpec with Matchers {
 
     "provide a string representation of the Gamefield" in {
       val players = PlayerList(9)
-      val gamesetting = GameStap(given_IField, players.getFirstPlayer, PlayerList(9))
+      val injector: Injector = Guice.createInjector(new Module())
+      val field = injector.getInstance(classOf[IField])
+      val gamesetting = GameStap(field, players.getFirstPlayer, PlayerList(9))
       val gamestrategy = HumanPlayer()
       val gamefield = new Gamefield(gamesetting, gamestrategy)
 

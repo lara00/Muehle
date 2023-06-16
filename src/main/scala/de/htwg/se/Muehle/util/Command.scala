@@ -25,7 +25,6 @@ class UndoManager[T]:
         redoStack = head :: redoStack
         result
       }
-
   def redoStep(t: T): T =
     redoStack match 
       case Nil => t

@@ -1,2 +1,1 @@
-
-    println("Play Muehle")
+println("Play Muehle")

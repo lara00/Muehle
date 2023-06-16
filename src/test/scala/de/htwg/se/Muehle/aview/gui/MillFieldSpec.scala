@@ -1,4 +1,5 @@
-package de.htwg.se.Muehle.aview.gui
+package de.htwg.se.Muehle
+package aview.gui
 
 import de.htwg.se.Muehle.model.fieldComponent.IField
 
@@ -12,10 +13,14 @@ import javax.swing.SwingUtilities
 import scala.swing.event.ActionEvent
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
 import java.awt.Graphics2D
+import com.google.inject.Injector
+import com.google.inject.Guice
+import de.htwg.se.Muehle.controller.controllerComponent.IController
 
 class MillFieldSpec extends AnyFlatSpec with Matchers {
+  val injector: Injector = Guice.createInjector(new Module())
+  val con = injector.getInstance(classOf[IController])
   "MillField" should "update player statistics and game stand label" in {
-    val con = Controller()
     System.setProperty("java.awt.headless", "true")
     SwingUtilities.invokeLater(new Runnable {
       override def run(): Unit = {

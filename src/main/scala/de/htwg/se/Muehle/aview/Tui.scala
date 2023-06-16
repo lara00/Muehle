@@ -12,7 +12,7 @@ import com.google.inject.Inject
 val invalidInputMsg =
   "Invalid input. Please enter a valid number between 1 and 24, or 'q' to quit"
 var loop = true
-class Tui(using var controller: IController) extends Observer:
+class Tui(var controller: IController) extends Observer:
   controller.add(this)
 
   def run(): Unit = 
