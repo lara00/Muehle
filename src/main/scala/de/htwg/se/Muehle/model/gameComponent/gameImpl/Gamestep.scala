@@ -1,19 +1,23 @@
 package de.htwg.se.Muehle.model.gameComponent.gameImpl
 
-import com.google.inject.Inject
-import com.google.inject.name.Named
 import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.gameComponent.IGameStap
 import de.htwg.se.Muehle.model.playerComponent.IPlayer
 import de.htwg.se.Muehle.model.{MillEvents, MoveEvents, PlayerList, Stone}
 
-case class GameStap @Inject()(field: IField, player: IPlayer, playerlist: PlayerList) extends IGameStap:
+case class GameStap(field: IField, player: IPlayer, playerlist: PlayerList) extends IGameStap:
   def newGamestap(field: IField, player: IPlayer, playerlist: PlayerList) = GameStap(field, player,playerlist)
+
   def gplayer: IPlayer = player
+
   def gplayerlist: PlayerList = playerlist
+
   def playername: Stone = player.pname
+
   def gfield: IField = field
+
   def stonesofaktiveplayer: Int = player.pstonetoput
+
   def getNextPlayer: IPlayer = playerlist.getNextPlayer(player)
 
   private def updatedStonesInField: PlayerList = playerlist.updateStonesInField(player)

@@ -1,11 +1,10 @@
 package de.htwg.se.Muehle.model.fieldComponent.fieldImpl
 
-import com.google.inject.Inject
 import de.htwg.se.Muehle.model.Stone
 import de.htwg.se.Muehle.model.fieldComponent.IField
 import scala.util.Try
 
-case class Field @Inject()(fields: Map[Int, Stone] = (1 to 24).map(_ -> Stone.Empty).toMap) extends IField:
+case class Field(fields: Map[Int, Stone] = (1 to 24).map(_ -> Stone.Empty).toMap) extends IField:
   def stones_field(number: Int): Stone = fields(number)
   def fieldmap: Map[Int, Stone] = fields
   def size: Int = fields.size
@@ -17,11 +16,9 @@ case class Field @Inject()(fields: Map[Int, Stone] = (1 to 24).map(_ -> Stone.Em
 
   def deleteStone(number: Int, value: Stone): IField = performAction(number, value)(_ == value) { (field, _) => field.copy(fields = field.fields.updated(number, Stone.Empty))}
 
-  def movestone(from: Int, to: Int, value: Stone): IField =
-    performAction(from, value)(_ == value && fields(to) == Stone.Empty) {
-      (field, stone) =>
-        val updatedField = field.copy(fields = field.fields.updated(from, Stone.Empty))
-        updatedField.copy(fields = updatedField.fields.updated(to, stone))}
+  def movestone(from: Int, to: Int, value: Stone): IField = performAction(from, value)(_ == value && fields(to) == Stone.Empty) {
+      (field, stone) => val updatedField = field.copy(fields = field.fields.updated(from, Stone.Empty))
+      updatedField.copy(fields = updatedField.fields.updated(to, stone))}
 
   def stoneString(number: Int): String = fields(number).toString
 

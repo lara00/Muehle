@@ -3,9 +3,8 @@ package de.htwg.se.Muehle.model
 import de.htwg.se.Muehle.Default.given
 import de.htwg.se.Muehle.model.Stone
 import de.htwg.se.Muehle.model.playerComponent.IPlayer
-import com.google.inject.Inject
 
-case class PlayerList  @Inject()(players: List[IPlayer]):
+case class PlayerList(players: List[IPlayer]):
   def getFirstPlayer: IPlayer = players.head
 
   def getNextPlayer(aktivePlayer: IPlayer): IPlayer = players.find(_ != aktivePlayer).get
@@ -19,7 +18,7 @@ case class PlayerList  @Inject()(players: List[IPlayer]):
     val nextplayer = getNextPlayer(player)
     nextplayer.pstoneinField == 3 || (nextplayer.pstoneinField + nextplayer.pstonetoput == 3)
 
-  def updateStones(player: IPlayer, increment: Boolean): PlayerList = {
+  def updateStones(player: IPlayer, increment: Boolean): PlayerList =
     PlayerList(players.map { p =>
       p match
         case `player` if increment =>
@@ -27,7 +26,6 @@ case class PlayerList  @Inject()(players: List[IPlayer]):
         case `player` => p.decrementStoneintheField
         case _        => p
     })
-  }
 
   def updateStonesInField(aktivePlayer: IPlayer): PlayerList = updateStones(aktivePlayer, increment = true)
 
@@ -39,6 +37,6 @@ case class PlayerList  @Inject()(players: List[IPlayer]):
 
 object PlayerList:
   def apply(input: Int): PlayerList = given_IPlayer.pplayerList(input)
-  
+
   def apply(player1: IPlayer, player2: IPlayer): PlayerList = PlayerList(List(player1, player2))
   
