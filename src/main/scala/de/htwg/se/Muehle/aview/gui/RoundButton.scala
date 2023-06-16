@@ -4,7 +4,7 @@ import scala.swing._
 import scala.swing.event._
 import java.awt.Color
 
-class RoundButton(text: String) extends Button(text) {
+class RoundButton(text: String) extends Button(text):
   private val defaultBackgroundColor = Color.lightGray
   private val defaultRadius = 25
   background = defaultBackgroundColor
@@ -43,4 +43,3 @@ class RoundButton(text: String) extends Button(text) {
   borderPainted = false
   focusPainted = false
   contentAreaFilled = false
-}

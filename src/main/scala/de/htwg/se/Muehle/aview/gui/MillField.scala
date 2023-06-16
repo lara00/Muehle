@@ -8,7 +8,7 @@ import scala.collection.mutable
 import java.awt.{Color}
 import de.htwg.se.Muehle.controller.controllerComponent.IController
 
-class MillField(controller: IController) extends GridBagPanel {
+class MillField(controller: IController) extends GridBagPanel:
   var ismill = false
   private var clickedButtons = 0
   val buttonPosition_ = mutable.Map[Int, Button]()
@@ -34,13 +34,11 @@ class MillField(controller: IController) extends GridBagPanel {
     button.reactions += { case ButtonClicked(_) => click_Button(index, button)
     }
 
-  def click_Button(index: Int, button: RoundButton): Unit = {
-    if (ismill) {
-       ismill = controller.handleMillCase(index)
-    } else {
-      handleNonMillCase(index, button)
-    }
-  }
+  def click_Button(index: Int, button: RoundButton): Unit =
+    ismill match
+      case true  => ismill = controller.handleMillCase(index)
+      case false => handleNonMillCase(index, button)
+
   private def handleNonMillCase(index: Int, button: RoundButton): Unit =
     controller.setormove match
       case true => controller.put(index + 1, -1)
@@ -68,4 +66,3 @@ class MillField(controller: IController) extends GridBagPanel {
         case 1 => Color.lightGray
         case 2 => Color.white
         case 3 => Color.black
-}
