@@ -16,7 +16,7 @@ import com.google.inject.name.Names
 
 
 class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStrategy) extends IController with Observable {
-  var gamesize = 0;
+  var gamesize = gamefield.gplayer.pstonetoput;
   val undoManager = new UndoManager[IGameStap]
 
   def undo: Unit =

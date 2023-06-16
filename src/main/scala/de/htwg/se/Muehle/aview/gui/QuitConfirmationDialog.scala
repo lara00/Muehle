@@ -5,7 +5,7 @@ import scala.swing._
 import scala.swing.event.ButtonClicked
 import controller.controllerComponent.IController
 
-class QuitConfirmationDialog(controller: IController) extends Dialog {
+class QuitConfirmationDialog(controller: IController) extends Dialog:
   title = "Quit Game"
 
   peer.setUndecorated(true)
@@ -26,4 +26,3 @@ class QuitConfirmationDialog(controller: IController) extends Dialog {
   def showQuitConfirmationDialog: Unit = 
     centerOnScreen()
     open()
-}

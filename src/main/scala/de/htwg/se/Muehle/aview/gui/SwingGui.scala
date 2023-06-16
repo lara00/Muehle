@@ -12,7 +12,7 @@ import util.Event
 import util.Observer
 import controller.controllerComponent.IController
 
-class SwingGui(using var controller: IController) extends Frame with Observer {
+class SwingGui(using var controller: IController) extends Frame with Observer:
   controller.add(this)
   title = "MILL"
   open()
@@ -23,9 +23,9 @@ class SwingGui(using var controller: IController) extends Frame with Observer {
 
   val mainPanel = new BoxPanel(Orientation.Vertical):
     contents += gameStand
-    contents += ShowStones(controller).createBoxPanel(Color.white,0,1)
+    contents += ShowStones(controller).createBoxPanel(Color.white,controller.gamesize, 0)
     contents += millField
-    contents += ShowStones(controller).createBoxPanel(Color.black,0,2)
+    contents += ShowStones(controller).createBoxPanel(Color.white,controller.gamesize, 0)
   contents = mainPanel
   
   menuBar = new MenuBar:
@@ -55,8 +55,12 @@ class SwingGui(using var controller: IController) extends Frame with Observer {
     millField.ismill = true
 
   private def redraw: Unit =
+    val (white_set, white_delete, black_set, balck_delete) = controller.PlayerStatics
+    val newShowStonesPanel = ShowStones(controller).createBoxPanel(Color.white, white_set, controller.gamesize - (white_delete + white_set))
+    val newShowStonesPanel1 = ShowStones(controller).createBoxPanel(Color.white, black_set, controller.gamesize - (balck_delete + black_set))
+    mainPanel.contents(1) = newShowStonesPanel
+    mainPanel.contents(3) = newShowStonesPanel1
     millField.update(controller)
     gameStand.text = controller.getGameStandLabelText
     mainPanel.revalidate()
     mainPanel.repaint()
-}
