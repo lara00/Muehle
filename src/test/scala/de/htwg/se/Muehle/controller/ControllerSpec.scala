@@ -99,6 +99,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           .setStone(6, Stone.Black)
           .setStone(8, Stone.Black)
       )
+      controller.getGameStandLabelText should be ("BLACK, Click to place the stone, then click to move it.")
     }
     "simulate set complett game with 4 stones as Singelplayer" in {
       val controller: Controller = Controller()
@@ -186,9 +187,27 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.getGameState(1) should be(2) // Stone.White
       controller.getGameState(2) should be(3) // Stone.Black
 
-      val fileIO = given_FileIOInterface
       controller.save
       controller.load
+
+      val fileIO_XML = de.htwg.se.Muehle.model.fieldComponent.fileIoXmlImpl.FileIO()
+      val fileIO_Json = de.htwg.se.Muehle.model.fileIOComponent.fileIoJsonImpl.FileIO()
+      val fileIO_CSV = de.htwg.se.Muehle.model.fileIOComponent.fileIOCSVImpl.FileIO()
+      fileIO_CSV.save(given_IGameStap, given_IPlayerStrategy)
+      fileIO_XML.save(given_IGameStap, given_IPlayerStrategy)
+      fileIO_Json.save(given_IGameStap, given_IPlayerStrategy)
+
+      fileIO_CSV.load
+      fileIO_XML.load
+      fileIO_Json.load
+
+      fileIO_CSV.save(given_IGameStap, AIPlayer())
+      fileIO_XML.save(given_IGameStap, AIPlayer())
+      fileIO_Json.save(given_IGameStap, AIPlayer())
+
+      fileIO_CSV.load
+      fileIO_XML.load
+      fileIO_Json.load
 
     }
   }
