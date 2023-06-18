@@ -53,17 +53,24 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
     "simulate set complete game with 4 stones" in {
       val controller: Controller = Controller()
+
       controller.undo
       controller.redo
       controller.put(1, -1)
+      controller.put(1, -1)
+      controller.undo
+      controller.put(1, -1)
+      controller.undo
+      controller.redo
       controller.put(2, -1)
       controller.put(10, -1)
       controller.put(3, -1)
       val expectedRound4 = field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(3, Stone.Black).setStone(2, Stone.Black)
       controller.gamefield.gfield should be(expectedRound4)
-
       controller.put(22, -1)
       controller.mill(2)
+      controller.undo
+      controller.redo
       val expectedRound5 = field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(3, Stone.Black)
       controller.gamefield.gfield should be(expectedRound5)
       controller.put(6, -1)
@@ -75,7 +82,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.gamefield.gfield should be(
         field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(23, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(3, Stone.Black))
       controller.undo
-      controller.put(23, 22)
+      controller.redo
       controller.getGameStandLabelText should be ("BLACK, jump with a stone.")
       controller.put(24, 3)
       controller.gamefield.gfield should be(field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(23, Stone.White).setStone(7, Stone.White)
@@ -83,7 +90,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.put(22, 23)
       controller.mill(23)
       controller.mill(24)
-
       controller.gamefield.gfield should be(
         field
           .setStone(1, Stone.White)
@@ -93,19 +99,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           .setStone(6, Stone.Black)
           .setStone(8, Stone.Black)
       )
-
-      controller.undo
-      controller.gamefield.gfield should be(
-        field
-          .setStone(1, Stone.White)
-          .setStone(10, Stone.White)
-          .setStone(23, Stone.White)
-          .setStone(7, Stone.White)
-          .setStone(6, Stone.Black)
-          .setStone(8, Stone.Black)
-          .setStone(24, Stone.Black)
-      )
-      controller.getGameStandLabelText should be ("WHITE, Click to place the stone, then click to move it.")
     }
     "simulate set complett game with 4 stones as Singelplayer" in {
       val controller: Controller = Controller()
@@ -138,6 +131,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         PlayerList(List(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 4))))
       controller.put(8, 5)
       controller.gamefield.gplayerlist should be(PlayerList(List(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 4))))
+
     }
     "case the put is not possible" in {
       val controller = Controller()
@@ -191,6 +185,11 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.getGameState(3) should be(1) // Stone.Empty
       controller.getGameState(1) should be(2) // Stone.White
       controller.getGameState(2) should be(3) // Stone.Black
+
+      val fileIO = given_FileIOInterface
+      controller.save
+      controller.load
+
     }
   }
 

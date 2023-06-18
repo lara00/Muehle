@@ -18,6 +18,17 @@ import com.google.inject.name.Names
 class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStrategy) extends IController with Observable {
   var gamesize = gamefield.gplayer.pstonetoput;
   val undoManager = new UndoManager[IGameStap]
+  val fileIO = given_FileIOInterface
+
+  def save: Unit = 
+    fileIO.save(gamefield, playerstrategy)
+    notifyObservers(Event.Status)
+
+  def load: Unit = 
+    val (g, p) = fileIO.load
+    gamefield = g
+    playerstrategy = p
+    notifyObservers(Event.Status)
 
   def undo: Unit =
     gamefield = undoManager.undoStep(gamefield)
@@ -40,9 +51,9 @@ class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStra
   def mill(delete: Int) =
     notifyObservers(Event.Status)
     val mill = gamefield.handleMill(delete)
-    PutCommand(Move(mill(1), mill(0), playerstrategy, delete, 0))
     mill(1) match
       case MillEvents.DeleteStone =>
+        undoManager.doStep(gamefield, PutCommand(Move(mill(1), mill(0), playerstrategy, delete, 0)))
         gamefield = mill(0)
         notifyObservers(Event.Status)
         if (playerstrategy == IGameInjector.createInjector().getInstance(Key.get(classOf[IPlayerStrategy], Names.named("AIPlayer"))).getClass())

@@ -11,6 +11,8 @@ trait IController extends Observable {
 
   def undo: Unit
   def redo: Unit
+  def save: Unit
+  def load: Unit
 
   def bildGameSet(number: Int, singlegamer: Boolean): Unit
 

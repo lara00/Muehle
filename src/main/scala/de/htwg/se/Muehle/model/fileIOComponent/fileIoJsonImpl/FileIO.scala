@@ -1,0 +1,205 @@
+package de.htwg.se.Muehle.model.fileIOComponent.fileIoJsonImpl
+
+import de.htwg.se.Muehle.model.playerstrategyComponent.IGameInjector
+import de.htwg.se.Muehle.model.fileIOComponent.FileIOInterface
+import de.htwg.se.Muehle.model.gameComponent.IGameStap
+import de.htwg.se.Muehle.model.PlayerList
+import de.htwg.se.Muehle.model.Stone
+import de.htwg.se.Muehle.model.fieldComponent.IField
+import java.lang.module.ModuleDescriptor.Provides
+import com.google.inject.name.Named
+import com.google.inject.Guice
+import com.google.inject.Injector
+import java.io.PrintWriter
+import de.htwg.se.Muehle.model.playerstrategyComponent.IPlayerStrategy
+import de.htwg.se.Muehle.model.playerComponent.IPlayer
+import de.htwg.se.Muehle.model.gameComponent.IGameStap
+import scala.xml.{Elem, XML}
+import de.htwg.se.Muehle.Default.given
+import scala.io.Source
+import org.json4s._
+import org.json4s.JsonDSL._
+import org.json4s.native.JsonMethods._
+
+import scala.util.Using
+import java.io.{File, FileWriter}
+
+import org.json4s._
+import org.json4s.native.JsonMethods._
+
+import com.google.inject.name.{Named, Names}
+import com.google.inject.{AbstractModule, Guice, Inject, Injector, Provides}
+import com.google.inject.Key
+
+
+class FileIO extends FileIOInterface {
+  override def load: (IGameStap, IPlayerStrategy) = (GameStapIO.LoadGameStap(), PlayerConfigurator.loadPlayerStrategyName())
+
+  override def save(gamestap: IGameStap, playerstrategy: IPlayerStrategy): Unit = {
+    createDirectory("JsonImpl")
+    PlayerConfigurator.savePlayerStrategy(playerstrategy)
+    GameStapIO.SaveGamestap(gamestap)
+  }
+
+  private def createDirectory(directoryPath: String): Unit = {
+    val directory = new File(directoryPath)
+    if (!directory.exists())
+      directory.mkdir()
+  }
+
+  object PlayerConfigurator {
+    private def saveToJson(filePath: String, strategy: IPlayerStrategy): Unit = {
+      val playerName = strategy.getClass.getSimpleName
+      val json = ("configuration" ->
+        ("player" ->
+          ("name" -> playerName)))
+      val jsonString = compact(render(json))
+      val writer = new PrintWriter(filePath)
+      try {
+        writer.write(jsonString)
+      } finally {
+        writer.close()
+      }
+    }
+
+    def savePlayerStrategy(player: IPlayerStrategy): Unit =
+      saveToJson("JsonImpl/playerstrategy.json", player)
+
+    def loadPlayerStrategyName(): IPlayerStrategy = {
+      val injector = IGameInjector.createInjector()
+      val json = parse(scala.io.Source.fromFile("JsonImpl/playerstrategy.json").mkString)
+      val playerName = (json \ "configuration" \ "player" \ "name") match {
+        case JString(name) => name
+        case _ => ""
+      }
+
+      playerName match {
+        case "AIPlayer" => injector.getInstance(Key.get(classOf[IPlayerStrategy], Names.named("AIPlayer")))
+        case "HumanPlayer" => injector.getInstance(Key.get(classOf[IPlayerStrategy], Names.named("HumanPlayer")))
+        case _ => injector.getInstance(Key.get(classOf[IPlayerStrategy], Names.named("HumanPlayer")))
+      }
+    }
+  }
+
+  object GameStapIO {
+    implicit val formats: DefaultFormats.type = DefaultFormats
+
+    private def toJson(player: IPlayer): JValue = {
+      val nameField = ("name", JString(player.pname.toString))
+      val stonesToPutField = ("stonesToPut", JInt(player.pstonetoput))
+      val stonesInFieldField = ("stonesInField", JInt(player.pstoneinField))
+
+      JObject(nameField, stonesToPutField, stonesInFieldField)
+    }
+
+    private def toJsonObject(position: Int, stone: Stone): JObject = {
+      JObject("position" -> position, "stone" -> stone.toString)
+    }
+
+    private def saveToFile(fileName: String, content: String): Unit = {
+      val file = new File(fileName)
+      Using.resource(new FileWriter(file)) { writer =>
+        writer.write(content)
+      }
+    }
+
+    private def loadPlayerFromJson(json: JValue): IPlayer = {
+      val nameStringOpt = (json \ "name").toOption.flatMap {
+        case JString(name) => Some(name)
+        case _ => None
+      }
+      val name = nameStringOpt.flatMap(nameStr => Stone.values.find(_.toString == nameStr)).getOrElse(Stone.Empty)
+
+      val stonesToPutOpt = (json \ "stonesToPut").toOption.flatMap {
+        case JInt(stones) => Some(stones.toInt)
+        case _ => None
+      }
+      val stonesToPut = stonesToPutOpt.getOrElse(0)
+
+      val stonesInFieldOpt = (json \ "stonesInField").toOption.flatMap {
+        case JInt(stones) => Some(stones.toInt)
+        case _ => None
+      }
+      val stonesInField = stonesInFieldOpt.getOrElse(0)
+
+      given_IPlayer.pplayer(name, stonesToPut, stonesInField)
+    }
+
+    private def loadFieldLineFromJson(json: JValue): Option[(Int, Stone)] = {
+      val positionOpt = (json \ "position").toOption.flatMap {
+        case JInt(position) => Some(position.toInt)
+        case _ => None
+      }
+
+      val stoneStringOpt = (json \ "stone").toOption.flatMap {
+        case JString(stoneStr) => Some(stoneStr)
+        case _ => None
+      }
+
+      for {
+        pos <- positionOpt
+        stoneStr <- stoneStringOpt
+        stone <- Stone.values.find(_.toString == stoneStr)
+      } yield (pos, stone)
+    }
+
+    private def loadFieldFromFile(fileName: String): IField = {
+      val jsonString = Using.resource(scala.io.Source.fromFile(fileName)) { source =>
+        source.mkString
+      }
+
+      val json = parse(jsonString)
+      val fieldList = (json \ "field").children.flatMap(loadFieldLineFromJson)
+      val fieldMap = fieldList.toMap
+      given_IField.createField(fieldMap)
+    }
+
+    private def savePlayerToFile(player: IPlayer, fileName: String): Unit = {
+      val playerJson = toJson(player)
+      val jsonString = compact(render(playerJson))
+      saveToFile(fileName, jsonString)
+    }
+
+    private def savePlayersToFile(playerList: PlayerList, fileName: String): Unit = {
+      val playersJson = playerList.players.map(toJson)
+      val jsonContent: JValue = JArray(playersJson)
+      val jsonString = compact(render(jsonContent))
+      saveToFile(fileName, jsonString)
+    }
+
+    private def saveFieldToFile(field: IField, fileName: String): Unit = {
+      val fieldLinesJson = field.fieldmap.map { case (position, stone) => toJsonObject(position, stone) }.toList
+      val jsonContent = ("field", fieldLinesJson)
+      val jsonString = compact(render(jsonContent))
+      saveToFile(fileName, jsonString)
+    }
+
+    def SaveGamestap(gameState: IGameStap): Unit = {
+      savePlayerToFile(gameState.gplayer, "JsonImpl/player1.json")
+      savePlayersToFile(gameState.gplayerlist, "JsonImpl/players.json")
+      saveFieldToFile(gameState.gfield, "JsonImpl/field.json")
+    }
+
+    def LoadGameStap(): IGameStap = {
+      val loadedField = loadFieldFromFile("JsonImpl/field.json")
+      val loadedPlayerList = loadPlayersFromFile("JsonImpl/players.json")
+      val loadedPlayer = loadPlayerFromFile("JsonImpl/player1.json")
+      given_IGameStap.newGamestap(loadedField, loadedPlayer, loadedPlayerList)
+    }
+
+    private def loadPlayersFromFile(fileName: String): PlayerList = {
+      val jsonString = scala.io.Source.fromFile(fileName).mkString
+      val json = parse(jsonString)
+      val players = (json \ "players").children.flatMap { playerJson =>
+        Seq(loadPlayerFromJson(playerJson))
+      }
+      PlayerList(players.toList)
+    }
+
+    private def loadPlayerFromFile(fileName: String): IPlayer = {
+      val jsonString = scala.io.Source.fromFile(fileName).mkString
+      val json = parse(jsonString)
+      loadPlayerFromJson(json)
+    }
+  }
+}

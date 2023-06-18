@@ -43,22 +43,27 @@ class AIPlayerSpec extends AnyWordSpec with Matchers {
         val (newGameStap, moveEvent) = aiPlayer.makeMove(gameStap, 2, 3)
         moveEvent should be(MoveEvents.MoveStone)
       }
-      /*
       "AIPlayer make a move" in {
       val aiPlayer = new AIPlayer()
       val p1 = PlayerList(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 4))
       aiPlayer.aimuhle = true
-      aiPlayer.millgamestap = GameStap(
-      given_IField.setStone(3, Stone.White).setStone(24, Stone.Black)
-      .setStone(1, Stone.White).setStone(2, Stone.White),
-      given_IPlayer.pplayer(Stone.Black, 0, 3),
-      p1
-      )
+      aiPlayer.millgamestap = given_IGameStap.newGamestap(
+      given_IField.setStone(3, Stone.White).setStone(24, Stone.Black).setStone(24, Stone.Black)
+      .setStone(1, Stone.White).setStone(2, Stone.White), p1.getFirstPlayer, p1)
 
-      val (newGameStap, moveEvent) = aiPlayer.makeMove(aiPlayer.millgamestap, 1, -1)
-      //moveEvent should be(MoveEvents.SetStone)
-    }
-        */
+      val (newGameStap, moveEvent) = aiPlayer.makeMove(given_IGameStap, 1, -1)
+
+      val p2 = PlayerList(given_IPlayer.pplayer(Stone.White, 3, 1), given_IPlayer.pplayer(Stone.Black, 3, 1))
+
+      aiPlayer.millcheck(1,-1, given_IGameStap.newGamestap(
+      given_IField.setStone(4, Stone.White).setStone(10, Stone.Black).setStone(22, Stone.Black)
+      .setStone(7, Stone.White).setStone(2, Stone.White), given_IPlayer.pplayer(Stone.Black, 3, 1), p2))
+      
+      aiPlayer.automove_withoutmill(given_IGameStap.newGamestap(
+      given_IField.setStone(3, Stone.White).setStone(24, Stone.Black).setStone(24, Stone.Black)
+      .setStone(1, Stone.White).setStone(2, Stone.White),
+       given_IPlayer.pplayer(Stone.Black, 3, 1), p2), 1, -1)
     }
   }
+}
 }

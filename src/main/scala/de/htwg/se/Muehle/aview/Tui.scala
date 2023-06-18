@@ -48,6 +48,12 @@ class Tui(using var controller: IController) extends Observer:
       case Success("y") =>
         controller.redo
         true
+      case Success("f") =>
+        controller.save
+        true
+      case Success("l") =>
+        controller.load
+        true
       case Success("sG") =>
         controller.bildGameSet(3, false)
         true

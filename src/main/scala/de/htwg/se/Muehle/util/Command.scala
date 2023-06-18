@@ -1,7 +1,6 @@
 package de.htwg.se.Muehle.util
 
 trait Command[T]:
-  def noStep(t: T): T
   def doStep(t: T): T
   def undoStep(t: T): T
   def redoStep(t: T): T
@@ -9,8 +8,6 @@ trait Command[T]:
 class UndoManager[T]:
   private var undoStack: List[Command[T]] = Nil
   private var redoStack: List[Command[T]] = Nil
-  def noStep(t: T): T =
-    t
 
   def doStep(t: T, command: Command[T]): T =
     undoStack = command :: undoStack
