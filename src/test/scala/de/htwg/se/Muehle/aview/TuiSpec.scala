@@ -35,6 +35,9 @@ class TuiSpec extends AnyWordSpec with Matchers {
       "return false if exit" in {
         tui.analyseInput(Try("q")) shouldBe false
       }
+      "show the help text" in {
+        tui.analyseInput(Try("h")) shouldBe true
+      }
       "return false" in {
         tui.analyseInput(Try("25")) shouldBe false
       }
