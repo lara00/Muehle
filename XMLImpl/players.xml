@@ -1,0 +1,11 @@
+<players>
+          <player>
+        <name>WHITE</name>
+        <stonesToPut>4</stonesToPut>
+        <stonesInField>0</stonesInField>
+      </player><player>
+        <name>BLACK</name>
+        <stonesToPut>4</stonesToPut>
+        <stonesInField>0</stonesInField>
+      </player>
+        </players>
