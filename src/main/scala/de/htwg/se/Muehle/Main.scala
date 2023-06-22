@@ -10,5 +10,6 @@ object Main:
     println("Play Muehle")
     val tui = Tui()
     val gui = new SwingGui()
+    gui.`open`()
     tui.run()
   

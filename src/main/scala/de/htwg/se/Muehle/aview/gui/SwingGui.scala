@@ -15,7 +15,6 @@ import controller.controllerComponent.IController
 class SwingGui(using var controller: IController) extends Frame with Observer:
   controller.add(this)
   title = "MILL"
-  open()
 
   val millField = new MillField(controller)
   val gameStand = new Label():
@@ -33,11 +32,11 @@ class SwingGui(using var controller: IController) extends Frame with Observer:
         contents += new MenuItem(Action("Open Settings")(new SettingsDialog(controller).visible = true))
   
   pack()
-  visible = true
-  redraw
 
   override def open(): Unit =
     super.open()
+    super.visible = true
+    redraw
     listenTo(this)
     reactions += {
     case WindowClosing(_) => controller.quit("")

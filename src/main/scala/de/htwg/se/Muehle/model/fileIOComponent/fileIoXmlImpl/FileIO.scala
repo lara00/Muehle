@@ -1,19 +1,21 @@
 package de.htwg.se.Muehle.model.fieldComponent.fileIoXmlImpl
 
 import java.io.{File, FileWriter, PrintWriter}
+
 import scala.util.Using
 import scala.xml.{Elem, XML, Node}
-import com.google.inject.{AbstractModule, Guice, Inject, Injector, Provides, Key}
+
+import com.google.inject.{AbstractModule, Guice, Inject, Injector, Provides}
 import com.google.inject.name.{Named, Names}
+import com.google.inject.Key
+
 import de.htwg.se.Muehle.Default.given
-import de.htwg.se.Muehle.model.PlayerList
-import de.htwg.se.Muehle.model.Stone
+import de.htwg.se.Muehle.model.{Stone, PlayerList}
 import de.htwg.se.Muehle.model.fieldComponent.IField
-import de.htwg.se.Muehle.model.gameComponent.IGameStap
 import de.htwg.se.Muehle.model.fileIOComponent.FileIOInterface
+import de.htwg.se.Muehle.model.gameComponent.IGameStap
 import de.htwg.se.Muehle.model.playerComponent.IPlayer
-import de.htwg.se.Muehle.model.playerstrategyComponent.IGameInjector
-import de.htwg.se.Muehle.model.playerstrategyComponent.IPlayerStrategy
+import de.htwg.se.Muehle.model.playerstrategyComponent.{IGameInjector, IPlayerStrategy}
 
 class FileIO extends FileIOInterface:
   override def load: (IGameStap, IPlayerStrategy) = (GamestapIO.LoadGameStap(), PlayerConfigurator.loadPlayerStrategyName())

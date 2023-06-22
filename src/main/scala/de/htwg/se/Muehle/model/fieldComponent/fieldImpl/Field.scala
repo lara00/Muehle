@@ -5,9 +5,8 @@ import de.htwg.se.Muehle.model.fieldComponent.IField
 import scala.util.Try
 
 case class Field(fields: Map[Int, Stone] = (1 to 24).map(_ -> Stone.Empty).toMap) extends IField:
-  def stones_field(number: Int): Stone = fields(number)
-
   def createField(cfield : Map[Int, Stone]): IField = Field(cfield)
+  def stones_field(number: Int): Stone = fields(number)
   def fieldmap: Map[Int, Stone] = fields
   def size: Int = fields.size
 

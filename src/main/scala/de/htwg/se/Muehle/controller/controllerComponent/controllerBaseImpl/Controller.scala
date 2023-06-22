@@ -56,7 +56,7 @@ class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStra
         undoManager.doStep(gamefield, PutCommand(Move(mill(1), mill(0), playerstrategy, delete, 0)))
         gamefield = mill(0)
         notifyObservers(Event.Status)
-        if (playerstrategy == IGameInjector.createInjector().getInstance(Key.get(classOf[IPlayerStrategy], Names.named("AIPlayer"))).getClass())
+        if (playerstrategy.getClass == IGameInjector.createInjector().getInstance(Key.get(classOf[IPlayerStrategy], Names.named("AIPlayer"))).getClass)
           gamefield = playerstrategy.makeMove(gamefield, 1, -1)(0)
           notifyObservers(Event.Status)
       case MillEvents.EndGame =>

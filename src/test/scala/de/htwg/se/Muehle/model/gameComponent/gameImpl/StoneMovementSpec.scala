@@ -47,6 +47,5 @@ class StoneMovementSpec extends AnyWordSpec with Matchers {
         newField should be(given_IField.setStone(2, Stone.Black))
       }
     }
-
   }
 }

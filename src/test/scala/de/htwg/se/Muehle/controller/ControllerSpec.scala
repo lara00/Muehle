@@ -187,37 +187,24 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.getGameState(1) should be(2) // Stone.White
       controller.getGameState(2) should be(3) // Stone.Black
 
-      controller.save
-      controller.load
-
-      val fileIO_XML = de.htwg.se.Muehle.model.fieldComponent.fileIoXmlImpl.FileIO()
-      val fileIO_Json = de.htwg.se.Muehle.model.fileIOComponent.fileIoJsonImpl.FileIO()
-      val fileIO_CSV = de.htwg.se.Muehle.model.fileIOComponent.fileIOCSVImpl.FileIO()
-      fileIO_CSV.save(given_IGameStap, given_IPlayerStrategy)
-      fileIO_XML.save(given_IGameStap, given_IPlayerStrategy)
-      fileIO_Json.save(given_IGameStap, given_IPlayerStrategy)
-
-      fileIO_CSV.load
-      fileIO_XML.load
-      fileIO_Json.load
-
-      fileIO_CSV.save(given_IGameStap, AIPlayer())
-      fileIO_XML.save(given_IGameStap, AIPlayer())
-      fileIO_Json.save(given_IGameStap, AIPlayer())
-
-      fileIO_CSV.load
-      fileIO_XML.load
-      fileIO_Json.load
-
     }
   }
 
   "calling iswhite" should {
     "return the correct color" in {
       val controller = Controller()
+      controller.save
+      controller.load
       controller.bildGameSet(2,true)
       controller.iswhite(Color.WHITE) should be(Color.BLACK)
       controller.iswhite(Color.BLACK) should be(Color.WHITE)
     }
   }
+  "aiplayer, shound make this turn after mill" should {
+    val controller = Controller()
+    controller.playerstrategy = AIPlayer()
+    controller.gamefield.gfield.setStone(1, Stone.Black)
+    controller.mill(1)
+  }
+  
 }

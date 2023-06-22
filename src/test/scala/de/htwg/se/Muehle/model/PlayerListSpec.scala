@@ -17,22 +17,15 @@ class PlayerListSpec extends AnyWordSpec with Matchers {
     "return the next player" in {
       val players = List(given_IPlayer.pplayer(Stone.White, 2, 0), given_IPlayer.pplayer(Stone.Black, 2, 0))
       val playerList = PlayerList(players)
-      playerList.getNextPlayer(given_IPlayer.pplayer(Stone.White, 2, 0)) should be(
-        given_IPlayer.pplayer(Stone.Black, 2, 0)
-      )
-      playerList.getNextPlayer(given_IPlayer.pplayer(Stone.Black, 2, 0)) should be(
-        given_IPlayer.pplayer(Stone.White, 2, 0)
-      )
+      playerList.getNextPlayer(given_IPlayer.pplayer(Stone.White, 2, 0)) should be(given_IPlayer.pplayer(Stone.Black, 2, 0))
+      playerList.getNextPlayer(given_IPlayer.pplayer(Stone.Black, 2, 0)) should be(given_IPlayer.pplayer(Stone.White, 2, 0))
     }
 
     "update the stones in the field for the active player" in {
       val players = List(given_IPlayer.pplayer(Stone.White, 2, 0), given_IPlayer.pplayer(Stone.Black, 2, 0))
       val playerList = PlayerList(players)
-      val updatedPlayerList =
-        playerList.updateStonesInField(given_IPlayer.pplayer(Stone.White, 2, 0))
-      updatedPlayerList should be(
-        PlayerList(List(given_IPlayer.pplayer(Stone.White, 1, 1), given_IPlayer.pplayer(Stone.Black, 2, 0)))
-      )
+      val updatedPlayerList = playerList.updateStonesInField(given_IPlayer.pplayer(Stone.White, 2, 0))
+      updatedPlayerList should be(PlayerList(List(given_IPlayer.pplayer(Stone.White, 1, 1), given_IPlayer.pplayer(Stone.Black, 2, 0))))
     }
 
     "check if the next player is not allowed to delete a stone" in {
@@ -56,9 +49,7 @@ class PlayerListSpec extends AnyWordSpec with Matchers {
       val playerList = PlayerList(players)
       val activePlayer = given_IPlayer.pplayer(Stone.White, 1, 1)
       val updatedPlayerList = playerList.updateStonesafterMill(activePlayer)
-      updatedPlayerList should be(
-        PlayerList(List(given_IPlayer.pplayer(Stone.White, 1, 0), given_IPlayer.pplayer(Stone.Black, 2, 0)))
-      )
+      updatedPlayerList should be(PlayerList(List(given_IPlayer.pplayer(Stone.White, 1, 0), given_IPlayer.pplayer(Stone.Black, 2, 0))))
     }
   }
 }

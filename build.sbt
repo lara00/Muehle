@@ -16,6 +16,7 @@ lazy val root = project
     libraryDependencies += "com.typesafe.play" %% "play-json" % "2.10.0-RC5",
     libraryDependencies += "org.json4s" %% "json4s-native" % "4.0.3",
     libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "1.3.8",
-    libraryDependencies += "org.yaml" % "snakeyaml" % "1.29",
-    libraryDependencies += "org.apache.avro" % "avro" % "1.10.2"
-  )
+    libraryDependencies += "org.yaml" % "snakeyaml" % "1.28",
+    libraryDependencies += "org.apache.avro" % "avro" % "1.10.2",
+    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.15"
+)
