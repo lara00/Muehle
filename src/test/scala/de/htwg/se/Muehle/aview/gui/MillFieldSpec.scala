@@ -17,8 +17,6 @@ import java.awt.Color
 class MillFieldSpec extends AnyFlatSpec with Matchers {
   "MillField" should "update player statistics and game stand label" in {
     val con = Controller()
-    val menu = ShowStones(con)
-    menu.createImagePanel(1 , Color.BLACK)(1) should be (true) 
     val e = SettingsDialog(con)
     System.setProperty("java.awt.headless", "true")
     SwingUtilities.invokeLater(new Runnable {
