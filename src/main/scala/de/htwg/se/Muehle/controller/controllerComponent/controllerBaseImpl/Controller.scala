@@ -56,8 +56,7 @@ class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStra
       case MillEvents.EndGame =>
         gamefield = mill(0)
         notifyObservers(Event.Quit)
-      case MillEvents.WrongDelete =>
-        notifyObservers(Event.Mill)
+      case MillEvents.WrongDelete => notifyObservers(Event.Mill)
 
   def put(to: Int, from: Int): Unit =
     val move = playerstrategy.makeMove(gamefield, to, from)
