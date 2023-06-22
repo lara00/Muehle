@@ -52,13 +52,7 @@ class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStra
     notifyObservers(Event.Status)
     val mill = gamefield.handleMill(delete)
     mill(1) match
-      case MillEvents.DeleteStone =>
-        undoManager.doStep(gamefield, PutCommand(Move(mill(1), mill(0), playerstrategy, delete, 0)))
-        gamefield = mill(0)
-        notifyObservers(Event.Status)
-        if (playerstrategy.getClass == IGameInjector.createInjector().getInstance(Key.get(classOf[IPlayerStrategy], Names.named("AIPlayer"))).getClass)
-          gamefield = playerstrategy.makeMove(gamefield, 1, -1)(0)
-          notifyObservers(Event.Status)
+      case MillEvents.DeleteStone => deleteStone(mill(0), mill(1), delete)
       case MillEvents.EndGame =>
         gamefield = mill(0)
         notifyObservers(Event.Quit)
@@ -117,3 +111,11 @@ class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStra
     if (color == Color.WHITE) Color.BLACK else Color.WHITE
 
   def playername: Stone = gamefield.playername
+
+  def deleteStone(game: IGameStap, event: MillEvents, delete: Int): Unit =
+    undoManager.doStep(gamefield, PutCommand(Move(event, game, playerstrategy, delete, 0)))
+    gamefield = game
+    notifyObservers(Event.Status)
+    if (playerstrategy.getClass == IGameInjector.createInjector().getInstance(Key.get(classOf[IPlayerStrategy], Names.named("AIPlayer"))).getClass)
+      gamefield = playerstrategy.makeMove(gamefield, 1, -1)(0)
+      notifyObservers(Event.Status)
