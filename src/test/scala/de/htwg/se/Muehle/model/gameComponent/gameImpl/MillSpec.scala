@@ -9,10 +9,7 @@ import de.htwg.se.Muehle.Default.given
 
 class MillSpec extends AnyFlatSpec with Matchers {
   "A Mill" should "detect a mill when it exists horizontal" in {
-    val field = given_IField
-      .setStone(1, Stone.White)
-      .setStone(2, Stone.White)
-      .setStone(3, Stone.White)
+    val field = given_IField.setStone(1, Stone.White).setStone(2, Stone.White).setStone(3, Stone.White)
     val mill = new Mill(field)
     val result = mill.existsMill()
     result should be(true)

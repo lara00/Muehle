@@ -6,6 +6,7 @@ trait IField:
   def size: Int
   def stones_field(number: Int): Stone 
   def fieldmap: Map[Int, Stone]
+  def createField(cfield : Map[Int, Stone]): IField
 
   def setStone(number: Int, value: Stone): IField
   def deleteStone(number: Int, value: Stone): IField

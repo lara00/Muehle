@@ -14,6 +14,7 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       player.pname shouldBe Stone.White
     }
   }
+  
   "incrementStoneintheField" should {
     "increment the stoneintheField field by 1" in {
       val player = given_IPlayer.pplayer(Stone.White, 0, 0)
@@ -29,6 +30,7 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       newPlayer.pstoneinField shouldBe 0
     }
   }
+
   "setstone" should {
     "return a new Field with the specified value at the specified position" in {
       val field = given_IField

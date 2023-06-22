@@ -51,6 +51,7 @@ class MillField(controller: IController) extends GridBagPanel:
     super.paintComponent(g)
     g.setColor(Color.black)
     val buttonPosition = buttonPosition_
+    /* Draw lines between the buttons to visually create a mill field.*/
     val buttonPositionsToConnect = 
       List((1, 3), (1, 22), (2, 8),(3, 24), (4, 6), (4, 19), (6, 21),  (17,23),
       (7, 9), (7, 16), (9, 18), (10, 12), (13, 15),(16, 18), (19, 21), (22, 24))
