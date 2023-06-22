@@ -16,14 +16,6 @@ import java.awt.Color
 import javax.swing.JPanel
 import java.awt.Graphics
 
-class MyPanel extends JPanel {
-  override protected def paintComponent(g: Graphics): Unit = {
-    super.paintComponent(g)
-    val g2d: Graphics2D = g.asInstanceOf[Graphics2D]
-    // Weitere Zeichnungsoperationen hier
-  }
-}
-
 class MillFieldSpec extends AnyFlatSpec with Matchers {
   "MillField" should "update player statistics and game stand label" in {
     val con = Controller()
@@ -32,8 +24,6 @@ class MillFieldSpec extends AnyFlatSpec with Matchers {
     r.createImagePanel(2, Color.black)(1) should be (true)
     val button = RoundButton("2")
     val t = SettingsDialog(con)
-    val gui = SwingGui()
-    gui.controller = con
     System.setProperty("java.awt.headless", "true")
     SwingUtilities.invokeLater(new Runnable {
       override def run(): Unit = {
