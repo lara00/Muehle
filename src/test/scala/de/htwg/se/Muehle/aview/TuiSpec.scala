@@ -26,6 +26,12 @@ class TuiSpec extends AnyWordSpec with Matchers {
       "return true if call undo" in {
         tui.analyseInput(Try("y")) shouldBe true
       }
+      "save the game" in {
+        tui.analyseInput(Try("f")) shouldBe true
+      }
+      "load the game" in {
+        tui.analyseInput(Try("l")) shouldBe true
+      }
       "return false if exit" in {
         tui.analyseInput(Try("q")) shouldBe false
       }

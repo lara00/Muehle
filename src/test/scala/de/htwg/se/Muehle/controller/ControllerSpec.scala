@@ -40,7 +40,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         )
       }
     }
-
     "quit" should {
       "notify observers with the quit event" in {
         var event: Option[Event] = None
@@ -53,7 +52,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
     "simulate set complete game with 4 stones" in {
       val controller: Controller = Controller()
-
+      // Test undo/redo, on a empty
       controller.undo
       controller.redo
       controller.put(1, -1)
@@ -67,8 +66,10 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.put(3, -1)
       val expectedRound4 = field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(3, Stone.Black).setStone(2, Stone.Black)
       controller.gamefield.gfield should be(expectedRound4)
+      //mill in field, delete stone 2
       controller.put(22, -1)
       controller.mill(2)
+      //test undo/redo on mill
       controller.undo
       controller.redo
       val expectedRound5 = field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(3, Stone.Black)
@@ -76,11 +77,12 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.put(6, -1)
       controller.put(7, -1)
       controller.put(8, -1)
-      controller.gamefield.gfield should be(
-        field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(3, Stone.Black))
+      controller.gamefield.gfield should be(field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(3, Stone.Black))
+      /*move a stone*/
       controller.put(23, 22)
       controller.gamefield.gfield should be(
         field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(23, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(3, Stone.Black))
+      /*test undo/redo on move*/
       controller.undo
       controller.redo
       controller.getGameStandLabelText should be ("BLACK, jump with a stone.")
@@ -91,14 +93,8 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.mill(23)
       controller.mill(24)
       controller.gamefield.gfield should be(
-        field
-          .setStone(1, Stone.White)
-          .setStone(10, Stone.White)
-          .setStone(22, Stone.White)
-          .setStone(7, Stone.White)
-          .setStone(6, Stone.Black)
-          .setStone(8, Stone.Black)
-      )
+        field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White)
+          .setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black))
       controller.getGameStandLabelText should be ("BLACK, Click to place the stone, then click to move it.")
     }
     "simulate set complett game with 4 stones as Singelplayer" in {
@@ -138,7 +134,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val controller = Controller()
       controller.bildGameSet(7,false)
       controller.gamefield.gfield.setStone(1, Stone.White)
-
       controller.put(1, -1)
       controller.gamefield.gfield should be(field.setStone(1, Stone.White))
       controller.setormove should be (true)
@@ -176,7 +171,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       stonesInField2 should be(0)
     }
   }
-
   "calling getGameState" should {
     "return the correct game state" in {
       val players = PlayerList(2)
@@ -186,18 +180,19 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.getGameState(3) should be(1) // Stone.Empty
       controller.getGameState(1) should be(2) // Stone.White
       controller.getGameState(2) should be(3) // Stone.Black
-
     }
   }
-
   "calling iswhite" should {
     "return the correct color" in {
       val controller = Controller()
-      controller.save
-      controller.load
       controller.bildGameSet(2,true)
       controller.iswhite(Color.WHITE) should be(Color.BLACK)
       controller.iswhite(Color.BLACK) should be(Color.WHITE)
+    }
+    "controller save and load" in {
+      controller.save
+      controller.load 
+      given_FileIOInterface.load(0) should be (controller.gamefield)
     }
   }
   "aiplayer, shound make this turn after mill" should {
@@ -206,5 +201,4 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     controller.gamefield.gfield.setStone(1, Stone.Black)
     controller.mill(1)
   }
-  
 }
