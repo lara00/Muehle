@@ -6,10 +6,10 @@ import scala.swing._
 import de.htwg.se.Muehle.controller.controllerComponent.IController
 
 class SettingsDialog(controller: IController) extends Dialog:
+  title = "Settings"
   val sizes = Seq(3, 4, 5, 6, 7, 8, 9)
   val singleplayer = Seq(false, true)
   val sizeGroup = new ButtonGroup
-  title = "Settings"
 
   val buttons = sizes.flatMap { size =>
     singleplayer.map { single =>
@@ -25,7 +25,3 @@ class SettingsDialog(controller: IController) extends Dialog:
     contents ++= buttons
     contents += new Label("Select game size:")
     border = Swing.EmptyBorder(10)
-
-  def showSettingConfirmationDialog: Unit = 
-    centerOnScreen()
-    open()

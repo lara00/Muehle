@@ -67,11 +67,12 @@ class AIPlayer() extends IPlayerStrategy:
       List(13, 9, 18, 14), List(14, 6, 13, 15, 21), List(15, 14, 3, 24), List(16, 12, 17), List(17, 20, 18), List(18, 17, 13),
       List(19, 11, 20), List(20, 19, 17, 21, 23), List(21, 20, 14), List(22, 23, 24), List(23, 22, 20, 24), List(24, 23, 15))
     val validMoves = gamefield.gfield.getBlackStonePositions.filter(position => sequence(position - 1).tail.exists(element => gamefield.gfield.stones_field(element) == Stone.Empty))
-    val move = Random.shuffle(validMoves).headOption.flatMap { from =>
-    val toOptions = sequence(from - 1).tail.filter(element => gamefield.gfield.stones_field(element) == Stone.Empty)
-    toOptions.headOption.map(randomTo => (from, randomTo))
-    }.getOrElse((0, 0))
-    move
+    Random.shuffle(validMoves).headOption match
+      case Some(from) =>
+        val toOptions = sequence(from - 1).tail.filter(element => gamefield.gfield.stones_field(element) == Stone.Empty)
+        val randomTo = Random.shuffle(toOptions).head
+        (from, randomTo)
+      case None =>(0, 0)
 
   def generateRandomNumber: Int = scala.util.Random.nextInt(24) + 1
 
