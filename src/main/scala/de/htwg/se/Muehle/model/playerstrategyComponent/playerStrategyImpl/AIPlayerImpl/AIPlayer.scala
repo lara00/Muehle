@@ -6,10 +6,11 @@ import de.htwg.se.Muehle.model.{MoveEvents, Stone}
 import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.gameComponent.IGameStap
 import de.htwg.se.Muehle.model.playerstrategyComponent.IPlayerStrategy
+import de.htwg.se.Muehle.Default.given
 
-class AIPlayer(aiStones: List[Int] = Nil) extends IPlayerStrategy:
+class AIPlayer() extends IPlayerStrategy:
   var aimuhle = false
-  var millgamestap: IGameStap = null
+  var millgamestap: IGameStap = given_IGameStap
 
   protected def handleMove(gameStap: IGameStap, to: Int, from: Int): (IGameStap, MoveEvents) =
     aimuhle match
