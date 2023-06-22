@@ -19,7 +19,6 @@ class MillFieldSpec extends AnyFlatSpec with Matchers {
     val con = Controller()
     val menu = ShowStones(con)
     menu.createImagePanel(1 , Color.BLACK)(1) should be (true) 
-    val r = RoundButton("2")
     val e = SettingsDialog(con)
     System.setProperty("java.awt.headless", "true")
     SwingUtilities.invokeLater(new Runnable {
