@@ -26,5 +26,6 @@ class SettingsDialog(controller: IController) extends Dialog:
     contents += new Label("Select game size:")
     border = Swing.EmptyBorder(10)
 
-  pack()
-  centerOnScreen()
+  def showSettingConfirmationDialog: Unit = 
+    centerOnScreen()
+    open()
