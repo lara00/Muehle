@@ -23,11 +23,11 @@ class PutCommand(move: Move) extends Command[IGameStap]:
         t.newGamestap(move.gamefield.gfield.deleteStone(move.to, move.gamefield.playername), move.gamefield.gplayer, move.gamefield.gplayerlist)
       case MoveEvents.NoMove | MillEvents.EndGame | MillEvents.WrongDelete   => t
       case MillEvents.DeleteStone => 
-        val nextPlayer = move.gamefield.gplayerlist.getNextPlayer(
-        move.gamefield.gplayer).incrementStoneintheField
+        val nextPlayer = move.gamefield.gplayerlist.getNextPlayer(move.gamefield.gplayer).incrementStoneintheField
         val newField = move.gamefield.gfield.setStone(move.to, move.gamefield.gplayer.pname)
         val newPlayerList = PlayerList(move.gamefield.gplayer, nextPlayer)
         t.newGamestap(newField, nextPlayer, newPlayerList)
+
   override def redoStep(t: IGameStap): IGameStap = 
     move.event match
       case MillEvents.DeleteStone | MillEvents.EndGame | MillEvents.WrongDelete =>

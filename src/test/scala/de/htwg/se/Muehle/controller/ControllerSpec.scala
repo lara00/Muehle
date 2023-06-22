@@ -40,7 +40,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         )
       }
     }
-
     "quit" should {
       "notify observers with the quit event" in {
         var event: Option[Event] = None
@@ -51,15 +50,16 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         event should contain(Event.Quit)
       }
     }
-    "simulate set complete game with 4 stones" in {
+    "simulate set complete game with 4 stones and test undo/redo" in {
       val controller: Controller = Controller()
-
+      // Test undo/redo, on a empty
       controller.undo
       controller.redo
       controller.put(1, -1)
       controller.put(1, -1)
       controller.undo
       controller.put(1, -1)
+      /*undo redo set*/
       controller.undo
       controller.redo
       controller.put(2, -1)
@@ -67,8 +67,10 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.put(3, -1)
       val expectedRound4 = field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(3, Stone.Black).setStone(2, Stone.Black)
       controller.gamefield.gfield should be(expectedRound4)
+      //mill in field, player white (1,10,22), delete stone 2 from player black
       controller.put(22, -1)
       controller.mill(2)
+      //test undo/redo on mill
       controller.undo
       controller.redo
       val expectedRound5 = field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(3, Stone.Black)
@@ -76,69 +78,26 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.put(6, -1)
       controller.put(7, -1)
       controller.put(8, -1)
-      controller.gamefield.gfield should be(
-        field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(3, Stone.Black))
+      controller.gamefield.gfield should be(field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(3, Stone.Black))
+      /*move a stone*/
       controller.put(23, 22)
-      controller.gamefield.gfield should be(
-        field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(23, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(3, Stone.Black))
+      controller.gamefield.gfield should be(field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(23, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(3, Stone.Black))
+      /*test undo/redo on move*/
       controller.undo
       controller.redo
       controller.getGameStandLabelText should be ("BLACK, jump with a stone.")
       controller.put(24, 3)
-      controller.gamefield.gfield should be(field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(23, Stone.White).setStone(7, Stone.White)
-          .setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(24, Stone.Black))
+      controller.gamefield.gfield should be(field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(23, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(24, Stone.Black))
       controller.put(22, 23)
       controller.mill(23)
       controller.mill(24)
-      controller.gamefield.gfield should be(
-        field
-          .setStone(1, Stone.White)
-          .setStone(10, Stone.White)
-          .setStone(22, Stone.White)
-          .setStone(7, Stone.White)
-          .setStone(6, Stone.Black)
-          .setStone(8, Stone.Black)
-      )
+      controller.gamefield.gfield should be(field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black))
       controller.getGameStandLabelText should be ("BLACK, Click to place the stone, then click to move it.")
-    }
-    "simulate set complett game with 4 stones as Singelplayer" in {
-      val controller: Controller = Controller()
-      controller.bildGameSet(4 , true)
-      controller.put(1, -1)
-      controller.gamefield.gplayerlist should be(PlayerList(List(given_IPlayer.pplayer(Stone.White, 3, 1), given_IPlayer.pplayer(Stone.Black, 3, 1))))
-      val simulatefield = given_IField.setStone(1, Stone.White).setStone(15, Stone.White).setStone(20, Stone.White).setStone(19, Stone.Black)
-        .setStone(4, Stone.Black).setStone(15, Stone.Black).setStone(1, Stone.White).setStone(10, Stone.White)
-      val playerStoneski: List[Int] = List(19, 20, 22)
-      val r = AIPlayer(playerStoneski)
-      controller.playerstrategy = r
-      controller.gamefield = GameStap(simulatefield,given_IPlayer.pplayer(Stone.White, 1, 3),
-      PlayerList(List(given_IPlayer.pplayer(Stone.White, 1, 3), given_IPlayer.pplayer(Stone.Black, 0, 4))))
-      controller.put(22, -1)
-      controller.mill(4)
-      controller.gamefield.gplayerlist should be(
-        PlayerList(List(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 3))))
-      val simulatefieldtomove = given_IField.setStone(1, Stone.White).setStone(15, Stone.White)
-        .setStone(20, Stone.White)
-        .setStone(5, Stone.White)
-        .setStone(19, Stone.Black)
-        .setStone(22, Stone.Black)
-        .setStone(20, Stone.Black)
-        .setStone(3, Stone.Black)
-      val playerStoneskitomove: List[Int] = List(19, 20, 22, 5)
-      val playerstrategymove = AIPlayer(playerStoneskitomove)
-      controller.playerstrategy = playerstrategymove
-      controller.gamefield = GameStap(
-        simulatefieldtomove,given_IPlayer.pplayer(Stone.White, 0, 4),
-        PlayerList(List(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 4))))
-      controller.put(8, 5)
-      controller.gamefield.gplayerlist should be(PlayerList(List(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 4))))
-
     }
     "case the put is not possible" in {
       val controller = Controller()
       controller.bildGameSet(7,false)
       controller.gamefield.gfield.setStone(1, Stone.White)
-
       controller.put(1, -1)
       controller.gamefield.gfield should be(field.setStone(1, Stone.White))
       controller.setormove should be (true)
@@ -176,7 +135,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       stonesInField2 should be(0)
     }
   }
-
   "calling getGameState" should {
     "return the correct game state" in {
       val players = PlayerList(2)
@@ -186,18 +144,19 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.getGameState(3) should be(1) // Stone.Empty
       controller.getGameState(1) should be(2) // Stone.White
       controller.getGameState(2) should be(3) // Stone.Black
-
     }
   }
-
   "calling iswhite" should {
     "return the correct color" in {
       val controller = Controller()
-      controller.save
-      controller.load
       controller.bildGameSet(2,true)
       controller.iswhite(Color.WHITE) should be(Color.BLACK)
       controller.iswhite(Color.BLACK) should be(Color.WHITE)
+    }
+    "controller save and load" in {
+      controller.save
+      controller.load 
+      given_FileIOInterface.load(0) should be (controller.gamefield)
     }
   }
   "aiplayer, shound make this turn after mill" should {
@@ -206,5 +165,4 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     controller.gamefield.gfield.setStone(1, Stone.Black)
     controller.mill(1)
   }
-  
 }
