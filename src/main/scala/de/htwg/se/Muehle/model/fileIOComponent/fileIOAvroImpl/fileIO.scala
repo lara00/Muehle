@@ -82,7 +82,6 @@ object GameStapIO:
     dataFileWriter.create(AvroSchema, file)
     dataFileWriter.append(record)
     dataFileWriter.close()
-    println("Player record saved successfully.")
   
   def loadFromFile(fileName: String): IPlayer =
     val file = new File(fileName)

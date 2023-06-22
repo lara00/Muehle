@@ -15,11 +15,10 @@ import de.htwg.se.Muehle.model.Stone
 import de.htwg.se.Muehle.model.fileIOComponent.FileIOInterface
 import de.htwg.se.Muehle.model.fieldComponent.fileIoXmlImpl.FileIO
 
-object Default {
+object Default:
   given IGameStap = GameStap(Field(), PlayerList(4).getFirstPlayer, PlayerList(4))
   given IController = Controller()
   given IPlayerStrategy = HumanPlayer()
   given IField = Field()
   given IPlayer = Player(Stone.White, 4, 0)
   given FileIOInterface = new FileIO
-}

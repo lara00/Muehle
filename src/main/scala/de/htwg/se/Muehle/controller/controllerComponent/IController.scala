@@ -6,7 +6,7 @@ import de.htwg.se.Muehle.util.Observable
 import de.htwg.se.Muehle.model.Stone
 import java.awt.Color
 
-trait IController extends Observable {
+trait IController extends Observable:
   var gamesize: Int
 
   def undo: Unit
@@ -31,5 +31,3 @@ trait IController extends Observable {
   def playername: Stone
 
   override def toString(): String
-
-}
