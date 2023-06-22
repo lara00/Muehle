@@ -17,6 +17,7 @@ import de.htwg.se.Muehle.model.gameComponent.gameImpl.GameStap
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.HumanPlayerImpl.HumanPlayer
 import de.htwg.se.Muehle.Default.given
 import de.htwg.se.Muehle.model.playerstrategyComponent.playerStrategyImpl.AIPlayerImpl.AIPlayer
+import de.htwg.se.Muehle.model.MillEvents
 
 class ControllerSpec extends AnyWordSpec with Matchers {
   val field = given_IField
@@ -162,7 +163,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
   "aiplayer, shound make this turn after mill" should {
     val controller = Controller()
     controller.playerstrategy = AIPlayer()
-    controller.gamefield.gfield.setStone(1, Stone.Black)
-    controller.mill(1)
+    controller.deleteStone(controller.gamefield, MillEvents.DeleteStone, 1)
   }
 }
