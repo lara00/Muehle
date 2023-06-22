@@ -15,7 +15,7 @@ import com.google.inject.{Key, Inject}
 import com.google.inject.name.Names
 
 
-class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStrategy) extends IController with Observable {
+class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStrategy) extends IController with Observable:
   var gamesize = gamefield.gplayer.pstonetoput;
   val undoManager = new UndoManager[IGameStap]
   val fileIO = given_FileIOInterface
@@ -117,4 +117,3 @@ class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStra
     if (color == Color.WHITE) Color.BLACK else Color.WHITE
 
   def playername: Stone = gamefield.playername
-}
