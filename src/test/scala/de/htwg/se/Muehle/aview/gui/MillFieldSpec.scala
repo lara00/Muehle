@@ -12,18 +12,10 @@ import javax.swing.SwingUtilities
 import scala.swing.event.ActionEvent
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
 import java.awt.Graphics2D
-import java.awt.Color
-import javax.swing.JPanel
-import java.awt.Graphics
 
 class MillFieldSpec extends AnyFlatSpec with Matchers {
   "MillField" should "update player statistics and game stand label" in {
     val con = Controller()
-    val e = QuitConfirmationDialog(con)
-    val r = ShowStones(con)
-    r.createImagePanel(2, Color.black)(1) should be (true)
-    val button = RoundButton("2")
-    val t = SettingsDialog(con)
     System.setProperty("java.awt.headless", "true")
     SwingUtilities.invokeLater(new Runnable {
       override def run(): Unit = {
