@@ -15,12 +15,12 @@ class ShowStones(controller : IController):
         contents += Swing.HStrut(300)
         contents += new Label("Delete Stones")
       contents += new BoxPanel(Orientation.Horizontal):
-        contents += createImagePanel(stones, color)(0)
-        contents += createImagePanel(delete, controller.iswhite(color))(0)
+        contents += createImagePanel(stones, color)
+        contents += createImagePanel(delete, controller.iswhite(color))
     boxpanel
 
-  def createImagePanel(value: Int, color: Color): (Panel, Boolean) =
-    (new Panel:
+  def createImagePanel(value: Int, color: Color): Panel =
+    new Panel:
       val stonesCount: Int = value
       override def paintComponent(g: Graphics2D): Unit = 
         super.paintComponent(g)
@@ -38,4 +38,4 @@ class ShowStones(controller : IController):
           g.fillOval(circleX, circleY, circleSize, circleSize)
 
       preferredSize = new Dimension(value * (40), 80)
-      background = controller.iswhite(color), true)
+      background = controller.iswhite(color)
