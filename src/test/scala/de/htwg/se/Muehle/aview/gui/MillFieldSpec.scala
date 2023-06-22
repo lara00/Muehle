@@ -16,8 +16,10 @@ import java.awt.Color
 
 class MillFieldSpec extends AnyFlatSpec with Matchers {
   "MillField" should "update player statistics and game stand label" in {
+    //System.setProperty("java.awt.headless", "true")
     val con = Controller()
-    val e = SettingsDialog()
+    // val t = SwingGui().controller = con
+    val e = SettingsDialog(con)
     SwingUtilities.invokeLater(new Runnable {
       override def run(): Unit = {
         val millField = MillField(con)

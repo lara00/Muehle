@@ -29,7 +29,7 @@ class SwingGui(using var controller: IController) extends Frame with Observer:
   
   menuBar = new MenuBar:
       contents += new Menu("Settings"):
-        contents += new MenuItem(Action("Open Settings")(new SettingsDialog().visible = true))
+        contents += new MenuItem(Action("Open Settings")(new SettingsDialog(controller).visible = true))
   
   pack()
 
