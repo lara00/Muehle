@@ -86,27 +86,37 @@ class Tui(using var controller: IController) extends Observer:
             false
       case Failure(_) => false
 
-def help: String = 
+def help: String =
   val message =
-    """First, enter the number of the field you want to move to (a number between 1 and 24),
-      |confirm the input, and then enter the number of the stone you want to move.
-      |To place a stone, enter -1.
+    """Welcome to the game help!
       |
-      |lSG = Game with 3 stones alone
-      |mSG = Game with 6 stones alone
-      |lSG = Game with 9 stones alone
-      |sG = Game with 3 stones and a partner
-      |mG = Game with 6 stones and a partner
-      |lG = Game with 9 stones and a partner
+      |To make a move, follow these steps:
+      |1. Enter the number of the field you want to move to (a number between 1 and 24).
+      |2. Confirm the input.
+      |3. Enter the number of the stone you want to move.
       |
-      |z = Undo
-      |y = Redo
-      |f = Save
-      |l = Load
-      |q = Quit
-      |h = help text
+      |To place a new stone on the board, enter -1 as the field number.
+      |
+      |Available game modes:
+      |- lSG: Game with 3 stones for a single player.
+      |- mSG: Game with 6 stones for a single player.
+      |- lSG: Game with 9 stones for a single player.
+      |- sG: Game with 3 stones for a player and a partner.
+      |- mG: Game with 6 stones for a player and a partner.
+      |- lG: Game with 9 stones for a player and a partner.
+      |
+      |Additional commands:
+      |- z: Undo the last move.
+      |- y: Redo a previously undone move.
+      |- f: Save the current game state.
+      |- l: Load a saved game state.
+      |- q: Quit the game.
+      |- h: Display the help text.
+      |
+      |Enjoy the game!
       |""".stripMargin
   message
+
 
 
 
