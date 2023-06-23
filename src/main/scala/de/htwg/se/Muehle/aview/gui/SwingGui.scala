@@ -49,8 +49,6 @@ class SwingGui(using var controller: IController) extends Frame with Observer:
 
   private def aktualiseMill: Unit =
     gameStand.text  = s"${controller.playername}, delete a stone."
-    gameStand.revalidate()
-    gameStand.repaint()
     millField.ismill = true
 
   private def redraw: Unit =
@@ -61,5 +59,3 @@ class SwingGui(using var controller: IController) extends Frame with Observer:
     mainPanel.contents(3) = newShowStonesPanel1
     millField.update(controller)
     gameStand.text = controller.getGameStandLabelText
-    mainPanel.revalidate()
-    mainPanel.repaint()
