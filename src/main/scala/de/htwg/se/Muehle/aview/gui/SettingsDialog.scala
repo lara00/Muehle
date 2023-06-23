@@ -16,7 +16,7 @@ class SettingsDialog(controller: IController) extends Dialog {
    radioButton }}
    
   sizeGroup.buttons ++= buttons;
-  contents = new BoxPanel(Orientation.Vertical):
+  contents = new BoxPanel(Orientation.Vertical){
     contents ++= buttons
-     border = Swing.EmptyBorder(10)
+     border = Swing.EmptyBorder(10)}
 }
