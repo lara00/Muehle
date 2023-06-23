@@ -55,7 +55,6 @@ class MillField(controller: IController) extends GridBagPanel:
     val buttonPositionsToConnect = 
       List((1, 3), (1, 22), (2, 8),(3, 24), (4, 6), (4, 19), (6, 21),  (17,23),
       (7, 9), (7, 16), (9, 18), (10, 12), (13, 15),(16, 18), (19, 21), (22, 24))
-
     buttonPositionsToConnect.foreach { case (startIndex, endIndex) =>
     val (pos1, pos2) = (buttonPosition(startIndex).location, buttonPosition(endIndex).location)
     g.drawLine(pos1.x + buttonSize / 2, pos1.y + buttonSize / 2, pos2.x + buttonSize / 2, pos2.y + buttonSize / 2)}
