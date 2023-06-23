@@ -19,5 +19,4 @@ class SettingsDialog(controller: IController) extends Dialog:
   sizeGroup.buttons ++= buttons;
   contents = new BoxPanel(Orientation.Vertical):
     contents ++= buttons
-     contents += new Label("Select game size:")
      border = Swing.EmptyBorder(10) 
