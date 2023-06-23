@@ -17,11 +17,9 @@ class PutCommand(move: Move) extends Command[IGameStap]:
 
   override def undoStep(t: IGameStap): IGameStap = 
     move.event match
-      case MoveEvents.MoveStone | MoveEvents.MoveStone_Mill =>
-         t.newGamestap(move.gamefield.gfield.deleteStone(move.from, move.gamefield.gplayer.pname).setStone(move.to, move.gamefield.gplayer.pname), move.gamefield.gplayer, move.gamefield.gplayerlist)
-      case MoveEvents.SetStone | MoveEvents.SetStone_Mill => 
-        t.newGamestap(move.gamefield.gfield.deleteStone(move.to, move.gamefield.playername), move.gamefield.gplayer, move.gamefield.gplayerlist)
-      case MoveEvents.NoMove | MillEvents.EndGame | MillEvents.WrongDelete   => t
+      case MoveEvents.MoveStone | MoveEvents.MoveStone_Mill => t.newGamestap(move.gamefield.gfield.deleteStone(move.from, move.gamefield.gplayer.pname).setStone(move.to, move.gamefield.gplayer.pname), move.gamefield.gplayer, move.gamefield.gplayerlist)
+      case MoveEvents.SetStone | MoveEvents.SetStone_Mill => t.newGamestap(move.gamefield.gfield.deleteStone(move.to, move.gamefield.playername), move.gamefield.gplayer, move.gamefield.gplayerlist)
+      case MoveEvents.NoMove | MillEvents.EndGame | MillEvents.WrongDelete => t
       case MillEvents.DeleteStone => 
         val nextPlayer = move.gamefield.gplayerlist.getNextPlayer(move.gamefield.gplayer).incrementStoneintheField
         val newField = move.gamefield.gfield.setStone(move.to, move.gamefield.gplayer.pname)
