@@ -53,9 +53,7 @@ class SwingGui(using var controller: IController) extends Frame with Observer:
 
   private def redraw: Unit =
     val (white_set, white_delete, black_set, balck_delete) = controller.PlayerStatics
-    val newShowStonesPanel = ShowStones(controller).createBoxPanel(Color.white, white_set, controller.gamesize - (white_delete + white_set))
-    val newShowStonesPanel1 = ShowStones(controller).createBoxPanel(Color.white, black_set, controller.gamesize - (balck_delete + black_set))
-    mainPanel.contents(1) = newShowStonesPanel
-    mainPanel.contents(3) = newShowStonesPanel1
+    mainPanel.contents(1) = ShowStones(controller).createBoxPanel(Color.white, white_set, controller.gamesize - (white_delete + white_set))
+    mainPanel.contents(3) = ShowStones(controller).createBoxPanel(Color.white, black_set, controller.gamesize - (balck_delete + black_set))
     millField.update(controller)
     gameStand.text = controller.getGameStandLabelText
