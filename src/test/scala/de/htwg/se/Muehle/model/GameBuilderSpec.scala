@@ -33,8 +33,7 @@ class GamefieldBuilderTest extends AnyWordSpec with Matchers {
     }
 
     "provide a string representation of the Gamefield" in {
-      val players = PlayerList(9)
-      val gamesetting = GameStap(given_IField, players.getFirstPlayer, PlayerList(9))
+      val gamesetting = GameStap(given_IField, PlayerList(9).getFirstPlayer, PlayerList(9))
       val gamestrategy = HumanPlayer()
       val gamefield = new Gamefield(gamesetting, gamestrategy)
       gamefield.toString contains "Gamefield(playerlist=[PlayerList(List(Player(WHITE, 9, 0), Player(BLACK, 9, 0))), singlegamer=HumanPlayer])"
