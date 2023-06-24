@@ -57,10 +57,10 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.undo
       controller.redo
       controller.put(1, -1)
+      controller.put(1, -1)
       controller.undo
       controller.redo
       /*undo redo set*/
-      controller.put(2, -1)
       controller.put(2, -1)
       controller.put(10, -1)
       controller.put(3, -1)
