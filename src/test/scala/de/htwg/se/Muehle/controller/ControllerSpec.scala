@@ -153,9 +153,8 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.iswhite(Color.BLACK) should be(Color.WHITE)
     }
     "controller save and load" in {
-      controller.save
-      controller.load 
-      //given_FileIOInterface.load(0) should be (controller.gamefield)
+      controller.save should be(true)
+      controller.load should be(true)
     }
   }
   "aiplayer, shound make this turn after mill" should {

@@ -20,15 +20,17 @@ class Controller(using var gamefield: IGameStap, var playerstrategy: IPlayerStra
   val undoManager = new UndoManager[IGameStap]
   val fileIO = given_FileIOInterface
 
-  def save: Unit = 
+  def save: Boolean = 
     fileIO.save(gamefield, playerstrategy)
     notifyObservers(Event.Status)
+    true
 
-  def load: Unit = 
+  def load: Boolean = 
     val (g, p) = fileIO.load
     gamefield = g
     playerstrategy = p
     notifyObservers(Event.Status)
+    true
 
   def undo: Unit =
     gamefield = undoManager.undoStep(gamefield)

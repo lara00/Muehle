@@ -18,6 +18,8 @@ class MillFieldSpec extends AnyFlatSpec with Matchers {
   "MillField" should "update player statistics and game stand label" in {
     val con = Controller()
     val showstones = ShowStones(con)
+    val q = QuitConfirmationDialog(con)
+    val s = SettingsDialog(con)
     SwingUtilities.invokeLater(new Runnable {
       override def run(): Unit = {
         val millField = MillField(con)
