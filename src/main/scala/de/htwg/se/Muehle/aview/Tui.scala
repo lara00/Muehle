@@ -109,7 +109,9 @@ class Tui(using var controller: IController) extends Observer:
         |1. Enter the number of the field you want to move to (a number between 1 and 24).
         |2. Confirm the input.
         |3. Enter the number of the stone you want to move.
+        |4. If you have fewer than 3 stones remaining, you can jump with your stones.
         |
+        |Placing a New Stone:
         |To place a new stone on the board, enter -1 as the field number.
         |
         |Available game modes:
