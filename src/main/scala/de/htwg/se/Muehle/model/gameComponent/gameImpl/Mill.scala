@@ -16,6 +16,5 @@ case class Mill(private val field: IField):
     val otherFields = millFields.filter(_ != number)
     field.fieldmap.get(number) match 
       case Some(stone) if stone != Stone.Empty =>
-        millFields.forall(field.fieldmap.get(_) == Some(stone)) &&
-        otherFields.forall(field.fieldmap.get(_) == Some(stone))
+        millFields.forall(field.fieldmap.get(_) == Some(stone)) && otherFields.forall(field.fieldmap.get(_) == Some(stone))
       case _ => false
