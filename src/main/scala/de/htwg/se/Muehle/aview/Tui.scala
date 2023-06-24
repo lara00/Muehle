@@ -89,6 +89,13 @@ class Tui(using var controller: IController) extends Observer:
 def help: String =
   val message =
     """Welcome to the game help!
+      | 1          2         3
+      |     4      5     6
+      |         7  8  9
+      | 10  11  12    13 14 15
+      |         16 17 18
+      |     19     20    21
+      | 22         23       24
       |
       |To make a move, follow these steps:
       |1. Enter the number of the field you want to move to (a number between 1 and 24).
