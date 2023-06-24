@@ -14,7 +14,7 @@ import de.htwg.se.Muehle.Default.given
 
 class AIPlayerSpec extends AnyWordSpec with Matchers {
   "An AIPlayer" when {
-    "using a MockAIPlayer" should {
+    "using an AIPlayer" should {
       val aiPlayer = new AIPlayer()
 
       "handle a move without forming a mill when setting a stone" in {
@@ -52,21 +52,21 @@ class AIPlayerSpec extends AnyWordSpec with Matchers {
           given_IPlayer.pplayer(Stone.Black, 3, 1), p2), 1, -1)
       }
 
-      "make a move as AIPlayer when AIPlayer has a mill" in {
+      "make a move as an AIPlayer when the AIPlayer has a mill" should {
         val aiPlayer = new AIPlayer()
         val p1 = PlayerList(given_IPlayer.pplayer(Stone.White, 0, 4), given_IPlayer.pplayer(Stone.Black, 0, 4))
-        
-        /*simulate AIPlayer has a mill*/
-        aiPlayer.aimuhle = true
-        aiPlayer.millgamestap = given_IGameStap.newGamestap(given_IField.setStone(3, Stone.White)
-        .setStone(24, Stone.Black).setStone(24, Stone.Black).setStone(1, Stone.White).setStone(2, Stone.White), p1.getFirstPlayer, p1)
-        val (newGameStap, moveEvent) = aiPlayer.makeMove(given_IGameStap, 1, -1)
-        val p2 = PlayerList(given_IPlayer.pplayer(Stone.White, 3, 1), given_IPlayer.pplayer(Stone.Black, 3, 1))
-
-        /*simulate AIPlayer gets a mill*/
-        aiPlayer.millcheck(1, -1, given_IGameStap.newGamestap(
-          given_IField.setStone(4, Stone.White).setStone(10, Stone.Black).setStone(22, Stone.Black)
-            .setStone(7, Stone.White).setStone(2, Stone.White), given_IPlayer.pplayer(Stone.Black, 3, 1), p2))
+        "simulate AIPlayer having a mill" in {
+          aiPlayer.aimuhle = true
+          aiPlayer.millgamestap = given_IGameStap.newGamestap(given_IField.setStone(3, Stone.White)
+            .setStone(24, Stone.Black).setStone(24, Stone.Black).setStone(1, Stone.White).setStone(2, Stone.White), p1.getFirstPlayer, p1)
+          val (newGameStap, moveEvent) = aiPlayer.makeMove(given_IGameStap, 1, -1)
+        }
+        "simulate AIPlayer getting a mill" in {
+          val p2 = PlayerList(given_IPlayer.pplayer(Stone.White, 3, 1), given_IPlayer.pplayer(Stone.Black, 3, 1))
+          aiPlayer.millcheck(1, -1, given_IGameStap.newGamestap(
+            given_IField.setStone(4, Stone.White).setStone(10, Stone.Black).setStone(22, Stone.Black)
+              .setStone(7, Stone.White).setStone(2, Stone.White), given_IPlayer.pplayer(Stone.Black, 3, 1), p2))
+        }
       }
     }
   }
