@@ -11,7 +11,9 @@ import com.google.inject.Inject
 import org.slf4j.{Logger, LoggerFactory}
 
 val invalidInputMsg =
-  "Invalid input. Please enter a valid number between 1 and 24, or 'q' to quit"
+    """Invalid input. Please enter a valid number between 1 and 24, or 'q' to quit.
+    You can also enter 'h' for help to view the available options."""
+
 var loop = true
 
 class Tui(using var controller: IController) extends Observer:
