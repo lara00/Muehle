@@ -15,32 +15,14 @@ jobs:
       - name: compile with sbt
         run: sbt compile
 
-    scalatest_sbt:
+  scalatest_sbt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Set up X11 display
-        run: export DISPLAY=:99
-
-      - name: Start Xvfb
-        run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-
       - name: Run tests
-        run: |
-          # Install required GUI libraries
-          apt-get update && apt-get install -y \
-            libxrender1 \
-            libxtst6 \
-            libxi6 \
-            libgl1-mesa-glx \
-            libgtk-3-0 \
-            openjfx \
-            libgl1-mesa-dri \
-            libgl1-mesa-dev \
-            libcanberra-gtk-module \
-            libcanberra-gtk3-module \
-            default-jdk
-          sbt clean coverage test coverageReport
+        run: sbt clean coverage test
+      - name: Coverage Report
+        run: sbt coverageReport
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2.0.0
+
