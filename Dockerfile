@@ -1,26 +1,11 @@
-FROM adoptopenjdk/openjdk11:debian
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    xvfb \
-    xauth \
-    x11vnc \
-    x11-utils \
-    xterm \
-    curl
-
-# Download and install sbt
-RUN curl -L -o sbt.tar.gz https://github.com/sbt/sbt/releases/download/v1.5.5/sbt-1.5.5.tgz \
-    && tar -xzf sbt.tar.gz \
-    && rm sbt.tar.gz \
-    && mv sbt /usr/local/sbt \
-    && ln -s /usr/local/sbt/bin/sbt /usr/local/bin/sbt
-
-ENV DISPLAY=:99
-
-WORKDIR /Muehle
-ADD . /Muehle
-
-CMD Xvfb $DISPLAY -screen 0 1024x768x16 & \
-    sleep 5 && \
-    sbt test
+FROM hseeberger/scala-sbt:17.0.2_1.6.2_3.1.1
+RUN apt-get update && \
+    apt-get install -y \
+    libxrender1 \
+    libxtst6 \
+    libxi6 \
+    libgl1-mesa-glx libgtk-3-0 openjfx libgl1-mesa-dri libgl1-mesa-dev libcanberra-gtk-module libcanberra-gtk3-module default-jdk
+ENV DISPLAY=host.docker.internal:0
+WORKDIR /app
+ADD . /app
+CMD sbt -Djava.awt.headless=false run
