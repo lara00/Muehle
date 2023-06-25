@@ -10,16 +10,11 @@ class RoundButton(text: String) extends Button(text):
   background = defaultBackgroundColor
 
   override def paintComponent(g: Graphics2D): Unit = 
-    val width = size.width - 1
-    val height = size.height - 1
-    val centerX = width / 2
-    val centerY = height / 2
-    val radius = defaultRadius
     g.setColor(background)
-    g.fillOval(0, 0, width, height)
+    g.fillOval(0, 0, size.width - 1, size.height - 1)
     background match 
-      case Color.white => drawGradientCircles(g, centerX, centerY, radius, new Color(192, 192, 192))
-      case Color.black => drawGradientCircles(g, centerX, centerY, radius, Color.lightGray)
+      case Color.white => drawGradientCircles(g, (size.width - 1) / 2, (size.height - 1) / 2, defaultRadius, new Color(192, 192, 192))
+      case Color.black => drawGradientCircles(g, (size.width - 1) / 2, (size.height - 1) / 2, defaultRadius, Color.lightGray)
       case _ =>
     super.paintComponent(g)
 
@@ -29,14 +24,13 @@ class RoundButton(text: String) extends Button(text):
 
   def drawGradientCircles(g: Graphics2D, centerX: Int,centerY: Int, radius: Int, baseColor: Color) : Unit =
     val numCircles = 3
-    val colorStep = 35
     for (i <- 1 to numCircles)
       val circleRadius = radius * i / numCircles
       val x = centerX - circleRadius
       val y = centerY - circleRadius
       val color = new Color(
         baseColor.getRed,baseColor.getGreen,
-        baseColor.getBlue,baseColor.getAlpha - i * colorStep)
+        baseColor.getBlue,baseColor.getAlpha - i * 35)
       g.setColor(color)
       g.fillOval(x, y, circleRadius * 2, circleRadius * 2)
       
