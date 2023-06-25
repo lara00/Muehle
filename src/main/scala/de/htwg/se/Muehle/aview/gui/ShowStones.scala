@@ -26,10 +26,8 @@ class ShowStones(controller : IController):
         val circleSize = 40
         val totalWidth = (stonesCount * (circleSize + 3) - 3)
         for (i <- 0 until stonesCount)
-          val circleX = ((size.width - totalWidth) / 2) + i * (circleSize + 3)
-          val circleY = (size.height - circleSize) / 2
           g.setColor(color)
-          g.fillOval(circleX, circleY, circleSize, circleSize)
+          g.fillOval(((size.width - totalWidth) / 2) + i * (circleSize + 3), (size.height - circleSize) / 2, circleSize, circleSize)
 
       preferredSize = new Dimension(stonesCount * (40), 80)
       background = controller.iswhite(color)
