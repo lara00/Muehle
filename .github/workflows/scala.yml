@@ -12,11 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run tests
-        run: |
-          docker build -t mill .
-          docker run -it --rm \
-            -e DISPLAY=$DISPLAY \
-            -v /tmp/.X11-unix:/tmp/.X11-unix \
-            mill sbt clean coverage test coverageReport
+      - run: |
+        docker build -t mill .
+        docker run -it --rm \
+          -e DISPLAY=$DISPLAY \
+          -v /tmp/.X11-unix:/tmp/.X11-unix \
+          -t mill sbt test
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2.0.0
