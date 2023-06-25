@@ -25,12 +25,9 @@ class ShowStones(controller : IController):
         super.paintComponent(g)
         val circleSize = 40
         val totalWidth = stonesCount * (circleSize + 3) - 3
-        val startX = (size.width - totalWidth) / 2
-        val startY = (size.height - circleSize) / 2
-
         for (i <- 0 until stonesCount)
-          val circleX = startX + i * (circleSize + 3)
-          val circleY = startY
+          val circleX = ((size.width - totalWidth) / 2) + i * (circleSize + 3)
+          val circleY = (size.height - circleSize) / 2
           g.setColor(color)
           g.fillOval(circleX, circleY, circleSize, circleSize)
 
