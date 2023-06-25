@@ -6,7 +6,6 @@ import java.awt.Color
 
 class RoundButton(text: String) extends Button(text):
   private val defaultBackgroundColor = Color.lightGray
-  private val defaultRadius = 25
   background = defaultBackgroundColor
 
   override def paintComponent(g: Graphics2D): Unit = 
