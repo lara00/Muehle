@@ -19,9 +19,8 @@ class ShowStones(controller : IController):
         contents += createImagePanel(delete, controller.iswhite(color))
     boxpanel
 
-  def createImagePanel(value: Int, color: Color): Panel =
+  def createImagePanel(stonesCount: Int, color: Color): Panel =
     new Panel:
-      val stonesCount: Int = value
       override def paintComponent(g: Graphics2D): Unit = 
         super.paintComponent(g)
         val imageSize = new Dimension(40, 40)
@@ -37,5 +36,5 @@ class ShowStones(controller : IController):
           g.setColor(color)
           g.fillOval(circleX, circleY, circleSize, circleSize)
 
-      preferredSize = new Dimension(value * (40), 80)
+      preferredSize = new Dimension(stonesCount * (40), 80)
       background = controller.iswhite(color)

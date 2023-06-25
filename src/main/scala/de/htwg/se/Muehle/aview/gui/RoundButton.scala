@@ -26,13 +26,11 @@ class RoundButton(text: String) extends Button(text):
     val numCircles = 3
     for (i <- 1 to numCircles)
       val circleRadius = radius * i / numCircles
-      val x = centerX - circleRadius
-      val y = centerY - circleRadius
       val color = new Color(
         baseColor.getRed,baseColor.getGreen,
         baseColor.getBlue,baseColor.getAlpha - i * 35)
       g.setColor(color)
-      g.fillOval(x, y, circleRadius * 2, circleRadius * 2)
+      g.fillOval(centerX - circleRadius, centerY - circleRadius, circleRadius * 2, circleRadius * 2)
       
   borderPainted = false
   focusPainted = false
