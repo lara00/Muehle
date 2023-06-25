@@ -51,39 +51,42 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         event should contain(Event.Quit)
       }
     }
-    "simulate set complete game with 4 stones and test undo/redo" in {
+    "simulate set complete game with 4 stones and test undo/redo" should {
       val controller: Controller = Controller()
-      // Test undo/redo, on a empty
+      "Test undo/redo, on a empty field" in {
       controller.undo
       controller.redo
+      }
+      "undo redo set" in {
       controller.put(1, -1)
       controller.put(1, -1)
       controller.undo
       controller.redo
-      /*undo redo set*/
+      }
+      "test undo/redo on mill" in {
       controller.put(2, -1)
       controller.put(10, -1)
       controller.put(3, -1)
       val expectedRound4 = field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(3, Stone.Black).setStone(2, Stone.Black)
       controller.gamefield.gfield should be(expectedRound4)
-      //mill in field, player white (1,10,22), delete stone 2 from player black
       controller.put(22, -1)
       controller.mill(2)
-      //test undo/redo on mill
       controller.undo
       controller.redo
       val expectedRound5 = field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(3, Stone.Black)
       controller.gamefield.gfield should be(expectedRound5)
+      }
+      "test undo/redo on move" in {
       controller.put(6, -1)
       controller.put(7, -1)
       controller.put(8, -1)
       controller.gamefield.gfield should be(field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(3, Stone.Black))
-      /*move a stone*/
       controller.put(23, 22)
       controller.gamefield.gfield should be(field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(23, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(3, Stone.Black))
-      /*test undo/redo on move*/
       controller.undo
       controller.redo
+      }
+      "test labelse" in {
       controller.getGameStandLabelText should be ("BLACK, jump with a stone.")
       controller.put(24, 3)
       controller.gamefield.gfield should be(field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(23, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black).setStone(24, Stone.Black))
@@ -93,6 +96,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.gamefield.gfield should be(field.setStone(1, Stone.White).setStone(10, Stone.White).setStone(22, Stone.White).setStone(7, Stone.White).setStone(6, Stone.Black).setStone(8, Stone.Black))
       controller.getGameStandLabelText should be ("BLACK, Click to place the stone, then click to move it.")
     }
+  }
     "case the put is not possible" in {
       val controller = Controller()
       controller.bildGameSet(7,false)
