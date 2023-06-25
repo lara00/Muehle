@@ -32,4 +32,4 @@ Mill (also known as Nine Men's Morris) is a traditional strategy game for two pl
 
 ## Show Image
 
-![image](https://github.com/lara00/Muehle/blob/f632e42dd1e971f9f35cc0bf731fbd70691c3e3e/src/resources/MillField.png)
+[![image](https://github.com/lara00/Muehle/blob/26566e97c8e3edc365f83c306b9ab05f888ae319/MillField.png)
