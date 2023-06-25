@@ -20,9 +20,10 @@ class Tui(using var controller: IController) extends Observer:
   controller.add(this)
 
   def run(): Unit = 
-    while (loop)
+    while (loop) {
       logger.trace(controller.toString())
       analyseInput(readLineTry())
+    }
 
   override def update(e: Event): Unit = e match
     case Event.Quit   =>
