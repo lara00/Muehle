@@ -3,4 +3,4 @@ FROM hseeberger/scala-sbt:8u222_1.3.5_2.13.1
 WORKDIR /Muehle
 ADD . /Muehle
 
-CMD sbt test
+CMD sbt coverage test coverageReport
