@@ -7,16 +7,21 @@ on:
     branches: [main]
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build with sbt
+        run: sbt test
+      - name: compile with sbt
+        run: sbt compile
+
   scalatest_sbt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Run tests
-      - run: |
-        docker build -t mill .
-        docker run -it --rm \
-          -e DISPLAY=$DISPLAY \
-          -v /tmp/.X11-unix:/tmp/.X11-unix \
-          -t mill sbt test
+        run: sbt clean coverage test
+      - name: Coverage Report
+        run: sbt coverageReport
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2.0.0
