@@ -8,4 +8,3 @@ RUN apt-get update && \
 ENV DISPLAY=host.docker.internal:0
 WORKDIR /app
 ADD . /app
-CMD sbt -Djava.awt.headless=false run
