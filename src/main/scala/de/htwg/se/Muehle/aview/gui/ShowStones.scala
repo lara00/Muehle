@@ -23,15 +23,13 @@ class ShowStones(controller : IController):
     new Panel:
       override def paintComponent(g: Graphics2D): Unit = 
         super.paintComponent(g)
-        val imageSize = new Dimension(40, 40)
         val circleSize = 40
-        val circleGap = 3
-        val totalWidth = stonesCount * (circleSize + circleGap) - circleGap
+        val totalWidth = stonesCount * (circleSize + 3) - 3
         val startX = (size.width - totalWidth) / 2
         val startY = (size.height - circleSize) / 2
 
         for (i <- 0 until stonesCount)
-          val circleX = startX + i * (circleSize + circleGap)
+          val circleX = startX + i * (circleSize + 3)
           val circleY = startY
           g.setColor(color)
           g.fillOval(circleX, circleY, circleSize, circleSize)

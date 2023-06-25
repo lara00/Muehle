@@ -23,9 +23,8 @@ class RoundButton(text: String) extends Button(text):
     g.drawOval(0, 0, size.width - 1, size.height - 1)
 
   def drawGradientCircles(g: Graphics2D, centerX: Int,centerY: Int, radius: Int, baseColor: Color) : Unit =
-    val numCircles = 3
-    for (i <- 1 to numCircles)
-      val circleRadius = radius * i / numCircles
+    for (i <- 1 to 3)
+      val circleRadius = radius * i / 3
       val color = new Color(
         baseColor.getRed,baseColor.getGreen,
         baseColor.getBlue,baseColor.getAlpha - i * 35)
