@@ -5,21 +5,14 @@ import scala.swing.event._
 import java.awt.Color
 
 class RoundButton(text: String) extends Button(text):
-  private val defaultBackgroundColor = Color.lightGray
-  private val defaultRadius = 25
-  background = defaultBackgroundColor
+  background = Color.lightGray
 
   override def paintComponent(g: Graphics2D): Unit = 
-    val width = size.width - 1
-    val height = size.height - 1
-    val centerX = width / 2
-    val centerY = height / 2
-    val radius = defaultRadius
     g.setColor(background)
-    g.fillOval(0, 0, width, height)
+    g.fillOval(0, 0, size.width - 1, size.height - 1)
     background match 
-      case Color.white => drawGradientCircles(g, centerX, centerY, radius, new Color(192, 192, 192))
-      case Color.black => drawGradientCircles(g, centerX, centerY, radius, Color.lightGray)
+      case Color.white => drawGradientCircles(g, (size.width - 1) / 2, (size.height - 1) / 2, 25, new Color(192, 192, 192))
+      case Color.black => drawGradientCircles(g, (size.width - 1) / 2, (size.height - 1) / 2, 25, Color.lightGray)
       case _ =>
     super.paintComponent(g)
 
@@ -28,17 +21,13 @@ class RoundButton(text: String) extends Button(text):
     g.drawOval(0, 0, size.width - 1, size.height - 1)
 
   def drawGradientCircles(g: Graphics2D, centerX: Int,centerY: Int, radius: Int, baseColor: Color) : Unit =
-    val numCircles = 3
-    val colorStep = 35
-    for (i <- 1 to numCircles)
-      val circleRadius = radius * i / numCircles
-      val x = centerX - circleRadius
-      val y = centerY - circleRadius
+    for (i <- 1 to 3)
+      val circleRadius = radius * i / 3
       val color = new Color(
         baseColor.getRed,baseColor.getGreen,
-        baseColor.getBlue,baseColor.getAlpha - i * colorStep)
+        baseColor.getBlue,baseColor.getAlpha - i * 35)
       g.setColor(color)
-      g.fillOval(x, y, circleRadius * 2, circleRadius * 2)
+      g.fillOval(centerX - circleRadius, centerY - circleRadius, circleRadius * 2, circleRadius * 2)
       
   borderPainted = false
   focusPainted = false

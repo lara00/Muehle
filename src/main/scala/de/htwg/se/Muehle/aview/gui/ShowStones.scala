@@ -19,23 +19,17 @@ class ShowStones(controller : IController):
         contents += createImagePanel(delete, controller.iswhite(color))
     boxpanel
 
-  def createImagePanel(value: Int, color: Color): Panel =
+  def createImagePanel(stonesCount: Int, color: Color): Panel =
     new Panel:
-      val stonesCount: Int = value
       override def paintComponent(g: Graphics2D): Unit = 
         super.paintComponent(g)
-        val imageSize = new Dimension(40, 40)
         val circleSize = 40
-        val circleGap = 3
-        val totalWidth = stonesCount * (circleSize + circleGap) - circleGap
-        val startX = (size.width - totalWidth) / 2
-        val startY = (size.height - circleSize) / 2
-
+        val totalWidth = stonesCount * (circleSize + 3) - 3
         for (i <- 0 until stonesCount)
-          val circleX = startX + i * (circleSize + circleGap)
-          val circleY = startY
+          val circleX = ((size.width - totalWidth) / 2) + i * (circleSize + 3)
+          val circleY = (size.height - circleSize) / 2
           g.setColor(color)
           g.fillOval(circleX, circleY, circleSize, circleSize)
 
-      preferredSize = new Dimension(value * (40), 80)
+      preferredSize = new Dimension(stonesCount * (40), 80)
       background = controller.iswhite(color)

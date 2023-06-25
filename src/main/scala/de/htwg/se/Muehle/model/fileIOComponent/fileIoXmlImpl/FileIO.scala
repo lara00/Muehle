@@ -29,7 +29,7 @@ class FileIO extends FileIOInterface:
     if (!directory.exists())
       directory.mkdir()
 
-  object PlayerConfigurator {
+  object PlayerConfigurator:
     private def saveToXml(filePath: String, strategy: IPlayerStrategy): Unit =
       val playerName = strategy.getClass.getSimpleName
       val xml =
@@ -43,8 +43,7 @@ class FileIO extends FileIOInterface:
       writer.write(xmlString)
       writer.close()
 
-    def savePlayerStrategy(player: IPlayerStrategy): Unit =
-      PlayerConfigurator.saveToXml("XMLImpl/playerstrategy.xml", player)
+    def savePlayerStrategy(player: IPlayerStrategy): Unit = PlayerConfigurator.saveToXml("XMLImpl/playerstrategy.xml", player)
 
     def loadPlayerStrategyName(): IPlayerStrategy =
       val injector = IGameInjector.createInjector()
@@ -55,9 +54,8 @@ class FileIO extends FileIOInterface:
         case Some("AIPlayer") => injector.getInstance(Key.get(classOf[IPlayerStrategy], Names.named("AIPlayer")))
         case Some("HumanPlayer") => injector.getInstance(Key.get(classOf[IPlayerStrategy], Names.named("HumanPlayer")))
         case _ => injector.getInstance(Key.get(classOf[IPlayerStrategy], Names.named("HumanPlayer")))
-  }
 
-  object GamestapIO {
+  object GamestapIO:
     private def toXmlPlayer(player: IPlayer): Elem =
       <player>
         <name>{player.pname.toString}</name>
@@ -142,4 +140,3 @@ class FileIO extends FileIOInterface:
       val loadedPlayerList = loadPlayersFromFile("XMLImpl/players.xml")
       val loadedPlayer = loadPlayerFromFile("XMLImpl/player1.xml")
       given_IGameStap.newGamestap(loadedField, loadedPlayer, loadedPlayerList)
-  }

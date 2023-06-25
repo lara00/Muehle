@@ -18,5 +18,7 @@ lazy val root = project
     libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "1.3.8",
     libraryDependencies += "org.yaml" % "snakeyaml" % "1.28",
     libraryDependencies += "org.apache.avro" % "avro" % "1.10.2",
-    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.15"
+    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.15",
+    libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.32",
+    libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.6"
 )
