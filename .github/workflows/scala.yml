@@ -10,11 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Set up Docker
-        uses: docker/setup-docker@v1
+        uses: actions/setup-docker@v2
+        with:
+          dockerfile: Dockerfile
 
       - name: Build and test with Docker
         run: |
@@ -24,5 +23,13 @@ jobs:
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             mill sbt test
 
-
-
+  scalatest_sbt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests
+        run: sbt clean coverage test
+      - name: Coverage Report
+        run: sbt coverageReport
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v2.0.0
