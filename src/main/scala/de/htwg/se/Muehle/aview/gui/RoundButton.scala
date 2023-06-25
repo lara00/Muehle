@@ -5,6 +5,10 @@ import scala.swing.event._
 import java.awt.Color
 
 class RoundButton(text: String) extends Button(text):
+  private val defaultBackgroundColor = Color.lightGray
+  private val defaultRadius = 25
+  background = defaultBackgroundColor
+
   override def paintComponent(g: Graphics2D): Unit = 
     g.setColor(background)
     g.fillOval(0, 0, size.width - 1, size.height - 1)
