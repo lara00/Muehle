@@ -5,16 +5,12 @@ import scala.swing.event._
 import java.awt.Color
 
 class RoundButton(text: String) extends Button(text):
-  private val defaultBackgroundColor = Color.lightGray
-  private val defaultRadius = 25
-  background = defaultBackgroundColor
-
   override def paintComponent(g: Graphics2D): Unit = 
     g.setColor(background)
     g.fillOval(0, 0, size.width - 1, size.height - 1)
     background match 
-      case Color.white => drawGradientCircles(g, (size.width - 1) / 2, (size.height - 1) / 2, defaultRadius, new Color(192, 192, 192))
-      case Color.black => drawGradientCircles(g, (size.width - 1) / 2, (size.height - 1) / 2, defaultRadius, Color.lightGray)
+      case Color.white => drawGradientCircles(g, (size.width - 1) / 2, (size.height - 1) / 2, 25, new Color(192, 192, 192))
+      case Color.black => drawGradientCircles(g, (size.width - 1) / 2, (size.height - 1) / 2, 25, Color.lightGray)
       case _ =>
     super.paintComponent(g)
 

@@ -13,13 +13,12 @@ class MillField(controller: IController) extends GridBagPanel:
   private var clickedButtons = 0
   val buttonPosition_ = mutable.Map[Int, Button]()
   private var button1: (RoundButton, Int) = (null, 0)
-  private val fieldSize = 800
   private val buttonSize = 75
   private val buttonPositions = List(
     (0, 0), (0, 3), (0, 6), (1, 1), (1, 3), (1, 5),(2, 2), (2, 3), (2, 4), (3, 0), (3, 1), (3, 2),
     (3, 4), (3, 5), (3, 6), (4, 2), (4, 3), (4, 4),(5, 1), (5, 3), (5, 5), (6, 0), (6, 3), (6, 6))
   background = new Color(220, 220, 220)
-  preferredSize = new Dimension(fieldSize, fieldSize)
+  preferredSize = new Dimension(800, 800)
 
   for (((row, col), index) <- buttonPositions.zipWithIndex)
     val button = new RoundButton(s"${index + 1}")
@@ -47,13 +46,12 @@ class MillField(controller: IController) extends GridBagPanel:
   override protected def paintComponent(g: Graphics2D): Unit =
     super.paintComponent(g)
     g.setColor(Color.black)
-    val buttonPosition = buttonPosition_
     /* Draw lines between the buttons to visually create a mill field.*/
     val buttonPositionsToConnect = 
       List((1, 3), (1, 22), (2, 8),(3, 24), (4, 6), (4, 19), (6, 21),  (17,23),
       (7, 9), (7, 16), (9, 18), (10, 12), (13, 15),(16, 18), (19, 21), (22, 24))
     buttonPositionsToConnect.foreach { case (startIndex, endIndex) =>
-    val (pos1, pos2) = (buttonPosition(startIndex).location, buttonPosition(endIndex).location)
+    val (pos1, pos2) = (buttonPosition_(startIndex).location, buttonPosition_(endIndex).location)
     g.drawLine(pos1.x + buttonSize / 2, pos1.y + buttonSize / 2, pos2.x + buttonSize / 2, pos2.y + buttonSize / 2)}
 
   def update(controller: IController): Unit =
