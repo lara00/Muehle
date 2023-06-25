@@ -10,20 +10,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Build with sbt
-        run: sbt test
-      - name: compile with sbt
-        run: sbt compile
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  scalatest_sbt:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run tests
-        run: sbt clean coverage test
-      - name: Coverage Report
-        run: sbt coverageReport
-      - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@v2.0.0
+      - name: Set up Docker
+        uses: docker/setup-docker@v1
+
+      - name: Build and test with Docker
+        run: |
+          docker build -t my-scala-gui-app .
+          docker run -it --rm \
+            -e DISPLAY=$DISPLAY \
+            -v /tmp/.X11-unix:/tmp/.X11-unix \
+            my-scala-gui-app sbt test
+
 
 
