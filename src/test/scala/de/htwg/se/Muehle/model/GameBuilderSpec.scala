@@ -37,7 +37,7 @@ class GamefieldBuilderTest extends AnyWordSpec with Matchers {
       val gamestrategy = HumanPlayer()
       val gamefield = new Gamefield(gamesetting, gamestrategy)
       gamefield.toString contains "Gamefield(playerlist=[PlayerList(List(Player(WHITE, 9, 0), Player(BLACK, 9, 0))), singlegamer=HumanPlayer])"
-      val aiplayerfield = new Gamefield(gamesetting, AIPlayer())
+      val aiplayerfield = new GamefieldBuilder().addStonesToPut(9).addSingleGamer(true).build()
       aiplayerfield.toString contains "Gamefield(playerlist=[PlayerList(List(Player(WHITE, 9, 0), Player(BLACK, 9, 0))), singlegamer=AIPlayer])"
     }
   }
