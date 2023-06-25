@@ -6,12 +6,13 @@ on:
   pull_request:
     branches: [main]
 
+jobs:
   scalatest_sbt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Run tests
-        run:
+        run: |
           docker build -t mill .
           docker run -it --rm \
             -e DISPLAY=$DISPLAY \
@@ -19,4 +20,3 @@ on:
             mill sbt clean coverage test coverageReport
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2.0.0
-        
