@@ -97,7 +97,7 @@ class FileIO extends FileIOInterface:
 
     private def loadPlayerFromXml(xml: Elem): IPlayer =
       val nameString = (xml \ "name").text
-      val name =
+      val name = 
         Stone.values.find(_.toString == nameString).getOrElse(Stone.Empty)
       val stonesToPut = (xml \ "stonesToPut").text.toInt
       val stonesInField = (xml \ "stonesInField").text.toInt
