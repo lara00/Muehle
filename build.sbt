@@ -22,3 +22,9 @@ lazy val root = project
     libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.32",
     libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.6"
 )
+
+assembly / assemblyMergeStrategy := {
+  case PathList("META-INF", _*) => MergeStrategy.discard
+  case _                        => MergeStrategy.first
+}
+assembly / target := baseDirectory.value
