@@ -28,3 +28,4 @@ assembly / assemblyMergeStrategy := {
   case _                        => MergeStrategy.first
 }
 assembly / target := baseDirectory.value
+assembly / test := (assembly / test).dependsOn(test in Test).value
