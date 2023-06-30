@@ -19,6 +19,8 @@ import de.htwg.se.Muehle.Default.given
 import de.htwg.se.Muehle.model.fileIOComponent.FileIOInterface
 import scala.jdk.CollectionConverters._
 
+import scala.collection.JavaConverters
+
 class FileIO extends FileIOInterface:
   override def load: (IGameStap, IPlayerStrategy) = (GamestapIO.loadGameState(), PlayerConfigurator.loadPlayerStrategyName)
   override def save(gamestap: IGameStap, playerstrategy: IPlayerStrategy): Unit =
@@ -53,19 +55,12 @@ class FileIO extends FileIOInterface:
         case _ => injector.getInstance(Key.get(classOf[IPlayerStrategy], Names.named("HumanPlayer")))
       
   object GamestapIO:
-    def saveToYamlPlayer(player: IPlayer): java.util.Map[String, String] = 
-      val playerMap = new java.util.HashMap[String, String]()
-      playerMap.put("name", player.pname.toString)
-      playerMap.put("stonesToPut", player.pstonetoput.toString)
-      playerMap.put("stonesInField", player.pstoneinField.toString)
-      playerMap
-
     def savePlayersToFile(playerList: PlayerList): Unit =
       savePlayerToFile(playerList.players(0), "YamlImpl/player01.yaml")
       savePlayerToFile(playerList.players(1), "YamlImpl/Player2.yaml")
 
     def savePlayerToFile(player: IPlayer, fileName: String): Unit =
-      val playerYaml = saveToYamlPlayer(player)
+      val playerYaml = JavaConverters.mapAsJavaMap(Map("name" -> player.pname.toString,"stonesToPut" -> player.pstonetoput.toString,"stonesInField" -> player.pstoneinField.toString))
       val yaml = new Yaml()
       val yamlString = yaml.dump(playerYaml)
       saveToFile(fileName, yamlString)

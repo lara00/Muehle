@@ -10,11 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Build with sbt
-        run: sbt test
       - name: compile with sbt
         run: sbt compile
-
+      - name: Build with sbt
+        run: sbt test
   scalatest_sbt:
     runs-on: ubuntu-latest
     steps:

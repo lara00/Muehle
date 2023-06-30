@@ -3,15 +3,17 @@ package de.htwg.se.Muehle.model.gameComponent.gameImpl
 import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.playerComponent.IPlayer
 
-object StoneMovement:
-  def apply(player: IPlayer, field: IField, to: Int, from: Int): IField =
-    from match
-      case -1 => field.setStone(to, player.pname)
-      case i if (1 to 24).contains(i) =>
-        if (player.pstonetoput == 0 && player.pstoneinField > 3)
-          if (switch(from, to)) field.movestone(from, to, player.pname) else field
-        else
-          field.movestone(from, to, player.pname)
+trait StoneMovement:
+  def move(player: IPlayer, field: IField, to: Int, from: Int): IField
+
+class Jump extends StoneMovement:
+  override def move(player: IPlayer, field: IField, to: Int, from: Int): IField = field.movestone(from, to, player.pname)
+
+class SetaStone extends StoneMovement:
+  override def move(player: IPlayer, field: IField, to: Int, from: Int): IField = field.setStone(to, player.pname)
+
+class Switch extends StoneMovement:
+  override def move(player: IPlayer, field: IField, to: Int, from: Int): IField = if (switch(from, to)) field.movestone(from, to, player.pname) else field
 
   private def switch(from: Int, to: Int): Boolean = 
     val from_ = if (from > 12) 25 - from else from
@@ -32,5 +34,14 @@ object StoneMovement:
                 case 2 => from_ - 3 == to_
             }
     canSwitch
+        
 
-
+object StoneMovement:
+  def apply(player: IPlayer, field: IField, to: Int, from: Int): IField =
+    from match
+      case -1 => SetaStone().move(player, field, to, from)
+      case i if (1 to 24).contains(i) =>
+        if (player.pstonetoput == 0 && player.pstoneinField > 3)
+          Switch().move(player, field, to, from)
+        else
+          Jump().move(player, field, to, from)

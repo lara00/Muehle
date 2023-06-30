@@ -10,7 +10,7 @@ import playerstrategyComponent.{IPlayerStrategy, IGameInjector}
 
 import Default.{given}
 
-class Gamefield(val gamesetting: IGameStap, val gamestrategy: IPlayerStrategy)
+class Gamefield(val gamesetting: IGameStap = given_IGameStap, val gamestrategy: IPlayerStrategy)
 
 class GamefieldBuilder():
   private var stonetoput: IGameStap = given_IGameStap

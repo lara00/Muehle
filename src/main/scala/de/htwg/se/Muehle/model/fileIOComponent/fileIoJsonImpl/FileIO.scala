@@ -24,7 +24,7 @@ import de.htwg.se.Muehle.model.playerstrategyComponent.{IGameInjector, IPlayerSt
 
 class FileIO extends FileIOInterface:
   override def load: (IGameStap, IPlayerStrategy) = (GameStapIO.LoadGameStap(), PlayerConfigurator.loadPlayerStrategyName())
-  override def save(gamestap: IGameStap, playerstrategy: IPlayerStrategy): Unit = 
+  override def save(gamestap: IGameStap, playerstrategy: IPlayerStrategy): Unit =
     createDirectory("JsonImpl")
     PlayerConfigurator.savePlayerStrategy(playerstrategy)
     GameStapIO.SaveGamestap(gamestap)
@@ -56,46 +56,33 @@ class FileIO extends FileIOInterface:
   object GameStapIO:
     implicit val formats: DefaultFormats.type = DefaultFormats
 
-    private def toJson(player: IPlayer): JValue = 
+    private def toJson(player: IPlayer): JValue =
       val nameField = ("name", JString(player.pname.toString))
       val stonesToPutField = ("stonesToPut", JInt(player.pstonetoput))
       val stonesInFieldField = ("stonesInField", JInt(player.pstoneinField))
       JObject(nameField, stonesToPutField, stonesInFieldField)
 
-    private def toJsonObject(position: Int, stone: Stone): JObject = JObject("position" -> position, "stone" -> stone.toString)
+    private def toJsonObject(position: Int, stone: Stone): JObject =
+      JObject("position" -> position, "stone" -> stone.toString)
 
     private def saveToFile(fileName: String, content: String): Unit =
       val file = new File(fileName)
       Using.resource(new FileWriter(file)) { writer =>
-        writer.write(content)}
+        writer.write(content)
+      }
 
     private def loadPlayerFromJson(json: JValue): IPlayer =
-      val nameStringOpt = (json \ "name").toOption.flatMap {
-        case JString(name) => Some(name)
-        case _ => None
-      }
-      val name = nameStringOpt.flatMap(nameStr => Stone.values.find(_.toString == nameStr)).getOrElse(Stone.Empty)
-      val stonesToPutOpt = (json \ "stonesToPut").toOption.flatMap {
-        case JInt(stones) => Some(stones.toInt)
-        case _ => None
-      }
+      val nameStringOpt = (json \ "name").extractOpt[String].flatMap(nameStr => Stone.values.find(_.toString == nameStr))
+      val name = nameStringOpt.getOrElse(Stone.Empty)
+      val stonesToPutOpt = (json \ "stonesToPut").extractOpt[Int]
       val stonesToPut = stonesToPutOpt.getOrElse(0)
-      val stonesInFieldOpt = (json \ "stonesInField").toOption.flatMap {
-        case JInt(stones) => Some(stones.toInt)
-        case _ => None
-      }
+      val stonesInFieldOpt = (json \ "stonesInField").extractOpt[Int]
       val stonesInField = stonesInFieldOpt.getOrElse(0)
       given_IPlayer.pplayer(name, stonesToPut, stonesInField)
 
     private def loadFieldLineFromJson(json: JValue): Option[(Int, Stone)] =
-      val positionOpt = (json \ "position").toOption.flatMap {
-        case JInt(position) => Some(position.toInt)
-        case _ => None
-      }
-      val stoneStringOpt = (json \ "stone").toOption.flatMap {
-        case JString(stoneStr) => Some(stoneStr)
-        case _ => None
-      }
+      val positionOpt = (json \ "position").extractOpt[Int]
+      val stoneStringOpt = (json \ "stone").extractOpt[String]
       for {
         pos <- positionOpt
         stoneStr <- stoneStringOpt
@@ -116,11 +103,11 @@ class FileIO extends FileIOInterface:
       val jsonString = compact(render(playerJson))
       saveToFile(fileName, jsonString)
 
-    private def savePlayersToFile(playerList: PlayerList): Unit = 
+    private def savePlayersToFile(playerList: PlayerList): Unit =
       savePlayerToFile(playerList.players(0), "JsonImpl/player01.json")
       savePlayerToFile(playerList.players(1), "JsonImpl/player02.json")
 
-    private def saveFieldToFile(field: IField, fileName: String): Unit = 
+    private def saveFieldToFile(field: IField, fileName: String): Unit =
       val fieldLinesJson = field.fieldmap.map { case (position, stone) => toJsonObject(position, stone) }.toList
       val jsonContent = ("field", fieldLinesJson)
       val jsonString = compact(render(jsonContent))
@@ -137,7 +124,7 @@ class FileIO extends FileIOInterface:
       val loadedPlayer = loadPlayerFromFile("JsonImpl/player1.json")
       given_IGameStap.newGamestap(loadedField, loadedPlayer, loadedPlayerList)
 
-    private def loadPlayersFromFile: PlayerList = 
+    private def loadPlayersFromFile: PlayerList =
       val loadedPlayer = loadPlayerFromFile("JsonImpl/player01.json")
       val loadedPlayer2 = loadPlayerFromFile("JsonImpl/player02.json")
       PlayerList(loadedPlayer, loadedPlayer2)
