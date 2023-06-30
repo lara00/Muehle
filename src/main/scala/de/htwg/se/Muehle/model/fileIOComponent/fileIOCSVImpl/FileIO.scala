@@ -36,23 +36,20 @@ class FileIO extends FileIOInterface:
       writer.writeAll(data)
       writer.close()
 
+    private def loadPlayerFromFile(fileName: String): IPlayer =
+      val reader = CSVReader.open(new File(fileName))
+      val data = reader.all()
+      reader.close()
+      val name = Stone.values.find(_.toString == data.head.head).getOrElse(Stone.Empty)
+      val stonesToPut = data.head(1).toInt
+      val stonesInField = data.head(2).toInt
+      given_IPlayer.pplayer(name, stonesToPut, stonesInField)
+
     private def savePlayersToFile(playerList: PlayerList, fileName: String): Unit =
       val writer = CSVWriter.open(new File(fileName))
       val data = playerList.players.map(player => Seq(player.pname.toString, player.pstonetoput.toString, player.pstoneinField.toString))
       writer.writeAll(data)
       writer.close()
-
-    private def loadPlayerFromFile(fileName: String): IPlayer =
-      val reader = CSVReader.open(new File(fileName))
-      val data = reader.all()
-      reader.close()
-      val nameStr = data.head.head
-      val stonesToPutStr = data.head(1)
-      val stonesInFieldStr = data.head(2)
-      val name = Stone.values.find(_.toString == nameStr).getOrElse(Stone.Empty)
-      val stonesToPut = stonesToPutStr.toInt
-      val stonesInField = stonesInFieldStr.toInt
-      given_IPlayer.pplayer(name, stonesToPut, stonesInField)
 
     private def loadPlayersFromFile(fileName: String): PlayerList = 
       val reader = CSVReader.open(new File(fileName))

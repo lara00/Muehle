@@ -8,7 +8,6 @@ import org.scalatest.wordspec.AnyWordSpec
 
 import util.Event
 import scala.util.Try
-import scalafx.scene.text.FontWeight.Black
 import de.htwg.se.Muehle.model.fieldComponent.IField
 import de.htwg.se.Muehle.model.{PlayerList, Stone}
 import de.htwg.se.Muehle.controller.controllerComponent.controllerBaseImpl.Controller
